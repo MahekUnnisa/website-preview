@@ -20,14 +20,16 @@ const Footer = () => {
     <footer className="bg-background-secondary border-t border-border">
       <div className="container-custom py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Brand Section */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">Z</span>
-              </div>
-              <span className="text-xl font-bold text-foreground-primary">ZeroAI</span>
-            </div>
+              {/* Brand Section */}
+              <div className="lg:col-span-2">
+                <div className="flex items-center space-x-2 mb-4">
+                  <img 
+                    src="/assets/icons/zeroAI.png" 
+                    alt="ZeroAI Logo" 
+                    className="w-10 h-10 rounded-lg"
+                  />
+                  <span className="text-xl font-bold text-foreground-primary">ZeroAI</span>
+                </div>
             <p className="text-foreground-muted text-sm mb-4 max-w-xs">
               An AI assistant that helps developers manage their calendar, tasks, and notes. 
               Supercharge your workflow — you focus on building, we take care of the rest.
