@@ -1,0 +1,593 @@
+/* ========================================
+   THEME DEFINITIONS
+   ======================================== */
+
+/* Dark Theme (Default) */
+:root,
+.dark {
+
+  --accent-gray: #444;
+  --accent-light: #fff;
+  --accent-dark: #000;
+
+  /* [linear-gradient(90deg,#ffffff0d_1.2px,transparent_1.2px),linear-gradient(#ffffff0d_1.2px,transparent_1.2px)] */
+  .grid-overlay {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1.2px, transparent 1.2px), linear-gradient(rgba(255, 255, 255, 0.03) 1.2px, transparent 1.2px);
+    background-size: 16px 16px;
+    background-position: center;
+    background-repeat: repeat;
+    opacity: 0.3;
+  }
+
+  --font-hauora: 'Hauora',
+  sans-serif;
+  /* Brand Colors - 3 Action Button Colors */
+  --brand-primary: #6b4ce8;
+  /* Primary Action Button */
+  --brand-secondary: #eee9dc;
+  /* Secondary Action Button */
+  --brand-tertiary: transparent;
+  /* Tertiary Action Button (colorless) */
+  --brand-secondary-hover: rgb(255, 255, 255, 0.5);
+  --brand-secondary-90: rgb(238, 233, 220, 0.9);
+  /* Primary Purple Scale */
+  --primary-purple-15: rgba(107, 76, 232, 0.15);
+  --primary-purple-50: #e7e4f0;
+  --primary-purple-75: #d4d0f1;
+  --primary-purple-100: #a790ff;
+  --primary-purple-200: #9277ff;
+  --primary-purple-300: #8061ff;
+  --primary-purple-400: #6b4ce8;
+  --primary-purple-500: #5629c1;
+  --primary-purple-600: #311b67;
+  --primary-purple-700: #1f163d;
+  --primary-purple-800: #100a21;
+
+  --muted-secondary: rgba(255, 255, 255, 0.06);
+  /* --background-dark-muted */
+  --muted-tertiary: #29282d;
+  /* --background-dark-muted */
+
+  /* Secondary Orange Scale */
+  --secondary-orange-50: #eee1dd;
+  --secondary-orange-75: #ead0ca;
+  --secondary-orange-100: #ffb49d;
+  --secondary-orange-400: #ff5a27;
+  --secondary-orange-500: #bd411c;
+  --secondary-orange-700: #341a13;
+
+  /* Semantic Colors */
+  --semantics-success-50: #dbf2e8;
+  --semantics-success-100: #0da767;
+  --semantics-success-200: #0e2c20;
+  --semantics-error-50: #f5d9dc;
+  --semantics-error-100: #d04554;
+  --semantics-error-200: #2d0e12;
+  --semantics-warning-50: #fdecd3;
+  --semantics-warning-100: #f39b16;
+  --semantics-warning-200: #2c1e09;
+
+  /* Background Colors - Dark */
+  --background: #0d0c0f;
+  /* --background-dark-primary */
+  --background-secondary: #151418;
+  /* --background-dark-secondary */
+  --background-tertiary: #222126;
+  /* --background-dark-tertiary */
+  --background-50: rgba(34, 33, 38, 0.5);
+
+  /* Background Colors - Light (for mixed usage) */
+  --background-light: #efeef3;
+  /* --background-light-primary */
+  --background-light-secondary: #f7f6f9;
+  /* --background-light-secondary */
+  --background-light-tertiary: rgba(255, 255, 255, 0.4);
+  /* --background-light-tertiary */
+
+  /* Text Colors - Dark */
+  --foreground: #fff;
+  /* --text-dark-white */
+  --foreground-50: #ffffff7e;
+  /* --text-dark-white */
+  --foreground-primary: #eee9dc;
+  --foreground-tertiary: rgba(255, 255, 255, 0.4);
+  /* --text-dark-primary */
+  --hero-primary: #85838a;
+  --gradient-from: var(--icon-primary);
+  --gradient-to: var(--hero-primary);
+  --foreground-secondary: rgba(238, 233, 220, 0.9);
+  /* --text-dark-shorts-paragraph */
+  --foreground-muted: rgba(255, 255, 255, 0.6);
+  /* --text-dark-captions */
+  --foreground-subtle: rgba(255, 255, 255, 0.06);
+  /* --text-dark-captions */
+  --foreground-link: #9277ff;
+  /* --text-dark-hyperlink */
+
+  /* Text Colors - Light (for mixed usage) */
+  --foreground-light: #000;
+  /* --text-light-black */
+  --foreground-light-primary: #221e1e;
+  /* --text-light-primary */
+  --foreground-light-secondary: rgba(34, 30, 30, 0.9);
+  /* --text-light-shorts-paragraph */
+  --foreground-light-subtle: rgba(255, 255, 255, 0.03);
+  /* --text-light-shorts-paragraph */
+  --foreground-light-muted: rgba(0, 0, 0, 0.6);
+  /* --text-light-captions */
+  --foreground-light-link: #6b4ce8;
+  /* --text-light-hyperlink */
+
+  /* Icons - Dark */
+  --icon-primary: #eee9dc;
+  /* --icons-dark-primary */
+  --icon-secondary: #858585;
+  /* --icons-dark-secondary */
+  --icon-selected: #9277ff;
+  /* --icons-dark-selected */
+
+  /* Icons - Light (for mixed usage) */
+  --icon-light-primary: #221e1e;
+  /* --icons-light-primary */
+  --icon-light-secondary: #858585;
+  /* --icons-light-secondary */
+  --icon-light-selected: #6b4ce8;
+  /* --icons-light-selected */
+
+  /* UI Elements - Dark */
+  --card: #222126;
+  /* --background-dark-tertiary */
+  --card-foreground: #eee9dc;
+  /* --text-dark-primary */
+  --popover: #222126;
+  --popover-foreground: #eee9dc;
+  --border: rgba(255, 255, 255, 0.1);
+  /* --ui-elements-borders-card-bg-dark-10 */
+  --border-muted: rgba(255, 255, 255, 0.06);
+  /* --ui-elements-borders-card-bg-dark-6 */
+  --border-subtle: rgba(255, 255, 255, 0.03);
+  /* --ui-elements-borders-card-bg-dark-3 */
+  --border-strong: rgba(255, 255, 255, 0.2);
+  /* --ui-elements-borders-card-bg-dark-20 */
+  --border-dark: rgba(255, 255, 255, 0.10);
+  /* --ui-elements-borders-card-bg-dark-10 */
+  --border-colored: rgba(107, 76, 232, 0.15);
+  /* --ui-elements-borders-card-bg-dark-colored-bg */
+  --border-selected: #6b4ce8;
+  /* --ui-elements-borders-card-bg-dark-selected */
+  --input: #222126;
+  --backdrop: rgba(0, 0, 0, 0.7);
+  --dot-muted: rgba(255, 255, 255, 0.2);
+
+  /* UI Elements - Light (for mixed usage) */
+  --border-light: rgba(0, 0, 0, 0.1);
+  /* --ui-elements-borders-card-bg-light-10 */
+  --border-light-muted: rgba(0, 0, 0, 0.06);
+  /* --ui-elements-borders-card-bg-light-6 */
+  --border-light-subtle: rgba(0, 0, 0, 0.03);
+  /* --ui-elements-borders-card-bg-light-3 */
+  --border-light-strong: rgba(0, 0, 0, 0.2);
+  /* --ui-elements-borders-card-bg-light-20 */
+  --border-light-colored: rgba(107, 76, 232, 0.15);
+  /* --ui-elements-borders-card-bg-light-colored-bg */
+  --border-light-selected: #6b4ce8;
+  /* --ui-elements-borders-card-bg-light-selected */
+
+  /* Interactive Elements */
+  --primary: #6b4ce8;
+  /* --button-primary */
+  --primary-foreground: #fff;
+  --primary-hover: #5629c1;
+  /* --button-states-primary-dark-pressed */
+  --primary-disabled: #514f5e;
+  /* --button-states-primary-dark-disabled */
+  --ring: #6b4ce8;
+
+  /* Secondary Elements */
+  --secondary: #222126;
+  /* --button-secondary-dark */
+  --secondary-foreground: #eee9dc;
+  --muted: #222126;
+  --muted-foreground: rgba(255, 255, 255, 0.6);
+  --accent: #151418;
+  --accent-foreground: #eee9dc;
+
+  /* Semantic Colors (using new variables) */
+  --success: #0da767;
+  /* --semantics-success-100 */
+  --success-foreground: #fff;
+  --success-light: #dbf2e8;
+  /* --semantics-success-50 */
+  --success-dark: #0e2c20;
+  /* --semantics-success-200 */
+  --error: #d04554;
+  /* --semantics-error-100 */
+  --error-foreground: #fff;
+  --error-light: #f5d9dc;
+  /* --semantics-error-50 */
+  --error-dark: #2d0e12;
+  /* --semantics-error-200 */
+  --warning: #f39b16;
+  /* --semantics-warning-100 */
+  --warning-foreground: #fff;
+  --warning-light: #fdecd3;
+  /* --semantics-warning-50 */
+  --warning-dark: #2c1e09;
+  /* --semantics-warning-200 */
+  --destructive: #d04554;
+  --destructive-foreground: #fff;
+
+  /* Charts */
+  --chart-1: #6b4ce8;
+  --chart-2: #9277ff;
+  --chart-3: #a790ff;
+  --chart-4: #8061ff;
+  --chart-5: #5629c1;
+
+  /* Layout */
+  --radius: 0.625rem;
+  --sidebar: #0d0c0f;
+  --sidebar-foreground: #eee9dc;
+  --sidebar-primary: #6b4ce8;
+  --sidebar-primary-foreground: #fff;
+  --sidebar-accent: #151418;
+  --sidebar-accent-foreground: #eee9dc;
+  --sidebar-border: #0d0c0f;
+  --sidebar-ring: #6b4ce8;
+  --subtext: rgba(255, 255, 255, 0.6);
+  --grid: #151418;
+
+  /* Extended theme colors for dark */
+  --command-bar-bg: #151418;
+  --main-bg: #0d0c0f;
+  --settings-bg: #222126;
+  --tldr-bg: rgba(107, 76, 232, 0.15);
+  --code-bg: #151418;
+  --code-inline-bg: #151418;
+  --markdown-bg: rgba(255, 255, 255, 0.06);
+  --toggle-active-bg: #222126;
+  --online-indicator: #0da767;
+  /* Scrollbar - Dark */
+  --scrollbar-thumb: rgba(255, 255, 255, 0.10);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.15);
+  --scrollbar-track: transparent;
+
+  /* Note colors for dark */
+  --note-color-1: #414141;
+  --note-color-2: #84542b;
+  --note-color-3: #6e4939;
+  --note-color-4: #2f654a;
+  --note-color-5: #593f73;
+  --note-color-6: #7f4140;
+  --note-color-7: #753b57;
+  --note-color-8: #95713a;
+  --note-color-9: #264b61;
+  --note-color-10: #404040;
+
+  --chat-border: rgba(255, 255, 255, 0.1);
+  --gradient-left: rgba(0, 0, 0, 0.4);
+  --gradient-right: rgba(0, 0, 0, 0);
+
+  --visual-left: #151418;
+  --visual-right: #1a191c;
+
+}
+
+/* Light Theme*/
+.light {
+
+  --accent-gray: #444;
+  --accent-light: #fff;
+  --accent-dark: #000;
+
+  /* [linear-gradient(90deg,#ffffff0d_1.2px,transparent_1.2px),linear-gradient(#ffffff0d_1.2px,transparent_1.2px)] */
+  .grid-overlay {
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1.2px, transparent 1.2px), linear-gradient(rgba(0, 0, 0, 0.03) 1.2px, transparent 1.2px);
+    background-size: 16px 16px;
+    background-position: center;
+    background-repeat: repeat;
+  }
+
+  /* Brand Colors - 3 Action Button Colors */
+  --brand-primary: #6b4ce8;
+  /* Primary Action Button */
+  --brand-secondary: #221e1e;
+  /* Secondary Action Button */
+  --brand-tertiary: transparent;
+  /* Tertiary Action Button (colorless) */
+  --brand-secondary-hover: rgb(238, 233, 220, 0.5);
+  /* added for parity with dark */
+  --brand-secondary-90: rgb(238, 233, 220, 0.9);
+  /* added for parity with dark */
+  --muted-secondary: rgba(0, 0, 0, 0.06);
+  /* --background-dark-muted */
+  --muted-tertiary: #cac6d9;
+  /* --background-dark-muted */
+  --dot-muted: rgba(0, 0, 0, 0.2);
+  /* Primary Purple Scale (same as dark) */
+  --primary-purple-15: rgba(107, 76, 232, 0.15);
+  /* added for parity with dark */
+  --primary-purple-50: #e7e4f0;
+  --primary-purple-75: #d4d0f1;
+  --primary-purple-100: #a790ff;
+  --primary-purple-200: #9277ff;
+  --primary-purple-300: #8061ff;
+  --primary-purple-400: #6b4ce8;
+  --primary-purple-500: #5629c1;
+  --primary-purple-600: #311b67;
+  --primary-purple-700: #1f163d;
+  --primary-purple-800: #100a21;
+
+  /* Secondary Orange Scale (same as dark) */
+  --secondary-orange-50: #eee1dd;
+  --secondary-orange-75: #ead0ca;
+  --secondary-orange-100: #ffb49d;
+  --secondary-orange-400: #ff5a27;
+  --secondary-orange-500: #bd411c;
+  --secondary-orange-700: #341a13;
+
+  /* Semantic Colors (same as dark) */
+  --semantics-success-50: #dbf2e8;
+  --semantics-success-100: #0da767;
+  --semantics-success-200: #0e2c20;
+  --semantics-error-50: #f5d9dc;
+  --semantics-error-100: #d04554;
+  --semantics-error-200: #2d0e12;
+  --semantics-warning-50: #fdecd3;
+  --semantics-warning-100: #f39b16;
+  --semantics-warning-200: #2c1e09;
+
+  /* Background Colors - Light */
+  --background: #efeef3;
+  --background-50: rgba(239, 238, 243, 0.9);
+  /* --background-light-primary */
+  --background-secondary: #f7f6f9;
+  /* --background-light-secondary */
+  --background-tertiary: #fff;
+  /* --background-light-tertiary */
+
+  /* Background Colors - Dark (for mixed usage) */
+  --background-dark: #0d0c0f;
+  /* --background-dark-primary */
+  --background-dark-secondary: #151418;
+  /* --background-dark-secondary */
+  --background-dark-tertiary: #222126;
+  /* --background-dark-tertiary */
+
+  --backdrop: rgba(255, 255, 255, 0.7);
+
+  /* Text Colors - Light */
+  --foreground: #000;
+  /* --text-light-black */
+  --foreground-50: #0000007e;
+  /* --text-light-black */
+  --foreground-primary: #221e1e;
+  /* --text-light-primary */
+  --foreground-tertiary: rgba(0, 0, 0, 0.4);
+  --hero-primary: #85838a;
+  --gradient-from: var(--hero-primary);
+  --gradient-to: var(--icon-primary);
+  --foreground-secondary: rgba(34, 30, 30, 0.9);
+  /* --text-light-shorts-paragraph */
+  --foreground-muted: rgba(0, 0, 0, 0.6);
+  /* --text-light-captions */
+  --foreground-subtle: rgba(0, 0, 0, 0.06);
+  /* added for parity with dark */
+  --foreground-link: #6b4ce8;
+  /* --text-light-hyperlink */
+
+  /* Text Colors - Dark (for mixed usage) */
+  --foreground-dark: #fff;
+  /* --text-dark-white */
+  --foreground-dark-primary: #eee9dc;
+  /* --text-dark-primary */
+  --foreground-dark-secondary: rgba(238, 233, 220, 0.9);
+  /* --text-dark-shorts-paragraph */
+  --foreground-dark-muted: rgba(255, 255, 255, 0.6);
+  /* --text-dark-captions */
+  --foreground-dark-link: #9277ff;
+  /* --text-dark-hyperlink */
+
+  /* Icons - Light */
+  --icon-primary: #221e1e;
+  /* --icons-light-primary */
+  --icon-secondary: #858585;
+  /* --icons-light-secondary */
+  --icon-selected: #6b4ce8;
+  /* --icons-light-selected */
+
+  /* Icons - Dark (for mixed usage) */
+  --icon-dark-primary: #eee9dc;
+  /* --icons-dark-primary */
+  --icon-dark-secondary: #858585;
+  /* --icons-dark-secondary */
+  --icon-dark-selected: #9277ff;
+  /* --icons-dark-selected */
+
+  /* UI Elements - Light */
+  --card: #fff;
+  /* --background-light-tertiary */
+  --card-foreground: #221e1e;
+  /* --text-light-primary */
+  --popover: #fff;
+  --popover-foreground: #221e1e;
+  --border: rgba(0, 0, 0, 0.1);
+  /* --ui-elements-borders-card-bg-light-10 */
+  --border-muted: rgba(0, 0, 0, 0.06);
+  /* --ui-elements-borders-card-bg-light-6 */
+  --border-subtle: rgba(0, 0, 0, 0.03);
+  /* --ui-elements-borders-card-bg-light-3 */
+  --border-strong: rgba(0, 0, 0, 0.2);
+  /* --ui-elements-borders-card-bg-light-20 */
+  --border-colored: rgba(107, 76, 232, 0.15);
+  /* --ui-elements-borders-card-bg-light-colored-bg */
+  --border-selected: #6b4ce8;
+  /* --ui-elements-borders-card-bg-light-selected */
+  --input: #fff;
+
+  /* UI Elements - Dark (for mixed usage) */
+  --border-dark: rgba(255, 255, 255, 0.1);
+  /* --ui-elements-borders-card-bg-dark-10 */
+  --border-dark-muted: rgba(255, 255, 255, 0.06);
+  /* --ui-elements-borders-card-bg-dark-6 */
+  --border-dark-subtle: rgba(255, 255, 255, 0.03);
+  /* --ui-elements-borders-card-bg-dark-3 */
+  --border-dark-strong: rgba(255, 255, 255, 0.2);
+  /* --ui-elements-borders-card-bg-dark-20 */
+  --border-dark-colored: rgba(107, 76, 232, 0.15);
+  /* --ui-elements-borders-card-bg-dark-colored-bg */
+  --border-dark-selected: #6b4ce8;
+  /* --ui-elements-borders-card-bg-dark-selected */
+
+  /* Interactive Elements */
+  --primary: #6b4ce8;
+  /* --button-primary */
+  --primary-foreground: #fff;
+  --primary-hover: #5629c1;
+  /* --button-states-primary-light-pressed */
+  --primary-disabled: #d5d3df;
+  /* --button-states-primary-light-disabled */
+  --ring: #6b4ce8;
+
+  /* Secondary Elements */
+  --secondary: #fff;
+  /* --button-secondary-light */
+  --secondary-foreground: #221e1e;
+  --muted: #f7f6f9;
+  --muted-foreground: rgba(0, 0, 0, 0.6);
+  --accent: #f7f6f9;
+  --accent-foreground: #221e1e;
+
+  /* Semantic Colors (using new variables) */
+  --success: #0da767;
+  /* --semantics-success-100 */
+  --success-foreground: #fff;
+  --success-light: #dbf2e8;
+  /* --semantics-success-50 */
+  --success-dark: #0e2c20;
+  /* --semantics-success-200 */
+  --error: #d04554;
+  /* --semantics-error-100 */
+  --error-foreground: #fff;
+  --error-light: #f5d9dc;
+  /* --semantics-error-50 */
+  --error-dark: #2d0e12;
+  /* --semantics-error-200 */
+  --warning: #f39b16;
+  /* --semantics-warning-100 */
+  --warning-foreground: #fff;
+  --warning-light: #fdecd3;
+  /* --semantics-warning-50 */
+  --warning-dark: #2c1e09;
+  /* --semantics-warning-200 */
+  --destructive: #d04554;
+  --destructive-foreground: #fff;
+
+  /* Charts */
+  --chart-1: #6b4ce8;
+  --chart-2: #9277ff;
+  --chart-3: #a790ff;
+  --chart-4: #8061ff;
+  --chart-5: #5629c1;
+
+  /* Layout */
+  --radius: 0.625rem;
+  --sidebar: #f7f6f9;
+  --sidebar-foreground: #221e1e;
+  --sidebar-primary: #6b4ce8;
+  --sidebar-primary-foreground: #fff;
+  --sidebar-accent: #efeef3;
+  --sidebar-accent-foreground: #221e1e;
+  --sidebar-border: #f7f6f9;
+  --sidebar-ring: #6b4ce8;
+  --subtext: rgba(0, 0, 0, 0.6);
+  --grid: #f7f6f9;
+
+  /* Extended theme colors for light */
+  --command-bar-bg: #f7f6f9;
+  --main-bg: #efeef3;
+  --settings-bg: #fff;
+  --tldr-bg: rgba(107, 76, 232, 0.15);
+  --code-bg: #f7f6f9;
+  --code-inline-bg: #f7f6f9;
+  --markdown-bg: #fff;
+  --toggle-active-bg: #fff;
+  --online-indicator: #0da767;
+  /* Scrollbar - Light */
+  --scrollbar-thumb: rgba(0, 0, 0, 0.10);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.15);
+  --scrollbar-track: transparent;
+
+  /* Note colors for light */
+  --note-color-1: #e0e0e0;
+  --note-color-2: #f4e4d7;
+  --note-color-3: #f0e6e0;
+  --note-color-4: #d4e8dd;
+  --note-color-5: #e6ddf0;
+  --note-color-6: #f0d6d6;
+  --note-color-7: #f0d6e0;
+  --note-color-8: #f4e8d7;
+  --note-color-9: #d6e6f0;
+  --note-color-10: #e6e6e6;
+
+  --chat-border: rgba(0, 0, 0, 0.1);
+  --gradient-left: rgba(0, 0, 0, 0.06);
+  --gradient-right: rgba(0, 0, 0, 0);
+  --visual-left: #f7f6f9;
+  --visual-right: #ecebf0;
+}
+
+/* Scrollbar styles (theme-aware via CSS variables) */
+.scrollbar-theme {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* WebKit-based browsers */
+.scrollbar-theme::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-theme::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 2px solid var(--scrollbar-track);
+}
+
+.scrollbar-theme::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+.scrollbar-theme::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
+}
+
+/* Indeterminate progress bar animation for preloader */
+@keyframes progress-indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+.animate-progress-indeterminate {
+  animation: progress-indeterminate 1.4s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Center stack entrance animations */
+@keyframes slide-down-fade-in {
+  0% { transform: translateY(-60px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes slide-up-fade-in {
+  0% { transform: translateY(60px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.enter-from-top {
+  animation: slide-down-fade-in 790ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+.enter-from-bottom {
+  animation: slide-up-fade-in 790ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
