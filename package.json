@@ -1,25 +1,35 @@
 {
-  "name": "zeroai-website",
+  "name": "devbytes-website",
   "version": "1.0.0",
-  "description": "",
+  "description": "DevBytes - Chrome Extension Landing Page",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "serve -s dist -l 3000"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "react",
+    "tailwindcss",
+    "ai",
+    "chrome-extension",
+    "productivity"
+  ],
+  "author": "Mahek Unnisa",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
-    "esbuild": "^0.25.12",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.9.5",
-    "serve": "^14.2.5"
+    "react-router-dom": "^7.9.5"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.16"
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "terser": "^5.44.0",
+    "vite": "^6.4.1"
   }
 }

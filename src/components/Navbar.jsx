@@ -1,0 +1,102 @@
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+
+const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const navLinks = [
+    { path: '#features', label: 'Features' },
+  ];
+
+  const isActive = (path) => location.pathname === path;
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+      <div className="container-custom">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xl">Z</span>
+            </div>
+            <span className="text-xl font-bold text-foreground-primary">ZeroAI</span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.path}
+                href={link.path}
+                className="text-base font-medium text-foreground-muted hover:text-foreground-primary transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+            <a
+              href="https://chromewebstore.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+            >
+              Add to Chrome
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 rounded-lg hover:bg-background-tertiary transition-colors"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <svg
+              className="w-6 h-6 text-foreground-primary"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {isMenuOpen ? (
+                <path d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden py-4 border-t border-border">
+            <div className="flex flex-col space-y-4">
+              {navLinks.map((link) => (
+                <a
+                  key={link.path}
+                  href={link.path}
+                  className="text-base font-medium text-foreground-muted hover:text-foreground-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
+              <a
+                href="https://chromewebstore.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary inline-block text-center"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Add to Chrome
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
+
