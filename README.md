@@ -83,7 +83,12 @@ docker-compose up -d
 docker-compose down
 ```
 
-The application will be available at `http://localhost:3000`
+The application will be available at `http://localhost:3000` (or the port defined in your `docker-compose.override.yml`).
+
+### Bitbucket Pipeline
+
+- `bitbucket-pipelines.yml` runs on `atlassian/default-image:3`, ensures all required AWS variables are present, builds the Docker image, logs into the ECR registry with the AWS CLI, and pushes both the commit/tag-derived version and `latest` to the repository defined by `ECR_REPOSITORY`.
+- Provide these Bitbucket variables: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, and `ECR_REPOSITORY`. The pipeline derives the version tag from `BITBUCKET_TAG`, falls back to the commit SHA, and lets you override that value by defining `IMAGE_VERSION`; it exits if any required AWS value is missing.
 
 ## 🎨 Customization
 
@@ -161,7 +166,7 @@ The Dockerfile uses a multi-stage build:
 1. **Stage 1**: Builds the React application with Node.js
 2. **Stage 2**: Serves the static files with Nginx
 
-This results in a minimal production image (~25MB) with optimized performance.
+This results in a minimal production image (~25MB) with optimized performance. The nginx configuration lives in `nginx/default.conf` so it can be reviewed or extended without touching the Dockerfile.
 
 ## 🔒 Security Features
 
@@ -192,4 +197,3 @@ This project is licensed under the ISC License.
 - React team for the amazing framework
 - Tailwind CSS for the utility-first CSS framework
 - Vite for the lightning-fast build tool
-

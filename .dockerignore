@@ -36,8 +36,6 @@ DEPLOYMENT.md
 *.md
 
 # Docker
-Dockerfile.nginx
-Dockerfile.node
 docker-compose.yml
 .dockerignore
 
