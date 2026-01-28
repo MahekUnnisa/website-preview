@@ -1,0 +1,31 @@
+image: atlassian/default-image:3
+
+pipelines:
+  branches:
+    main:
+      - step:
+          name: Build and publish Docker image
+          services:
+            - docker
+          script:
+            - |
+              required_vars=(AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_DEFAULT_REGION ECR_REPOSITORY)
+              for var in "${required_vars[@]}"; do
+                if [ -z "${!var:-}" ]; then
+                  echo "Required pipeline variable '$var' is not set" >&2
+                  exit 1
+                fi
+              done
+              IMAGE_VERSION=${IMAGE_VERSION:-${BITBUCKET_TAG:-${BITBUCKET_COMMIT:-}}}
+              if [ -z "$IMAGE_VERSION" ]; then
+                echo "Unable to determine IMAGE_VERSION (set IMAGE_VERSION, push a tag, or ensure BITBUCKET_COMMIT is available)" >&2
+                exit 1
+              fi
+            - IMAGE_NAME_LATEST="${ECR_REPOSITORY}:latest"
+            - IMAGE_NAME_VERSION="${ECR_REPOSITORY}:${IMAGE_VERSION}"
+            - ECR_HOST=${ECR_REPOSITORY%%/*}
+            - docker build -t "$IMAGE_NAME_LATEST" -t "$IMAGE_NAME_VERSION" .
+            - apt-get update && apt-get install -y awscli >/tmp/aws-install.log
+            - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$ECR_HOST"
+            - docker push "$IMAGE_NAME_VERSION"
+            - docker push "$IMAGE_NAME_LATEST"

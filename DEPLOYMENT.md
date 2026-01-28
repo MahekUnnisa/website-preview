@@ -63,6 +63,11 @@ docker-compose down
 docker-compose up -d --build
 ```
 
+### Continuous Delivery
+
+- Bitbucket Pipelines (`bitbucket-pipelines.yml`) builds the Docker image on `main`, logs into ECR with the supplied AWS credentials, and pushes both `latest` and a version tag to `ECR_REPOSITORY`. The version tag is taken from `BITBUCKET_TAG`, falls back to the commit SHA, and can be overridden via `IMAGE_VERSION` if needed.
+- Configure these Bitbucket repository variables before running the pipeline: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, and `ECR_REPOSITORY` so the job can log into AWS and publish both tags; the pipeline fails fast if any are missing.
+
 ## Environment Setup
 
 The application uses environment variables for configuration. Create a `.env` file:
@@ -91,6 +96,7 @@ The production Dockerfile includes an optimized Nginx configuration with:
 - SPA fallback routing
 - Security headers (X-Frame-Options, X-XSS-Protection, etc.)
 - Health check endpoint
+- The same configuration is stored at `nginx/default.conf` so it can be audited separately.
 
 ## Health Checks
 
@@ -182,4 +188,3 @@ For issues or questions:
 - Email: support@zeroai.com
 - GitHub: [Repository URL]
 - Documentation: [Docs URL]
-
