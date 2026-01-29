@@ -1,5 +1,5 @@
 # Multi-stage build: build with Node, serve with lightweight nginx
-FROM node:lts-alpine3.23 AS builder
+FROM node:24.13.0-alpine3.23 AS builder
 
 WORKDIR /app
 

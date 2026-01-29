@@ -32,7 +32,31 @@ Landing page for DevBytes - an AI-powered Chrome extension that helps developers
 
 ### Prerequisites
 
-- Node.js 18+ or Docker
+- Node.js 24.13.0 LTS – project enforces this via `.nvmrc` and the `engines` field in `package.json`
+- npm 11.6.2 – project enforces this via the `engines` field in `package.json`
+- Git
+- Docker (optional, for containerized development)
+- Better use nvm to manage Node.js versions.
+
+### Usng nvm
+
+```bash
+nvm install
+nvm use
+```
+
+### Using Docker
+
+```bash
+docker build -t zeroai-website .
+docker run -p 3000:80 zeroai-website
+```
+
+### Using Docker Compose
+
+```bash
+docker-compose up -d
+```
 
 ### Development
 
