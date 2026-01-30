@@ -6,10 +6,22 @@ Thank you for your interest in contributing to the ZeroAI website! This document
 
 ### Prerequisites
 
-- Node.js 18+ 
-- npm 9+
+- Node.js 24.13.0 LTS – project enforces this via `.nvmrc` and the `engines` field in `package.json`
+- npm 11.6.2 – project enforces this via the `engines` field in `package.json`
 - Git
 - Docker (optional, for containerized development)
+- Better use nvm to manage Node.js versions.
+
+### Usng nvm
+
+```bash
+nvm install
+nvm use
+```
+
+### Using Docker
+
+For full Docker usage (build, run, and compose workflows), see the **“🐳 Docker Deployment”** section in `README.md`. That section is the single source of truth for container commands and options.
 
 ### Getting Started
 
@@ -121,6 +133,13 @@ The website uses a purple-based dark theme:
 5. **Responsive** - Mobile-first approach
 
 ## Making Changes
+
+### Security & Dependencies
+
+- Follow the pinned Node.js and npm versions defined in `.nvmrc` and `package.json`.
+- Prefer `npm ci` over `npm install` when reproducing CI locally.
+- Avoid introducing dependencies with known high/critical vulnerabilities (run `npm audit` before opening a PR).
+- If you update dependencies, add a short note in the PR description summarizing the change and any security impact.
 
 ### Branch Naming
 
