@@ -8,10 +8,12 @@ const Footer = () => {
     product: [
       { label: 'Features', path: '#features' },
       { label: 'Chrome Extension', path: 'https://chromewebstore.google.com', external: true },
+      { label: 'Slack App', path: '/slack' },
     ],
     legal: [
       { label: 'Privacy Policy', path: '/privacy' },
       { label: 'Terms of Service', path: '/terms' },
+      { label: 'Support', path: '/support' },
     ],
   };
 
@@ -56,12 +58,12 @@ const Footer = () => {
                       {link.label}
                     </a>
                   ) : (
-                    <a
-                      href={link.path}
+                    <Link
+                      to={link.path}
                       className="text-foreground-muted hover:text-foreground-primary text-sm transition-colors"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   )}
                 </li>
               ))}
