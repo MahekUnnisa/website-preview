@@ -8,6 +8,8 @@ import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Support from './pages/Support';
 import About from './pages/About';
+import Claim from './pages/Claim';
+import PartnerSuccess from './pages/PartnerSuccess';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/slack" element={<SlackLanding />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/claim" element={<Claim />} />
+            <Route path="/partner/success" element={<PartnerSuccess />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/about" element={<About />} />
