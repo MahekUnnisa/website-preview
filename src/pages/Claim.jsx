@@ -62,12 +62,19 @@ export default function Claim() {
 
   if (!token) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-16 text-slate-200">
-        <h1 className="text-2xl font-semibold mb-3">Invalid link</h1>
-        <p className="text-slate-400 mb-6">This page needs a claim token from your reward email.</p>
-        <Link to="/" className="text-indigo-400 hover:text-indigo-300">
-          Back home
-        </Link>
+      <div className="relative">
+        <div className="fixed inset-0 grid-overlay pointer-events-none" />
+        <section className="relative min-h-[70vh] flex items-center">
+          <div className="container-custom w-full">
+            <div className="max-w-lg mx-auto rounded-[0.625rem] border border-border bg-background-tertiary p-6">
+              <h1 className="text-2xl font-semibold text-foreground-primary mb-3">Invalid link</h1>
+              <p className="text-sm text-foreground-muted mb-6">This page needs a claim token from your reward email.</p>
+              <Link to="/" className="text-sm text-purple-200 hover:text-purple-100">
+                Back home
+              </Link>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
@@ -75,35 +82,45 @@ export default function Claim() {
   const invalid = status && status.valid === false;
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-16 text-slate-200">
-      <h1 className="text-2xl font-semibold mb-3">Claim your ZeroAI access</h1>
-      <p className="text-slate-400 mb-6">
-        Sign in with the same Google account as the email that received this reward. After login you can sync the
-        extension in one step.
-      </p>
-      {statusError && <p className="text-amber-400 text-sm mb-4">{statusError}</p>}
-      {invalid && (
-        <p className="text-amber-400 text-sm mb-4">
-          {status.expired ? 'This reward link has expired.' : 'This reward link is not valid.'}
-        </p>
-      )}
-      <Button
-        onClick={startGoogle}
-        disabled={Boolean(invalid)}
-        className="mb-4"
-      >
-        Continue with Google
-      </Button>
-      {status?.onboarding_status === 'activated' && status?.valid && (
-        <p className="text-emerald-400 text-sm mb-4">
-          This reward is already active. You can still sign in to manage your account.
-        </p>
-      )}
-      <p className="text-slate-500 text-sm">
-        <Link to="/" className="text-indigo-400 hover:text-indigo-300">
-          Back home
-        </Link>
-      </p>
+    <div className="relative">
+      <div className="fixed inset-0 grid-overlay pointer-events-none" />
+      <section className="relative min-h-[70vh] flex items-center">
+        <div className="container-custom w-full">
+          <div className="max-w-lg mx-auto rounded-[0.625rem] border border-border bg-background-tertiary p-6 shadow-2xl shadow-black/20">
+            <div className="mb-5 inline-flex items-center space-x-2 rounded-full border border-border-colored bg-purple-15 px-3 py-1.5">
+              <span className="h-2 w-2 rounded-full bg-purple-400"></span>
+              <span className="text-xs font-medium text-purple-200">Partner access</span>
+            </div>
+            <h1 className="text-2xl font-semibold text-foreground-primary mb-3">Claim your ZeroAI access</h1>
+            <p className="text-sm text-foreground-muted mb-6 leading-relaxed">
+              Sign in with the Google account that received this reward. After login, you can sync the extension in one step.
+            </p>
+            {statusError && <p className="text-warning text-sm mb-4">{statusError}</p>}
+            {invalid && (
+              <p className="text-warning text-sm mb-4">
+                {status.expired ? 'This reward link has expired.' : 'This reward link is not valid.'}
+              </p>
+            )}
+            <Button
+              onClick={startGoogle}
+              disabled={Boolean(invalid)}
+              className="mb-4"
+            >
+              Continue with Google
+            </Button>
+            {status?.onboarding_status === 'activated' && status?.valid && (
+              <p className="text-success text-sm mb-4">
+                This reward is already active. You can still sign in to manage your account.
+              </p>
+            )}
+            <p className="text-sm">
+              <Link to="/" className="text-purple-200 hover:text-purple-100">
+                Back home
+              </Link>
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

@@ -10,6 +10,9 @@ const chromeWebStoreUrl =
 
 const POLL_INTERVAL_MS = 2500;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
+const shellClass = 'max-w-lg mx-auto rounded-[0.625rem] border border-border bg-background-tertiary p-6 shadow-2xl shadow-black/20';
+const pageClass = 'relative min-h-[70vh] flex items-center';
+const linkClass = 'text-sm text-purple-200 hover:text-purple-100';
 
 function canTalkToExtensions() {
   return typeof chrome !== 'undefined' && Boolean(chrome.runtime?.sendMessage) && Boolean(extensionId);
@@ -241,40 +244,61 @@ export default function PartnerSuccess() {
 
   if (oauthError === 'email_mismatch') {
     return (
-      <div className="max-w-lg mx-auto px-4 py-16 text-slate-200">
-        <h1 className="text-2xl font-semibold mb-3">Google account does not match</h1>
-        <p className="text-slate-400 mb-6">
-          Sign in with the same Google email that received the partner reward, then open the claim link again.
-        </p>
-        <Link to="/claim" className="text-indigo-400 hover:text-indigo-300">
-          Back to claim
-        </Link>
+      <div className="relative">
+        <div className="fixed inset-0 grid-overlay pointer-events-none" />
+        <section className={pageClass}>
+          <div className="container-custom w-full">
+            <div className={shellClass}>
+              <h1 className="text-2xl font-semibold text-foreground-primary mb-3">Google account does not match</h1>
+              <p className="text-sm text-foreground-muted mb-6 leading-relaxed">
+                Sign in with the same Google email that received the partner reward, then open the claim link again.
+              </p>
+              <Link to="/claim" className={linkClass}>
+                Back to claim
+              </Link>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
 
   if (oauthError === 'claim_expired') {
     return (
-      <div className="max-w-lg mx-auto px-4 py-16 text-slate-200">
-        <h1 className="text-2xl font-semibold mb-3">Claim link expired</h1>
-        <p className="text-slate-400 mb-6">
-          Your sign-in took too long, or this link was already used. Open the original reward email again and start over.
-        </p>
-        <Link to="/" className="text-indigo-400 hover:text-indigo-300">
-          Back home
-        </Link>
+      <div className="relative">
+        <div className="fixed inset-0 grid-overlay pointer-events-none" />
+        <section className={pageClass}>
+          <div className="container-custom w-full">
+            <div className={shellClass}>
+              <h1 className="text-2xl font-semibold text-foreground-primary mb-3">Claim link expired</h1>
+              <p className="text-sm text-foreground-muted mb-6 leading-relaxed">
+                Your sign-in took too long, or this link was already used. Open the original reward email again and start over.
+              </p>
+              <Link to="/" className={linkClass}>
+                Back home
+              </Link>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
 
   if (!jwt) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-16 text-slate-200">
-        <h1 className="text-2xl font-semibold mb-3">Missing session</h1>
-        <p className="text-slate-400 mb-6">Open this page from the link you land on after Google sign-in.</p>
-        <Link to="/" className="text-indigo-400 hover:text-indigo-300">
-          Back home
-        </Link>
+      <div className="relative">
+        <div className="fixed inset-0 grid-overlay pointer-events-none" />
+        <section className={pageClass}>
+          <div className="container-custom w-full">
+            <div className={shellClass}>
+              <h1 className="text-2xl font-semibold text-foreground-primary mb-3">Missing session</h1>
+              <p className="text-sm text-foreground-muted mb-6 leading-relaxed">Open this page from the link you land on after Google sign-in.</p>
+              <Link to="/" className={linkClass}>
+                Back home
+              </Link>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
@@ -282,53 +306,62 @@ export default function PartnerSuccess() {
   const showExtensionInstallHelp = phase === 'done_web_only';
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-16 text-slate-200">
-      <h1 className="text-2xl font-semibold mb-3">You are in</h1>
-      <p className="text-slate-400 mb-4">
-        {phase === 'minting' && 'Finishing sign-in and preparing extension sync…'}
-        {phase === 'idle' && 'Preparing…'}
-        {phase === 'error' && (message || 'Something went wrong.')}
-        {phase === 'done_synced' && (message || 'All set.')}
-        {phase === 'done_web_only' && (message || '')}
-      </p>
+    <div className="relative">
+      <div className="fixed inset-0 grid-overlay pointer-events-none" />
+      <section className={pageClass}>
+        <div className="container-custom w-full">
+          <div className={shellClass}>
+            <div className="mb-5 inline-flex items-center space-x-2 rounded-full border border-border-colored bg-purple-15 px-3 py-1.5">
+              <span className="h-2 w-2 rounded-full bg-purple-400"></span>
+              <span className="text-xs font-medium text-purple-200">ZeroAI access</span>
+            </div>
+            <h1 className="text-2xl font-semibold text-foreground-primary mb-3">You are in</h1>
+            <p className="text-sm text-foreground-muted mb-4 leading-relaxed">
+              {phase === 'minting' && 'Finishing sign-in and preparing extension sync...'}
+              {phase === 'idle' && 'Preparing...'}
+              {phase === 'error' && (message || 'Something went wrong.')}
+              {phase === 'done_synced' && (message || 'All set.')}
+              {phase === 'done_web_only' && (message || '')}
+            </p>
 
-      {showExtensionInstallHelp && (
-        <div
-          className="mb-8 rounded-xl border border-slate-600/80 bg-slate-800/50 p-5 text-left"
-          role="region"
-          aria-label="Install the ZeroAI extension"
-        >
-          <h2 className="text-lg font-semibold text-white mb-2">Next: install the ZeroAI Chrome extension</h2>
-          <p className="text-slate-400 text-sm mb-4 leading-relaxed">
-            Your partner reward is applied to your ZeroAI account for this Google login. The website cannot run ZeroAI
-            inside Chrome by itself — install the extension to get the sidebar, quick actions, meeting features, and
-            everything else.
-          </p>
-          <a
-            href={chromeWebStoreUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-900"
-          >
-            Install ZeroAI from Chrome Web Store
-          </a>
-          <p className="mt-4 text-slate-500 text-sm leading-relaxed">
-            Keep this tab open — we'll auto-sync the moment the extension is installed. You can also{' '}
-            <button
-              type="button"
-              className="text-indigo-400 underline hover:text-indigo-300"
-              onClick={() => window.location.reload()}
-            >
-              refresh this page
-            </button>
-            .
-          </p>
+            {showExtensionInstallHelp && (
+              <div
+                className="mb-8 rounded-[0.625rem] border border-border-colored bg-purple-15 p-5 text-left"
+                role="region"
+                aria-label="Install the ZeroAI extension"
+              >
+                <h2 className="text-lg font-semibold text-foreground-primary mb-2">Next: install the ZeroAI Chrome extension</h2>
+                <p className="text-foreground-muted text-sm mb-4 leading-relaxed">
+                  Your partner reward is applied to this Google login. Install the extension to use ZeroAI in Chrome with the sidebar, quick actions, meeting features, and notes.
+                </p>
+                <a
+                  href={chromeWebStoreUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block rounded-[0.625rem] bg-brand-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-400/15 transition-colors hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-background"
+                >
+                  Install ZeroAI from Chrome Web Store
+                </a>
+                <p className="mt-4 text-foreground-muted text-sm leading-relaxed">
+                  Keep this tab open. We'll auto-sync the moment the extension is installed. You can also{' '}
+                  <button
+                    type="button"
+                    className="text-purple-200 underline hover:text-purple-100"
+                    onClick={() => window.location.reload()}
+                  >
+                    refresh this page
+                  </button>
+                  .
+                </p>
+              </div>
+            )}
+
+            <Link to="/" className={linkClass}>
+              Back home
+            </Link>
+          </div>
         </div>
-      )}
-
-      <Link to="/" className="text-indigo-400 hover:text-indigo-300 text-sm">
-        Back home
-      </Link>
+      </section>
     </div>
   );
 }

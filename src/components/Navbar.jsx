@@ -12,17 +12,21 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/85 backdrop-blur-xl border-b border-border">
       <div className="container-custom">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center gap-2">
             <img 
-              src="/assets/icons/zeroAI.png" 
-              alt="ZeroAI Logo" 
-              className="w-10 h-10 rounded-lg"
+              src="/assets/icons/icon.png"
+              alt="DevBot Logo" 
+              className="h-5 w-auto"
             />
-            <span className="text-xl font-bold text-foreground-primary">ZeroAI</span>
+            <img 
+              src="/assets/icons/logo.png"
+              alt="ZeroAI Logo" 
+              className="h-5 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -31,7 +35,7 @@ const Navbar = () => {
               <a
                 key={link.path}
                 href={link.path}
-                className="text-base font-medium text-foreground-muted hover:text-foreground-primary transition-colors"
+                className="text-sm font-medium text-foreground-muted hover:text-foreground-primary transition-colors"
               >
                 {link.label}
               </a>
@@ -49,6 +53,7 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2 rounded-lg hover:bg-background-tertiary transition-colors"
+            aria-label="Toggle navigation menu"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <svg
@@ -77,7 +82,7 @@ const Navbar = () => {
                 <a
                   key={link.path}
                   href={link.path}
-                  className="text-base font-medium text-foreground-muted hover:text-foreground-primary transition-colors"
+                  className="text-sm font-medium text-foreground-muted hover:text-foreground-primary transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
