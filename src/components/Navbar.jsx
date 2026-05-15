@@ -37,7 +37,7 @@ const Navbar = () => {
               </a>
             ))}
             <a
-              href="https://chromewebstore.google.com"
+              href="https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
@@ -84,7 +84,7 @@ const Navbar = () => {
                 </a>
               ))}
               <a
-                href="https://chromewebstore.google.com"
+                href="https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary inline-block text-center"

@@ -62,6 +62,16 @@ const Privacy = () => {
       ],
     },
     {
+      title: 'WhatsApp Business Messaging',
+      content: [
+        'ZeroAI may communicate with you via WhatsApp Business messaging operated by Candela Labs Private Limited through the WhatsApp Business API.',
+        'By providing your WhatsApp number and explicitly opting in, you consent to receive transactional messages, product updates, and support communications from ZeroAI via WhatsApp.',
+        'You may opt out of WhatsApp messages at any time by replying "STOP" to any message, or by contacting us at support@zeroai.co.in. Opt-out requests are processed within 24 hours.',
+        'We do not use WhatsApp to send promotional or marketing messages without your explicit prior consent.',
+        'All WhatsApp communications are conducted in accordance with Meta\'s WhatsApp Business Policy and applicable data protection laws.',
+      ],
+    },
+    {
       title: 'Changes to This Policy',
       content: [
         'We may update this privacy policy from time to time.',
@@ -88,10 +98,13 @@ const Privacy = () => {
               Last Updated: November 4, 2025
             </p>
             <Card className="bg-purple-15 border-border-colored">
-              <p className="text-sm text-foreground-muted">
-                At ZeroAI, we take your privacy seriously. This Privacy Policy explains how we collect, 
-                use, disclose, and safeguard your information when you use our Chrome extension and services. 
+              <p className="text-sm text-foreground-muted mb-3">
+                At ZeroAI, we take your privacy seriously. This Privacy Policy explains how we collect,
+                use, disclose, and safeguard your information when you use our Chrome extension and services.
                 Please read this policy carefully to understand our practices regarding your personal data.
+              </p>
+              <p className="text-sm text-foreground-muted">
+                ZeroAI is a product of <strong className="text-foreground-primary">Candela Labs Private Limited</strong>, a company incorporated under the laws of Singapore.
               </p>
             </Card>
           </div>
@@ -131,6 +144,14 @@ const Privacy = () => {
                   please contact us at:
                 </p>
                 <div className="space-y-2 text-foreground-primary">
+                  <p>
+                    <strong>Company:</strong>{' '}
+                    <span className="text-foreground-muted">Candela Labs Private Limited</span>
+                  </p>
+                  <p>
+                    <strong>Address:</strong>{' '}
+                    <span className="text-foreground-muted">105 The Octagon, #07-02 Cecil Street, Singapore</span>
+                  </p>
                   <p>
                     <strong>Email:</strong>{' '}
                     <a href="mailto:privacy@zeroai.com" className="text-purple-200 hover:text-purple-100">

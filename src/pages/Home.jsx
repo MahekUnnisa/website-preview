@@ -97,9 +97,9 @@ const Home = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up-fade-in">
-              <a 
-                href="https://chromewebstore.google.com" 
-                target="_blank" 
+              <a
+                href="https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <Button variant="primary" size="lg">
@@ -170,9 +170,9 @@ const Home = () => {
               <p className="text-sm text-foreground-muted mb-5">
                 Join developers who are boosting productivity with ZeroAI
               </p>
-              <a 
-                href="https://chromewebstore.google.com" 
-                target="_blank" 
+              <a
+                href="https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <Button variant="primary" size="lg">

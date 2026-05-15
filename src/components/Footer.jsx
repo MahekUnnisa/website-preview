@@ -7,7 +7,12 @@ const Footer = () => {
   const footerLinks = {
     product: [
       { label: 'Features', path: '#features' },
-      { label: 'Chrome Extension', path: 'https://chromewebstore.google.com', external: true },
+      { label: 'Chrome Extension', path: 'https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg', external: true },
+      { label: 'Slack App', path: '/slack' },
+    ],
+    company: [
+      { label: 'About Us', path: '/about' },
+      { label: 'Support', path: '/support' },
     ],
     legal: [
       { label: 'Privacy Policy', path: '/privacy' },
@@ -19,7 +24,7 @@ const Footer = () => {
   return (
     <footer className="bg-background-secondary border-t border-border">
       <div className="container-custom py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
               {/* Brand Section */}
               <div className="lg:col-span-2">
                 <div className="flex items-center space-x-2 mb-4">
@@ -56,13 +61,30 @@ const Footer = () => {
                       {link.label}
                     </a>
                   ) : (
-                    <a
-                      href={link.path}
+                    <Link
+                      to={link.path}
                       className="text-foreground-muted hover:text-foreground-primary text-sm transition-colors"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h3 className="text-foreground-primary font-semibold mb-4">Company</h3>
+            <ul className="space-y-3">
+              {footerLinks.company.map((link) => (
+                <li key={link.path}>
+                  <Link
+                    to={link.path}
+                    className="text-foreground-muted hover:text-foreground-primary text-sm transition-colors"
+                  >
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -87,9 +109,12 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-border">
+        <div className="mt-12 pt-8 border-t border-border space-y-1">
           <p className="text-center text-foreground-muted text-sm">
-            © {currentYear} ZeroAI. All rights reserved.
+            © {currentYear} Candela Labs Private Limited. All rights reserved.
+          </p>
+          <p className="text-center text-foreground-muted text-xs">
+            ZeroAI is a product of Candela Labs Private Limited, incorporated in Singapore.
           </p>
         </div>
       </div>
