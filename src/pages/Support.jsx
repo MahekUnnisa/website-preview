@@ -88,6 +88,14 @@ const Support = () => {
                     Email is the fastest way to reach us. We aim to reply within 2–5 business days.
                   </p>
                   <p>
+                    <strong>Company:</strong>{' '}
+                    <span className="text-foreground-muted">Candela Labs Private Limited</span>
+                  </p>
+                  <p>
+                    <strong>Address:</strong>{' '}
+                    <span className="text-foreground-muted">105 The Octagon, #07-02 Cecil Street, Singapore</span>
+                  </p>
+                  <p>
                     <strong>Support:</strong>{' '}
                     <a href="mailto:support@zeroai.co.in" className="text-purple-200 hover:text-purple-100">
                       support@zeroai.co.in

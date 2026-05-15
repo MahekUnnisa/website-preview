@@ -90,9 +90,9 @@ const Terms = () => {
     {
       title: 'Governing Law',
       content: [
-        'These terms shall be governed by the laws of the State of California, without regard to conflict of law principles.',
-        'Any disputes shall be resolved in the courts located in San Francisco County, California.',
-        'You agree to submit to the personal jurisdiction of these courts.',
+        'These terms shall be governed by the laws of Singapore, without regard to conflict of law principles.',
+        'Any disputes shall be resolved in the courts of Singapore.',
+        'You agree to submit to the personal jurisdiction of the Singapore courts.',
       ],
     },
     {
@@ -123,10 +123,13 @@ const Terms = () => {
               Last Updated: November 4, 2025
             </p>
             <Card className="bg-purple-15 border-border-colored">
-              <p className="text-sm text-foreground-muted">
-                These Terms of Service govern your access to and use of ZeroAI's Chrome extension and services, 
-                including our website and any related services. By using our services, 
+              <p className="text-sm text-foreground-muted mb-3">
+                These Terms of Service govern your access to and use of ZeroAI's Chrome extension and services,
+                including our website and any related services. By using our services,
                 you agree to be bound by these terms.
+              </p>
+              <p className="text-sm text-foreground-muted">
+                ZeroAI is a product of <strong className="text-foreground-primary">Candela Labs Private Limited</strong>, a company incorporated under the laws of Singapore. References to "ZeroAI", "we", "us", or "our" in these terms refer to Candela Labs Private Limited.
               </p>
             </Card>
           </div>
@@ -165,6 +168,14 @@ const Terms = () => {
                   If you have any questions about these Terms of Service, please contact us at:
                 </p>
                 <div className="space-y-2 text-foreground-primary">
+                  <p>
+                    <strong>Company:</strong>{' '}
+                    <span className="text-foreground-muted">Candela Labs Private Limited</span>
+                  </p>
+                  <p>
+                    <strong>Address:</strong>{' '}
+                    <span className="text-foreground-muted">105 The Octagon, #07-02 Cecil Street, Singapore</span>
+                  </p>
                   <p>
                     <strong>Email:</strong>{' '}
                     <a href="mailto:legal@zeroai.com" className="text-purple-200 hover:text-purple-100">

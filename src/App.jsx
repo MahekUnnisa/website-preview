@@ -7,6 +7,7 @@ import SlackLanding from './pages/SlackLanding';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Support from './pages/Support';
+import About from './pages/About';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <Route path="/support" element={<Support />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/about" element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
