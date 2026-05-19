@@ -7,15 +7,20 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-# Copy source files and build
+# VITE_* is not needed here: nginx entrypoint emits /runtime-env.js from container env (see docker-compose `environment`).
 COPY . .
+
 RUN npm run build
 
-# Final stage: serve the static site with nginx (non-root on 8080)
+# Final stage: serve the static site with nginx
 FROM nginx:stable-alpine-slim
+
+RUN apk add --no-cache jq
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 RUN chown -R nginx:nginx /usr/share/nginx/html /var/cache/nginx /var/run /var/log/nginx && \
     chmod -R 755 /usr/share/nginx/html && \
@@ -24,6 +29,4 @@ RUN chown -R nginx:nginx /usr/share/nginx/html /var/cache/nginx /var/run /var/lo
 
 EXPOSE 80
 
-USER nginx
-
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
