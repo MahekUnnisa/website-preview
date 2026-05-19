@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { getChromeWebStoreUrl } from '../lib/env';
+
+const chromeWebStoreUrl = getChromeWebStoreUrl();
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,7 +44,7 @@ const Navbar = () => {
               </a>
             ))}
             <a
-              href="https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg"
+              href={chromeWebStoreUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
@@ -89,7 +92,7 @@ const Navbar = () => {
                 </a>
               ))}
               <a
-                href="https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg"
+                href={chromeWebStoreUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary inline-block text-center"

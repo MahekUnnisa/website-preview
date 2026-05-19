@@ -1,5 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getChromeWebStoreUrl } from '../lib/env';
+
+const chromeWebStoreUrl = getChromeWebStoreUrl();
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -7,12 +10,12 @@ const Footer = () => {
   const footerLinks = {
     product: [
       { label: 'Features', path: '#features' },
-      { label: 'Chrome Extension', path: 'https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg', external: true },
       { label: 'Slack App', path: '/slack' },
     ],
     company: [
       { label: 'About Us', path: '/about' },
       { label: 'Support', path: '/support' },
+      { label: 'Chrome Extension', path: chromeWebStoreUrl, external: true },
     ],
     legal: [
       { label: 'Privacy Policy', path: '/privacy' },

@@ -1,6 +1,9 @@
 import React from 'react';
 import Card from '../components/Card';
 import Button from '../components/Button';
+import { getChromeWebStoreUrl } from '../lib/env';
+
+const chromeWebStoreUrl = getChromeWebStoreUrl();
 
 const Home = () => {
   const features = [
@@ -91,9 +94,9 @@ const Home = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up-fade-in">
-              <a
-                href="https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg"
-                target="_blank"
+              <a 
+                href={chromeWebStoreUrl}
+                target="_blank" 
                 rel="noopener noreferrer"
               >
                 <Button variant="primary" size="lg">
@@ -165,9 +168,9 @@ const Home = () => {
               <p className="text-sm text-foreground-muted mb-5 leading-relaxed">
                 A focused assistant for the tabs, meetings, notes, and tasks already in front of you.
               </p>
-              <a
-                href="https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg"
-                target="_blank"
+              <a 
+                href={chromeWebStoreUrl}
+                target="_blank" 
                 rel="noopener noreferrer"
               >
                 <Button variant="primary" size="lg">

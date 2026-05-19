@@ -1,18 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import PartnerFlowLayout from '../components/PartnerFlowLayout';
+import ExtensionInstallGuide from '../components/ExtensionInstallGuide';
+import { getApiBase, getChromeWebStoreUrl, getExtensionId } from '../lib/env';
 
-const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
-const extensionId = (import.meta.env.VITE_EXTENSION_ID || '').trim();
-const DEFAULT_CHROME_WEBSTORE_URL =
-  'https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg';
-const chromeWebStoreUrl =
-  (import.meta.env.VITE_CHROME_WEBSTORE_URL || '').trim() || DEFAULT_CHROME_WEBSTORE_URL;
+const apiBase = getApiBase();
+const extensionId = getExtensionId();
+const chromeWebStoreUrl = getChromeWebStoreUrl();
 
 const POLL_INTERVAL_MS = 2500;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
-const shellClass = 'max-w-lg mx-auto rounded-[0.625rem] border border-border bg-background-tertiary p-6 shadow-2xl shadow-black/20';
-const pageClass = 'relative min-h-[70vh] flex items-center';
-const linkClass = 'text-sm text-purple-200 hover:text-purple-100';
+
+const linkClass = 'text-sm font-medium text-purple-200 hover:text-purple-100 underline-offset-4 hover:underline';
 
 function canTalkToExtensions() {
   return typeof chrome !== 'undefined' && Boolean(chrome.runtime?.sendMessage) && Boolean(extensionId);
@@ -133,7 +132,9 @@ export default function PartnerSuccess() {
       if (resp?.ok) {
         syncedRef.current = true;
         setPhase('done_synced');
-        setMessage('ZeroAI extension is signed in. You can close this tab.');
+        setMessage(
+          'ZeroAI is signed in and synced. We’re opening a new tab where you can pin the extension and get started.',
+        );
         return true;
       }
       setPhase('done_web_only');
@@ -242,126 +243,106 @@ export default function PartnerSuccess() {
 
   useEffect(() => () => stopPolling(), [stopPolling]);
 
+  useEffect(() => {
+    if (phase !== 'done_synced') return;
+    try {
+      const key = 'zeroai_partner_post_sync_tab';
+      if (typeof sessionStorage !== 'undefined') {
+        if (sessionStorage.getItem(key)) return;
+        sessionStorage.setItem(key, '1');
+      }
+      window.open(`${window.location.origin}/`, '_blank', 'noopener,noreferrer');
+    } catch {
+      /* popup blocked — user can use manual link below */
+    }
+  }, [phase]);
+
   if (oauthError === 'email_mismatch') {
     return (
-      <div className="relative">
-        <div className="fixed inset-0 grid-overlay pointer-events-none" />
-        <section className={pageClass}>
-          <div className="container-custom w-full">
-            <div className={shellClass}>
-              <h1 className="text-2xl font-semibold text-foreground-primary mb-3">Google account does not match</h1>
-              <p className="text-sm text-foreground-muted mb-6 leading-relaxed">
-                Sign in with the same Google email that received the partner reward, then open the claim link again.
-              </p>
-              <Link to="/claim" className={linkClass}>
-                Back to claim
-              </Link>
-            </div>
-          </div>
-        </section>
-      </div>
+      <PartnerFlowLayout eyebrow="Partner reward" title="Google account does not match">
+        <p className="text-foreground-muted">
+          Sign in with the same Google email that received the partner reward, then open the claim link again.
+        </p>
+        <p>
+          <Link to="/claim" className={linkClass}>
+            Back to claim
+          </Link>
+        </p>
+      </PartnerFlowLayout>
     );
   }
 
   if (oauthError === 'claim_expired') {
     return (
-      <div className="relative">
-        <div className="fixed inset-0 grid-overlay pointer-events-none" />
-        <section className={pageClass}>
-          <div className="container-custom w-full">
-            <div className={shellClass}>
-              <h1 className="text-2xl font-semibold text-foreground-primary mb-3">Claim link expired</h1>
-              <p className="text-sm text-foreground-muted mb-6 leading-relaxed">
-                Your sign-in took too long, or this link was already used. Open the original reward email again and start over.
-              </p>
-              <Link to="/" className={linkClass}>
-                Back home
-              </Link>
-            </div>
-          </div>
-        </section>
-      </div>
+      <PartnerFlowLayout eyebrow="Partner reward" title="Claim link expired">
+        <p className="text-foreground-muted">
+          Your sign-in took too long, or this link was already used. Open the original reward email again and start
+          over.
+        </p>
+        <p>
+          <Link to="/" className={linkClass}>
+            Back home
+          </Link>
+        </p>
+      </PartnerFlowLayout>
     );
   }
 
   if (!jwt) {
     return (
-      <div className="relative">
-        <div className="fixed inset-0 grid-overlay pointer-events-none" />
-        <section className={pageClass}>
-          <div className="container-custom w-full">
-            <div className={shellClass}>
-              <h1 className="text-2xl font-semibold text-foreground-primary mb-3">Missing session</h1>
-              <p className="text-sm text-foreground-muted mb-6 leading-relaxed">Open this page from the link you land on after Google sign-in.</p>
-              <Link to="/" className={linkClass}>
-                Back home
-              </Link>
-            </div>
-          </div>
-        </section>
-      </div>
+      <PartnerFlowLayout eyebrow="Partner reward" title="Missing session">
+        <p className="text-foreground-muted">Open this page from the link you land on after Google sign-in.</p>
+        <p>
+          <Link to="/" className={linkClass}>
+            Back home
+          </Link>
+        </p>
+      </PartnerFlowLayout>
     );
   }
 
   const showExtensionInstallHelp = phase === 'done_web_only';
 
+  const statusLine =
+    phase === 'minting'
+      ? 'Finishing sign-in and preparing extension sync...'
+      : phase === 'idle'
+        ? 'Preparing...'
+        : phase === 'error'
+          ? message || 'Something went wrong.'
+          : phase === 'done_synced'
+            ? message || 'All set.'
+            : phase === 'done_web_only'
+              ? message || ''
+              : '';
+
+  const statusMuted = phase === 'minting' || phase === 'idle';
+
   return (
-    <div className="relative">
-      <div className="fixed inset-0 grid-overlay pointer-events-none" />
-      <section className={pageClass}>
-        <div className="container-custom w-full">
-          <div className={shellClass}>
-            <div className="mb-5 inline-flex items-center space-x-2 rounded-full border border-border-colored bg-purple-15 px-3 py-1.5">
-              <span className="h-2 w-2 rounded-full bg-purple-400"></span>
-              <span className="text-xs font-medium text-purple-200">ZeroAI access</span>
-            </div>
-            <h1 className="text-2xl font-semibold text-foreground-primary mb-3">You are in</h1>
-            <p className="text-sm text-foreground-muted mb-4 leading-relaxed">
-              {phase === 'minting' && 'Finishing sign-in and preparing extension sync...'}
-              {phase === 'idle' && 'Preparing...'}
-              {phase === 'error' && (message || 'Something went wrong.')}
-              {phase === 'done_synced' && (message || 'All set.')}
-              {phase === 'done_web_only' && (message || '')}
-            </p>
+    <PartnerFlowLayout eyebrow="ZeroAI access" title="You’re signed in">
+      <p className={statusMuted ? 'text-foreground-muted animate-pulse' : 'text-foreground-muted'}>{statusLine}</p>
 
-            {showExtensionInstallHelp && (
-              <div
-                className="mb-8 rounded-[0.625rem] border border-border-colored bg-purple-15 p-5 text-left"
-                role="region"
-                aria-label="Install the ZeroAI extension"
-              >
-                <h2 className="text-lg font-semibold text-foreground-primary mb-2">Next: install the ZeroAI Chrome extension</h2>
-                <p className="text-foreground-muted text-sm mb-4 leading-relaxed">
-                  Your partner reward is applied to this Google login. Install the extension to use ZeroAI in Chrome with the sidebar, quick actions, meeting features, and notes.
-                </p>
-                <a
-                  href={chromeWebStoreUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block rounded-[0.625rem] bg-brand-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-400/15 transition-colors hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-background"
-                >
-                  Install ZeroAI from Chrome Web Store
-                </a>
-                <p className="mt-4 text-foreground-muted text-sm leading-relaxed">
-                  Keep this tab open. We'll auto-sync the moment the extension is installed. You can also{' '}
-                  <button
-                    type="button"
-                    className="text-purple-200 underline hover:text-purple-100"
-                    onClick={() => window.location.reload()}
-                  >
-                    refresh this page
-                  </button>
-                  .
-                </p>
-              </div>
-            )}
+      {phase === 'done_synced' && (
+        <p className="text-sm text-foreground-secondary">
+         Open a new tab and start using ZeroAI.
+        </p>
+      )}
 
-            <Link to="/" className={linkClass}>
-              Back home
-            </Link>
-          </div>
-        </div>
-      </section>
-    </div>
+      {showExtensionInstallHelp && (
+        <>
+          <p className="text-foreground-secondary text-sm leading-relaxed">
+            You’re signed in on the web. On a computer, use Chrome and follow the steps — install the extension, keep this
+            tab open until sync completes, then continue in the new tab we open for you.
+          </p>
+          <ExtensionInstallGuide chromeWebStoreUrl={chromeWebStoreUrl} />
+        </>
+      )}
+
+      <div className="pt-8 border-t border-border">
+        <Link to="/" className={linkClass}>
+          Back home
+        </Link>
+      </div>
+    </PartnerFlowLayout>
   );
 }

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import Button from '../components/Button';
+import PartnerFlowLayout from '../components/PartnerFlowLayout';
+import { getApiBase } from '../lib/env';
 
-const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+const apiBase = getApiBase();
 
 const ERROR_COPY = {
-  invalid_or_expired: 'This reward link is no longer valid. It may have expired or been replaced by a newer one. Check your email for the most recent claim link.',
+  invalid_or_expired:
+    'This reward link is no longer valid. It may have expired or been replaced by a newer one. Check your email for the most recent claim link.',
   bootstrap_failed: 'Something went wrong while preparing your sign-in. Please try again in a minute.',
 };
+
+const linkClass = 'text-sm font-medium text-purple-200 hover:text-purple-100 underline-offset-4 hover:underline';
 
 export default function Claim() {
   const [params] = useSearchParams();
@@ -20,7 +25,7 @@ export default function Claim() {
 
   useEffect(() => {
     if (!token || !apiBase) {
-      if (!apiBase) setStatusError('Site is missing VITE_API_BASE_URL. Configure the website env and rebuild.');
+      if (!apiBase) setStatusError('Site is missing base url.');
       return;
     }
     let cancelled = false;
@@ -42,9 +47,7 @@ export default function Claim() {
       } catch (err) {
         if (!cancelled) {
           setStatusError(
-            err instanceof Error
-              ? `Could not reach the API: ${err.message}`
-              : 'Could not reach the API.',
+            err instanceof Error ? `Could not reach the API: ${err.message}` : 'Could not reach the API.',
           );
         }
       }
@@ -62,65 +65,48 @@ export default function Claim() {
 
   if (!token) {
     return (
-      <div className="relative">
-        <div className="fixed inset-0 grid-overlay pointer-events-none" />
-        <section className="relative min-h-[70vh] flex items-center">
-          <div className="container-custom w-full">
-            <div className="max-w-lg mx-auto rounded-[0.625rem] border border-border bg-background-tertiary p-6">
-              <h1 className="text-2xl font-semibold text-foreground-primary mb-3">Invalid link</h1>
-              <p className="text-sm text-foreground-muted mb-6">This page needs a claim token from your reward email.</p>
-              <Link to="/" className="text-sm text-purple-200 hover:text-purple-100">
-                Back home
-              </Link>
-            </div>
-          </div>
-        </section>
-      </div>
+      <PartnerFlowLayout eyebrow="Partner reward" title="Invalid link">
+        <p className="text-foreground-muted">
+          This page needs a claim token from your reward email.
+        </p>
+        <p>
+          <Link to="/" className={linkClass}>
+            Back home
+          </Link>
+        </p>
+      </PartnerFlowLayout>
     );
   }
 
   const invalid = status && status.valid === false;
 
   return (
-    <div className="relative">
-      <div className="fixed inset-0 grid-overlay pointer-events-none" />
-      <section className="relative min-h-[70vh] flex items-center">
-        <div className="container-custom w-full">
-          <div className="max-w-lg mx-auto rounded-[0.625rem] border border-border bg-background-tertiary p-6 shadow-2xl shadow-black/20">
-            <div className="mb-5 inline-flex items-center space-x-2 rounded-full border border-border-colored bg-purple-15 px-3 py-1.5">
-              <span className="h-2 w-2 rounded-full bg-purple-400"></span>
-              <span className="text-xs font-medium text-purple-200">Partner access</span>
-            </div>
-            <h1 className="text-2xl font-semibold text-foreground-primary mb-3">Claim your ZeroAI access</h1>
-            <p className="text-sm text-foreground-muted mb-6 leading-relaxed">
-              Sign in with the Google account that received this reward. After login, you can sync the extension in one step.
-            </p>
-            {statusError && <p className="text-warning text-sm mb-4">{statusError}</p>}
-            {invalid && (
-              <p className="text-warning text-sm mb-4">
-                {status.expired ? 'This reward link has expired.' : 'This reward link is not valid.'}
-              </p>
-            )}
-            <Button
-              onClick={startGoogle}
-              disabled={Boolean(invalid)}
-              className="mb-4"
-            >
-              Continue with Google
-            </Button>
-            {status?.onboarding_status === 'activated' && status?.valid && (
-              <p className="text-success text-sm mb-4">
-                This reward is already active. You can still sign in to manage your account.
-              </p>
-            )}
-            <p className="text-sm">
-              <Link to="/" className="text-purple-200 hover:text-purple-100">
-                Back home
-              </Link>
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
+    <PartnerFlowLayout eyebrow="Partner reward" title="Claim your ZeroAI access">
+      <p className="text-foreground-muted">
+        Sign in with the Google account that received this reward. After login, you can sync the extension in one
+        step.
+      </p>
+      {statusError && <p className="text-warning text-sm">{statusError}</p>}
+      {invalid && (
+        <p className="text-warning text-sm">
+          {status.expired ? 'This reward link has expired.' : 'This reward link is not valid.'}
+        </p>
+      )}
+      <div className="pt-2">
+        <Button onClick={startGoogle} disabled={Boolean(invalid)} className="min-w-[14rem]">
+          Continue with Google
+        </Button>
+      </div>
+      {status?.onboarding_status === 'activated' && status?.valid && (
+        <p className="text-success text-sm">
+          This reward is already active. You can still sign in to manage your account.
+        </p>
+      )}
+      <div className="pt-8 border-t border-border">
+        <Link to="/" className={linkClass}>
+          Back home
+        </Link>
+      </div>
+    </PartnerFlowLayout>
   );
 }
