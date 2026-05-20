@@ -8,7 +8,7 @@ const Card = ({ children, className = '', hover = true, ...props }) => {
 
   return (
     <div
-      className={`card-base ${hover ? 'hover:shadow-lg hover:shadow-purple-400/10' : ''} ${className}`}
+      className={`card-base ${hover ? 'hover:border-border-colored hover:shadow-lg hover:shadow-purple-400/10' : ''} ${className}`}
       {...safeProps}
     >
       {children}

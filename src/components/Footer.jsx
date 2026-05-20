@@ -1,5 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getChromeWebStoreUrl } from '../lib/env';
+
+const chromeWebStoreUrl = getChromeWebStoreUrl();
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -7,12 +10,12 @@ const Footer = () => {
   const footerLinks = {
     product: [
       { label: 'Features', path: '#features' },
-      { label: 'Chrome Extension', path: 'https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg', external: true },
       { label: 'Slack App', path: '/slack' },
     ],
     company: [
       { label: 'About Us', path: '/about' },
       { label: 'Support', path: '/support' },
+      { label: 'Chrome Extension', path: chromeWebStoreUrl, external: true },
     ],
     legal: [
       { label: 'Privacy Policy', path: '/privacy' },
@@ -20,28 +23,25 @@ const Footer = () => {
     ],
   };
 
-
   return (
     <footer className="bg-background-secondary border-t border-border">
       <div className="container-custom py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-              {/* Brand Section */}
-              <div className="lg:col-span-2">
-                <div className="flex items-center space-x-2 mb-4">
-                  <img 
-                    src="/assets/icons/zeroAI.png" 
-                    alt="ZeroAI Logo" 
-                    className="w-10 h-10 rounded-lg"
-                  />
-                  <span className="text-xl font-bold text-foreground-primary">ZeroAI</span>
-                </div>
+          {/* Brand Section */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center mb-4">
+              <img
+                src="/assets/icons/logo.png"
+                alt="ZeroAI Logo"
+                className="h-8 w-auto"
+              />
+            </div>
             <p className="text-foreground-muted text-sm mb-4 max-w-xs">
-              An AI assistant that helps developers manage their calendar, tasks, and notes. 
-              Supercharge your workflow — you focus on building, we take care of the rest.
+              A Chrome assistant for notes, tasks, meetings, and quick web actions. Built to stay close to your workflow.
             </p>
             <div className="inline-flex items-center space-x-2 bg-purple-15 border border-border-colored rounded-full px-3 py-1.5">
-              <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></span>
-              <span className="text-xs text-purple-200 font-medium">Now in Open Beta</span>
+              <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
+              <span className="text-xs text-purple-200 font-medium">Chrome Extension</span>
             </div>
           </div>
 
