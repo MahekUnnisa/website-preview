@@ -259,9 +259,9 @@ export default function PartnerSuccess() {
 
   if (oauthError === 'email_mismatch') {
     return (
-      <PartnerFlowLayout eyebrow="Partner reward" title="Google account does not match">
+      <PartnerFlowLayout eyebrow="Exclusively for you" title="Google account does not match.">
         <p className="text-foreground-muted">
-          Sign in with the same Google email that received the partner reward, then open the claim link again.
+          Please sign in with the same Google email that received the reward.
         </p>
         <p>
           <Link to="/claim" className={linkClass}>
@@ -274,7 +274,7 @@ export default function PartnerSuccess() {
 
   if (oauthError === 'claim_expired') {
     return (
-      <PartnerFlowLayout eyebrow="Partner reward" title="Claim link expired">
+      <PartnerFlowLayout eyebrow="Exclusively for you" title="Claim link expired">
         <p className="text-foreground-muted">
           Your sign-in took too long, or this link was already used. Open the original reward email again and start
           over.
@@ -290,7 +290,7 @@ export default function PartnerSuccess() {
 
   if (!jwt) {
     return (
-      <PartnerFlowLayout eyebrow="Partner reward" title="Missing session">
+      <PartnerFlowLayout eyebrow="Exclusively for you" title="Missing session">
         <p className="text-foreground-muted">Open this page from the link you land on after Google sign-in.</p>
         <p>
           <Link to="/" className={linkClass}>
@@ -319,7 +319,7 @@ export default function PartnerSuccess() {
   const statusMuted = phase === 'minting' || phase === 'idle';
 
   return (
-    <PartnerFlowLayout eyebrow="ZeroAI access" title="You’re signed in">
+    <PartnerFlowLayout eyebrow="ZeroAI access" title="You’re signed in.">
       <p className={statusMuted ? 'text-foreground-muted animate-pulse' : 'text-foreground-muted'}>{statusLine}</p>
 
       {phase === 'done_synced' && (
@@ -331,8 +331,7 @@ export default function PartnerSuccess() {
       {showExtensionInstallHelp && (
         <>
           <p className="text-foreground-secondary text-sm leading-relaxed">
-            You’re signed in on the web. On a computer, use Chrome and follow the steps — install the extension, keep this
-            tab open until sync completes, then continue in the new tab we open for you.
+            You’re signed in on the web.
           </p>
           <ExtensionInstallGuide chromeWebStoreUrl={chromeWebStoreUrl} />
         </>

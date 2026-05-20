@@ -7,20 +7,20 @@ import React from 'react';
 export default function ExtensionInstallGuide({ chromeWebStoreUrl }) {
   const steps = [
     {
-      title: 'Use Chrome on a desktop or laptop',
-      body: 'ZeroAI is a Chrome extension. Complete these steps on a computer — mobile browsers are not supported.',
+      title: 'Desktop Only',
+      body: 'Open this page in desktop Chrome (extension environments are unsupported on mobile).',
     },
     {
-      title: 'Install ZeroAI from the Chrome Web Store',
-      body: 'Open the store listing below and choose Add to Chrome. Approve the permission prompt when Chrome asks.',
+      title: 'Install Extension',
+      body: 'Click the button below to add ZeroAI from the Chrome Web Store.',
     },
     {
-      title: 'Stay on this tab while we connect your account',
-      body: 'After the extension installs, we sync your partner reward automatically. If nothing happens within a minute, refresh this page.',
+      title: 'Auto-sync',
+      body: 'Keep this tab active. The extension will handshake with this page to sync your reward. (Refresh if stuck >60s).',
     },
     {
-      title: 'When sync succeeds, we open ZeroAI in a new tab',
-      body: 'Use that tab to pin ZeroAI from Chrome’s toolbar (puzzle icon) and start working. You can close this tab afterward.',
+      title: 'Initialize',
+      body: 'ZeroAI will open a new workspace tab upon successful sync. Pin the extension and close this setup tab.',
     },
   ];
 
@@ -31,10 +31,7 @@ export default function ExtensionInstallGuide({ chromeWebStoreUrl }) {
       aria-label="Install the ZeroAI Chrome extension"
     >
       <div>
-        <h2 className="text-lg font-semibold text-foreground-primary mb-1">Finish setup in Chrome</h2>
-        <p className="text-sm text-foreground-secondary leading-relaxed">
-          Your partner reward is tied to this Google sign-in. Follow the steps, then install from the Web Store.
-        </p>
+        <h2 className="text-lg font-semibold text-foreground-primary mb-1">Chrome setup steps:</h2>
       </div>
 
       <ol className="space-y-5 list-none">

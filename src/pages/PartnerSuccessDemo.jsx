@@ -71,7 +71,7 @@ export default function PartnerSuccessDemo() {
   switch (scene) {
     case 'synced':
       return (
-        <PartnerFlowLayout prepend={prepend} eyebrow="ZeroAI access" title="You’re signed in">
+        <PartnerFlowLayout prepend={prepend} eyebrow="ZeroAI access" title="You’re signed in.">
           <p className="text-foreground-secondary">
             ZeroAI is signed in and synced. In production we open your site in a new tab here — pin ZeroAI from Chrome’s
             toolbar (puzzle icon), then close this tab when you’re ready.
@@ -81,7 +81,7 @@ export default function PartnerSuccessDemo() {
       );
     case 'minting':
       return (
-        <PartnerFlowLayout prepend={prepend} eyebrow="ZeroAI access" title="You’re signed in">
+        <PartnerFlowLayout prepend={prepend} eyebrow="ZeroAI access" title="You’re signed in.">
           <p className="text-foreground-muted animate-pulse">
             Finishing sign-in and preparing extension sync...
           </p>
@@ -90,7 +90,7 @@ export default function PartnerSuccessDemo() {
       );
     case 'error':
       return (
-        <PartnerFlowLayout prepend={prepend} eyebrow="ZeroAI access" title="You’re signed in">
+        <PartnerFlowLayout prepend={prepend} eyebrow="ZeroAI access" title="You’re signed in.">
           <p className="text-foreground-muted">
             mint_failed_503 — Something went wrong reaching the sync service (demo message).
           </p>
@@ -99,9 +99,9 @@ export default function PartnerSuccessDemo() {
       );
     case 'email_mismatch':
       return (
-        <PartnerFlowLayout prepend={prepend} eyebrow="Partner reward" title="Google account does not match">
+        <PartnerFlowLayout prepend={prepend} eyebrow="Exclusively for you" title="Google account does not match.">
           <p className="text-foreground-muted">
-            Sign in with the same Google email that received the partner reward, then open the claim link again.
+            Please sign in with the same Google email that received the reward.
           </p>
           <p>
             <Link to="/claim" className={linkClass}>
@@ -112,7 +112,7 @@ export default function PartnerSuccessDemo() {
       );
     case 'claim_expired':
       return (
-        <PartnerFlowLayout prepend={prepend} eyebrow="Partner reward" title="Claim link expired">
+        <PartnerFlowLayout prepend={prepend} eyebrow="Exclusively for you" title="Claim link expired">
           <p className="text-foreground-muted">
             Your sign-in took too long, or this link was already used. Open the original reward email again and start
             over.
@@ -126,7 +126,7 @@ export default function PartnerSuccessDemo() {
       );
     case 'missing_session':
       return (
-        <PartnerFlowLayout prepend={prepend} eyebrow="Partner reward" title="Missing session">
+        <PartnerFlowLayout prepend={prepend} eyebrow="Exclusively for you" title="Missing session">
           <p className="text-foreground-muted">Open this page from the link you land on after Google sign-in.</p>
           <p>
             <Link to="/" className={linkClass}>
@@ -138,10 +138,9 @@ export default function PartnerSuccessDemo() {
     case 'install':
     default:
       return (
-        <PartnerFlowLayout prepend={prepend} eyebrow="ZeroAI access" title="You’re signed in">
+        <PartnerFlowLayout prepend={prepend} eyebrow="ZeroAI access" title="You’re signed in.">
           <p className="text-foreground-secondary text-sm leading-relaxed">
-            You’re signed in on the web. On a computer, use Chrome and follow the steps — install the extension, keep this
-            tab open until sync completes, then continue in the new tab we open for you.
+            You’re signed in on the web.
           </p>
           <ExtensionInstallGuide chromeWebStoreUrl={chromeWebStoreUrl} />
           <DemoFooter />
