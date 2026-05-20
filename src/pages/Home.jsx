@@ -13,7 +13,7 @@ const Home = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       ),
-      title: 'Meetings That Stay Organized',
+      title: 'Organized meetings',
       description: 'See what is next, prepare quickly, and keep follow-ups from slipping after the call ends.',
     },
     {
@@ -22,8 +22,8 @@ const Home = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
         </svg>
       ),
-      title: 'Tasks From The Flow Of Work',
-      description: 'Capture action items while you browse, then return to a clear list when it is time to execute.',
+      title: 'Simplified tasks',
+      description: 'Capture tasks straight from your browser, then open a clean list when it\'s time to build.',
     },
     {
       icon: (
@@ -31,8 +31,8 @@ const Home = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
         </svg>
       ),
-      title: 'Notes Without Context Switching',
-      description: 'Save thoughts, links, and small details from any page without opening another app.',
+      title: 'Usable notes',
+      description: 'Save thoughts, links, and key details from any webpage without breaking focus.',
     },
     {
       icon: (
@@ -49,18 +49,9 @@ const Home = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       ),
-      title: 'Quick Actions From Chrome',
-      description: 'Use fast commands for search, notes, tasks, and page actions without interrupting your current tab.',
-    },
-    {
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-        </svg>
-      ),
-      title: 'A Calm AI Sidebar',
-      description: 'Keep assistance close, useful, and contained so your browser stays focused instead of crowded.',
-    },
+      title: 'Quick actions',
+      description: 'Use fast slash commands (/) to search docs, take notes, and log tasks without leaving your current tab.',
+    }
   ];
 
   return (
@@ -82,14 +73,14 @@ const Home = () => {
 
             {/* Heading */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-[-0.04em] animate-slide-down-fade-in">
-              <span className="text-foreground-primary">AI help that lives</span>
+              <span className="text-foreground-primary">Your work assistant,</span>
               <br />
-              <span className="gradient-text">where you already work</span>
+              <span className="gradient-text">that actually delivers.</span>
             </h1>
 
             {/* Description */}
             <p className="text-base md:text-lg text-foreground-muted mb-8 max-w-2xl mx-auto leading-relaxed animate-slide-down-fade-in">
-              ZeroAI brings notes, tasks, meeting prep, summaries, and quick actions into Chrome, so small pieces of work do not pull you away from the page.
+              ZeroAI brings notes, tasks, meeting summaries, smart prep, and instant actions directly into Chrome, so you never have to leave your workflow.
             </p>
 
             {/* CTA Buttons */}
@@ -133,24 +124,26 @@ const Home = () => {
               Useful pieces, kept close
             </h2>
             <p className="text-sm md:text-base text-foreground-muted leading-relaxed">
-              ZeroAI is designed for the small moments that slow a browser workflow down: saving context, extracting meaning, planning next steps, and getting back to work.
+              ZeroAI is built for the small but frequent moments that slow you down: capturing context, extracting insights, planning next steps, and getting back to deep work.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="group relative overflow-hidden bg-background-secondary/80">
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-400/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-[0.625rem] border border-border-colored bg-purple-15 text-purple-200 transition-colors group-hover:text-purple-100">
-                  {feature.icon}
-                </div>
-                <h3 className="text-base font-semibold text-foreground-primary mb-2 tracking-[-0.01em]">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-foreground-muted leading-relaxed">
-                  {feature.description}
-                </p>
-              </Card>
+              <div key={index} className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex">
+                <Card className="group relative overflow-hidden bg-background-secondary/80 w-full">
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-400/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                  <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-[0.625rem] border border-border-colored bg-purple-15 text-purple-200 transition-colors group-hover:text-purple-100">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground-primary mb-2 tracking-[-0.01em]">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-foreground-muted leading-relaxed">
+                    {feature.description}
+                  </p>
+                </Card>
+              </div>
             ))}
           </div>
         </div>
@@ -166,7 +159,7 @@ const Home = () => {
                 Bring ZeroAI into Chrome
               </h2>
               <p className="text-sm text-foreground-muted mb-5 leading-relaxed">
-                A focused assistant for the tabs, meetings, notes, and tasks already in front of you.
+                A focused assistant for the tabs, meetings, notes, and tasks.
               </p>
               <a 
                 href={chromeWebStoreUrl}
