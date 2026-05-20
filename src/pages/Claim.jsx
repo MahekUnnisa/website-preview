@@ -65,7 +65,7 @@ export default function Claim() {
 
   if (!token) {
     return (
-      <PartnerFlowLayout eyebrow="Partner reward" title="Invalid link">
+      <PartnerFlowLayout eyebrow="Exclusively for you" title="Invalid link">
         <p className="text-foreground-muted">
           This page needs a claim token from your reward email.
         </p>
@@ -81,10 +81,9 @@ export default function Claim() {
   const invalid = status && status.valid === false;
 
   return (
-    <PartnerFlowLayout eyebrow="Partner reward" title="Claim your ZeroAI access">
+    <PartnerFlowLayout eyebrow="Exclusively for you" title="Claim your ZeroAI access!">
       <p className="text-foreground-muted">
-        Sign in with the Google account that received this reward. After login, you can sync the extension in one
-        step.
+        Sign in with the Google account that received this reward to instantly sync your extension.
       </p>
       {statusError && <p className="text-warning text-sm">{statusError}</p>}
       {invalid && (
