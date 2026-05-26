@@ -4,8 +4,6 @@ import Button from '../components/Button';
 import PartnerFlowLayout from '../components/PartnerFlowLayout';
 import { getApiBase } from '../lib/env';
 
-const apiBase = getApiBase();
-
 const ERROR_COPY = {
   invalid_or_expired:
     'This reward link is no longer valid. It may have expired or been replaced by a newer one. Check your email for the most recent claim link.',
@@ -24,6 +22,7 @@ export default function Claim() {
   );
 
   useEffect(() => {
+    const apiBase = getApiBase();
     if (!token || !apiBase) {
       if (!apiBase) setStatusError('Site is missing base url.');
       return;
@@ -58,6 +57,7 @@ export default function Claim() {
   }, [token]);
 
   const startGoogle = () => {
+    const apiBase = getApiBase();
     if (!token || !apiBase) return;
     const state = `claim_${token}`;
     window.location.href = `${apiBase}/partner-access/login/google?state=${encodeURIComponent(state)}`;

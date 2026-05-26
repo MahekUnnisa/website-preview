@@ -4,20 +4,17 @@ import PartnerFlowLayout from '../components/PartnerFlowLayout';
 import ExtensionInstallGuide from '../components/ExtensionInstallGuide';
 import { getApiBase, getChromeWebStoreUrl, getExtensionId } from '../lib/env';
 
-const apiBase = getApiBase();
-const extensionId = getExtensionId();
-const chromeWebStoreUrl = getChromeWebStoreUrl();
-
 const POLL_INTERVAL_MS = 2500;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
 
 const linkClass = 'text-sm font-medium text-purple-200 hover:text-purple-100 underline-offset-4 hover:underline';
 
 function canTalkToExtensions() {
-  return typeof chrome !== 'undefined' && Boolean(chrome.runtime?.sendMessage) && Boolean(extensionId);
+  return typeof chrome !== 'undefined' && Boolean(chrome.runtime?.sendMessage) && Boolean(getExtensionId());
 }
 
 function pingExtension() {
+  const extensionId = getExtensionId();
   return new Promise((resolve) => {
     try {
       chrome.runtime.sendMessage(extensionId, { type: 'PING' }, (resp) => {
@@ -34,6 +31,7 @@ function pingExtension() {
 }
 
 function syncExtension(code) {
+  const extensionId = getExtensionId();
   return new Promise((resolve) => {
     try {
       chrome.runtime.sendMessage(extensionId, { type: 'SYNC', code }, (resp) => {
@@ -97,9 +95,10 @@ export default function PartnerSuccess() {
   const pollTimerRef = useRef(null);
   const syncedRef = useRef(false);
 
-  const canMint = useMemo(() => Boolean(jwt && apiBase && !oauthError), [jwt, oauthError]);
+  const canMint = useMemo(() => Boolean(jwt && getApiBase() && !oauthError), [jwt, oauthError]);
 
   const mintCode = useCallback(async () => {
+    const apiBase = getApiBase();
     const res = await fetch(`${apiBase}/partner-access/exchange-code`, {
       method: 'POST',
       headers: {
@@ -195,7 +194,7 @@ export default function PartnerSuccess() {
       if (!canTalkToExtensions()) {
         setPhase('done_web_only');
         setMessage(
-          extensionId
+          getExtensionId()
             ? 'Your ZeroAI account is active in this browser session. Install the Chrome extension below to sync it automatically.'
             : 'Your ZeroAI account is active in this browser session. Install the Chrome extension below — one-click sync requires VITE_EXTENSION_ID in the site build.',
         );
@@ -333,7 +332,7 @@ export default function PartnerSuccess() {
           <p className="text-foreground-secondary text-sm leading-relaxed">
             You’re signed in on the web.
           </p>
-          <ExtensionInstallGuide chromeWebStoreUrl={chromeWebStoreUrl} />
+          <ExtensionInstallGuide chromeWebStoreUrl={getChromeWebStoreUrl()} />
         </>
       )}
 
