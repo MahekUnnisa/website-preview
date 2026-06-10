@@ -1,31 +1,98 @@
-image: atlassian/default-image:3
+image: atlassian/default-image:5
+
+definitions:
+  services:
+    docker:
+      memory: 6144
 
 pipelines:
-  branches:
-    master:
+  tags:
+    "*":
       - step:
-          name: Build and publish Docker image
+          name: Build and push multi-arch image to ECR
+          size: 2x
+          runs-on:
+            - self.hosted
+            - linux
+
           services:
             - docker
+
+          caches:
+            - docker
+
           script:
+            - set -e
+
+            # Validate env vars
             - |
-              required_vars=(AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_DEFAULT_REGION ECR_REPOSITORY)
-              for var in "${required_vars[@]}"; do
-                if [ -z "${!var:-}" ]; then
+              for var in AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_DEFAULT_REGION ECR_REPOSITORY; do
+                eval value=\$$var
+                if [ -z "$value" ]; then
                   echo "Required pipeline variable '$var' is not set" >&2
                   exit 1
                 fi
               done
-              IMAGE_VERSION=${IMAGE_VERSION:-${BITBUCKET_TAG:-${BITBUCKET_COMMIT:-}}}
-              if [ -z "$IMAGE_VERSION" ]; then
-                echo "Unable to determine IMAGE_VERSION (set IMAGE_VERSION, push a tag, or ensure BITBUCKET_COMMIT is available)" >&2
-                exit 1
+
+            # Install AWS CLI v2
+            - apt-get update -qq && apt-get install -y -qq unzip curl
+            - curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+            - unzip -q /tmp/awscliv2.zip -d /tmp && /tmp/aws/install
+
+            # Fetch master with an explicit refspec so refs/remotes/origin/master is always
+            # populated regardless of how the runner cloned (--single-branch, cached, etc.).
+            # --depth=2147483647 effectively unshallows so ancestry checks have full history.
+            - git fetch --depth=2147483647 origin +refs/heads/master:refs/remotes/origin/master
+
+            # Determine image version
+            - |
+              SANITIZED_TAG=$(echo "$BITBUCKET_TAG" | tr '/' '-')
+
+              if git merge-base --is-ancestor "$BITBUCKET_COMMIT" refs/remotes/origin/master 2>/dev/null; then
+                IMAGE_VERSION="$SANITIZED_TAG"
+                IS_MASTER_TAG="true"
+                echo "Master branch tag detected"
+              else
+                IMAGE_VERSION="${SANITIZED_TAG}-dev"
+                IS_MASTER_TAG="false"
+                echo "Non-master branch tag detected"
               fi
-            - IMAGE_NAME_LATEST="${ECR_REPOSITORY}:latest"
-            - IMAGE_NAME_VERSION="${ECR_REPOSITORY}:${IMAGE_VERSION}"
-            - ECR_HOST=${ECR_REPOSITORY%%/*}
-            - docker build -t "$IMAGE_NAME_LATEST" -t "$IMAGE_NAME_VERSION" .
-            - apt-get update && apt-get install -y awscli >/tmp/aws-install.log
+
+              export IMAGE_VERSION
+              export IS_MASTER_TAG
+              export IMAGE_NAME="${ECR_REPOSITORY}:${IMAGE_VERSION}"
+              export ECR_HOST=${ECR_REPOSITORY%%/*}
+
+              echo "Publishing image: $IMAGE_NAME"
+
+            # Login to ECR
             - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$ECR_HOST"
-            - docker push "$IMAGE_NAME_VERSION"
-            - docker push "$IMAGE_NAME_LATEST"
+
+            # Abort if this exact image tag already exists in ECR (prevents duplicate builds)
+            - |
+              ECR_REPO_NAME="${ECR_REPOSITORY#*/}"
+              if aws ecr describe-images \
+                   --repository-name "$ECR_REPO_NAME" \
+                   --image-ids imageTag="$IMAGE_VERSION" \
+                   --region "$AWS_DEFAULT_REGION" > /dev/null 2>&1; then
+                echo "Image $IMAGE_NAME already exists in ECR — skipping duplicate build."
+                exit 0
+              fi
+
+            # Set up QEMU for arm64 emulation and create a docker-container buildx builder
+            - docker run --rm --privileged tonistiigi/binfmt --install all
+            - docker buildx create --name multiarch --driver docker-container --use
+            - docker buildx inspect --bootstrap
+
+            # Multi-arch build + push (also tag "latest" for tags built off master)
+            - |
+              BUILD_TAGS=(-t "$IMAGE_NAME")
+              if [ "$IS_MASTER_TAG" = "true" ]; then
+                BUILD_TAGS+=(-t "${ECR_REPOSITORY}:latest")
+                echo "Also tagging as latest"
+              fi
+
+              docker buildx build \
+                --platform linux/amd64,linux/arm64 \
+                "${BUILD_TAGS[@]}" \
+                --push .
