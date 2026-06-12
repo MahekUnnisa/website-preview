@@ -154,8 +154,8 @@ const Privacy = () => {
                   </p>
                   <p>
                     <strong>Email:</strong>{' '}
-                    <a href="mailto:privacy@zeroai.com" className="text-purple-200 hover:text-purple-100">
-                      privacy@zeroai.com
+                    <a href="mailto:support@zeroai.co.in" className="text-purple-200 hover:text-purple-100">
+                      support@zeroai.co.in
                     </a>
                   </p>
                 </div>

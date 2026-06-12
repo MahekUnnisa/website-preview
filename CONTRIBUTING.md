@@ -241,7 +241,7 @@ Before submitting a PR:
 If you have questions or need help:
 
 - Open an issue on GitHub
-- Email: dev@zeroai.com
+- Email: dev@zeroai.co.in
 - Check the README and DEPLOYMENT guides
 
 ## Code of Conduct

@@ -73,7 +73,7 @@ docker-compose up -d --build
 The application uses environment variables for configuration. Create a `.env` file:
 
 ```env
-VITE_API_URL=https://api.zeroai.com
+VITE_API_URL=https://api.zeroai.co.in
 VITE_APP_NAME=ZeroAI
 ```
 
@@ -185,6 +185,6 @@ docker run -p 8080:80 zeroai-website:latest
 ## Support
 
 For issues or questions:
-- Email: support@zeroai.com
+- Email: support@zeroai.co.in
 - GitHub: [Repository URL]
 - Documentation: [Docs URL]

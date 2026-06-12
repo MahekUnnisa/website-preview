@@ -179,7 +179,7 @@ zeroai-website/
 Create a `.env` file in the root directory for any environment-specific configurations:
 
 ```env
-VITE_API_URL=https://api.zeroai.com
+VITE_API_URL=https://api.zeroai.co.in
 VITE_APP_NAME=ZeroAI
 ```
 
