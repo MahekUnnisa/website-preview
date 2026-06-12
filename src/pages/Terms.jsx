@@ -178,8 +178,8 @@ const Terms = () => {
                   </p>
                   <p>
                     <strong>Email:</strong>{' '}
-                    <a href="mailto:legal@zeroai.com" className="text-purple-200 hover:text-purple-100">
-                      legal@zeroai.com
+                    <a href="mailto:support@zeroai.co.in" className="text-purple-200 hover:text-purple-100">
+                      support@zeroai.co.in
                     </a>
                   </p>
                 </div>
