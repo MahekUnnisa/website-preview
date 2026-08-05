@@ -8,7 +8,7 @@ A static single-page app built with React and Tailwind CSS, bundled by Vite and 
 
 - React 19.2.8 + React Router 8.3.0 (`BrowserRouter`, client-side routing)
 - Vite 8.2.0 (Rolldown bundler)
-- Tailwind CSS 3.4.19 + PostCSS + Autoprefixer
+- Tailwind CSS 4.3.3 via `@tailwindcss/vite` (CSS-first config, no PostCSS)
 - Node.js 24.13.0 (pinned via `.nvmrc` / `.node-version`)
 
 ## Pages
@@ -33,8 +33,10 @@ The partner claim flow is specified in [`docs/referral-program/claim-activation.
 ```bash
 nvm use                     # Node 24.13.0, per .nvmrc
 npm ci
-cp .env.example .env.local  # then fill in VITE_API_BASE_URL
 npm run dev                 # http://localhost:5173
+
+# optional — only to point at a local API instead of production:
+# cp .env.example .env.local
 ```
 
 ### Scripts
@@ -55,13 +57,15 @@ for the local API.
 
 ## Environment variables
 
-All config is **build-time**: Vite inlines `VITE_*` into the bundle, so changing a value requires a rebuild. See `.env.example` for the full list.
+All config is **build-time**: Vite inlines `VITE_*` into the bundle, so changing a value requires a rebuild. None are secrets — every value is readable in the shipped JavaScript.
 
-| Variable | Purpose |
-| --- | --- |
-| `VITE_API_BASE_URL` | Partner API base URL used by `/claim` and `/partner/success` |
-| `VITE_EXTENSION_ID` | Chrome extension ID, for one-click sync from `/partner/success` |
-| `VITE_CHROME_WEBSTORE_URL` | Install CTA target (optional; defaults to the live listing) |
+**All three are optional.** Each falls back to its production value in `src/lib/env.js`, so a build with nothing configured works against live infrastructure. Set them only to point a build elsewhere.
+
+| Variable | Purpose | Default |
+| --- | --- | --- |
+| `VITE_API_BASE_URL` | Partner API base, used by `/claim` and `/partner/success`. Must include the version segment. | `https://api.zeroai.co.in/v2` |
+| `VITE_EXTENSION_ID` | Target of `chrome.runtime.sendMessage` for one-click sync | the published extension ID |
+| `VITE_CHROME_WEBSTORE_URL` | Install CTA target | the live store listing |
 
 Locally these come from `.env.local`. In production they are set in the Cloudflare Pages project settings.
 
@@ -79,7 +83,7 @@ Pushing to the production branch triggers a build via the Cloudflare Pages Git i
 | Root directory | `/` |
 | Production branch | `master` |
 
-**Environment variables** (set for both Production *and* Preview): `NODE_VERSION=24.13.0`, `VITE_API_BASE_URL`, `VITE_EXTENSION_ID`, `VITE_CHROME_WEBSTORE_URL`.
+**Environment variables:** `NODE_VERSION=24.13.0` is required. The three `VITE_*` variables are optional — set them (for both Production *and* Preview) only to override the production defaults, for example to point a preview build at a staging API.
 
 ### Routing and headers
 
@@ -116,16 +120,20 @@ zeroai-website/
 │   ├── App.jsx
 │   └── index.jsx
 ├── index.html
-├── vite.config.js
-├── tailwind.config.js
-└── postcss.config.js
+└── vite.config.js
 ```
 
 ## Theming
 
+Tailwind v4 is configured in CSS, not JavaScript — there is no `tailwind.config.js`
+and no `postcss.config.js`.
+
+- Design tokens (purple/orange scales, `Hauora` font family, radius, keyframes):
+  the `@theme` block in `src/styles/index.css`
+- Shared component classes (`btn-primary`, `card-base`, …): `@utility` blocks in
+  the same file
 - Global styles: `src/styles/index.css`
 - Theme colours: `src/styles/themes.css`
-- Tailwind config (custom purple scale, `Hauora` font family, keyframes): `tailwind.config.js`
 
 ## Licence
 
