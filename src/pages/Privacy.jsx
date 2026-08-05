@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Card from '../components/Card';
 
 const Privacy = () => {
+  useEffect(() => {
+    if (window.location.hash === '#google-api-data-use') {
+      window.requestAnimationFrame(() => {
+        document.getElementById('google-api-data-use')?.scrollIntoView();
+      });
+    }
+  }, []);
+
   const sections = [
     {
       title: 'Information We Collect',
@@ -19,6 +27,34 @@ const Privacy = () => {
         'To send you technical notices, updates, security alerts, and support messages',
         'To respond to your comments, questions, and customer service requests',
         'To monitor and analyze trends, usage, and activities in connection with our services',
+      ],
+    },
+    {
+      id: 'google-api-data-use',
+      title: 'Connected Account Data and AI Use',
+      content: [
+        'ZeroAI connects to your Google account and other third-party services only after you approve access through the relevant consent screen.',
+        'ZeroAI uses connected-account data only to complete actions you request inside ZeroAI. Depending on the permissions you approve, this may include finding information, reading content, summarizing content, drafting messages, sending messages, creating files, updating files, scheduling events, managing tasks, organizing content, or deleting content.',
+        'ZeroAI does not access, scan, process, or act on your connected-account data in the background without your request.',
+        'Some assistant features may require broad account access, such as full Google Drive access, when you ask ZeroAI to find or work with existing files without selecting each file first. This access is used only for actions requested by you.',
+        'ZeroAI protects connected-account data using encryption in transit and secure storage practices. OAuth tokens and integration credentials are stored securely and are not shared with AI/ML providers.',
+        'ZeroAI processes only the minimum data needed to complete your request and does not keep raw connected-account content longer than necessary unless you explicitly save that content inside ZeroAI.',
+        'ZeroAI does not sell user data received from connected services and does not use it for advertising.',
+        'ZeroAI’s use and transfer of information received from Google APIs follows the Google API Services User Data Policy, including the Limited Use requirements.',
+        { subheading: 'AI/ML Use' },
+        'ZeroAI may use AI/ML systems only to complete the specific assistant action requested by the user.',
+        'ZeroAI does not use raw, aggregated, anonymized, or derived user data received from Google APIs or connected services to create, train, improve, or fine-tune artificial intelligence or machine learning models.',
+        'When user data is processed by AI/ML service providers, it is used only to complete the user-requested action. ZeroAI does not permit AI/ML service providers to use this data to train, improve, or fine-tune AI or machine learning models.',
+        'If ZeroAI adds or removes AI/ML providers that process connected-account data, this Privacy Policy will be updated before that processing is used in production.',
+        { subheading: 'User Control' },
+        'Users can revoke ZeroAI’s Google access at any time from their Google Account permissions page.',
+        'Users may request deletion of stored integration tokens and related cached data by contacting ZeroAI support.',
+        <>
+          For privacy or connected-account data questions, contact:{' '}
+          <a href="mailto:support@zeroai.co.in" className="text-purple-200 hover:text-purple-100">
+            support@zeroai.co.in
+          </a>
+        </>,
       ],
     },
     {
@@ -95,7 +131,7 @@ const Privacy = () => {
               <span className="gradient-text">Policy</span>
             </h1>
             <p className="text-sm text-foreground-muted mb-6">
-              Last Updated: November 4, 2025
+              Last Updated: August 5, 2026
             </p>
             <Card className="bg-purple-15 border-border-colored">
               <p className="text-sm text-foreground-muted mb-3">
@@ -117,16 +153,24 @@ const Privacy = () => {
           <div className="max-w-4xl mx-auto space-y-8">
             {sections.map((section, index) => (
               <div key={index}>
-                <h2 className="text-xl font-bold text-foreground-primary mb-4">
+                <h2 id={section.id} className="scroll-mt-24 text-xl font-bold text-foreground-primary mb-4">
                   {index + 1}. {section.title}
                 </h2>
                 <Card>
                   <ul className="space-y-4">
                     {section.content.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex items-start space-x-3">
-                        <span className="flex-shrink-0 w-2 h-2 bg-purple-400 rounded-full mt-2"></span>
-                        <span className="text-sm text-foreground-muted flex-grow">{item}</span>
-                      </li>
+                      item.subheading ? (
+                        <li key={itemIndex}>
+                          <h3 className="text-base font-semibold text-foreground-primary pt-2">
+                            {item.subheading}
+                          </h3>
+                        </li>
+                      ) : (
+                        <li key={itemIndex} className="flex items-start space-x-3">
+                          <span className="flex-shrink-0 w-2 h-2 bg-purple-400 rounded-full mt-2"></span>
+                          <span className="text-sm text-foreground-muted flex-grow">{item}</span>
+                        </li>
+                      )
                     ))}
                   </ul>
                 </Card>
@@ -169,4 +213,3 @@ const Privacy = () => {
 };
 
 export default Privacy;
-
