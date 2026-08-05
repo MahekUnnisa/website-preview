@@ -34,14 +34,19 @@ The partner claim flow is specified in [`docs/referral-program/claim-activation.
 nvm use                     # Node 24.13.0, per .nvmrc
 npm ci
 cp .env.example .env.local  # then fill in VITE_API_BASE_URL
-npm run dev                 # http://localhost:3000
+npm run dev                 # http://localhost:5173
 ```
 
 ### Scripts
 
-- `npm run dev` — dev server on port 3000 (configured in `vite.config.js`)
+- `npm run dev` — dev server on port 5173
 - `npm run build` — production build to `dist/`
-- `npm run preview` — serve the build with Vite
+- `npm run preview` — serve the build on port 4173
+
+Both ports are pinned with `strictPort` in `vite.config.js`, so a clash fails
+loudly rather than drifting to another port — the dev origin has to match the
+API's CORS allowlist and the Google OAuth redirect URI. Port 3000 is left free
+for the local API.
 
 > `npm run preview` does **not** apply `_headers` or `_redirects`. To test those (SPA deep links, security headers) exactly as Cloudflare serves them:
 > ```bash
