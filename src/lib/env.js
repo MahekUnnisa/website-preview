@@ -1,19 +1,8 @@
 const DEFAULT_CHROME_WEBSTORE_URL =
   'https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg';
 
-function getRuntimeEnv(key) {
-  if (typeof window === 'undefined') return undefined;
-  const bag = window.__ENV__;
-  if (!bag || typeof bag !== 'object') return undefined;
-  const v = bag[key];
-  if (v !== undefined && v !== null && String(v) !== '') return String(v);
-  return undefined;
-}
-
-/** Prefer runtime config (Docker/nginx entrypoint → `/runtime-env.js`), then Vite `import.meta.env` (dev / build). */
+/** Build-time config: Vite inlines `VITE_*` from `.env.local` (dev) or the Cloudflare Pages env (build). */
 export function getEnv(key, fallback = '') {
-  const runtime = getRuntimeEnv(key);
-  if (runtime !== undefined) return runtime;
   const built = import.meta.env[key];
   if (built !== undefined && built !== '') return String(built);
   return fallback;
