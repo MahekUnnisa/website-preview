@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 const TRICKLE_MS = 180; // how often the bar creeps forward while loading
 const MIN_VISIBLE_MS = 400; // stops the bar flashing when a chunk is already cached

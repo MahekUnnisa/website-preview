@@ -6,7 +6,7 @@ A static single-page app built with React and Tailwind CSS, bundled by Vite and 
 
 ## Tech stack
 
-- React 19.2.8 + React Router DOM 7.18.2 (`BrowserRouter`, client-side routing)
+- React 19.2.8 + React Router 8.3.0 (`BrowserRouter`, client-side routing)
 - Vite 8.2.0 (Rolldown bundler)
 - Tailwind CSS 3.4.19 + PostCSS + Autoprefixer
 - Node.js 24.13.0 (pinned via `.nvmrc` / `.node-version`)

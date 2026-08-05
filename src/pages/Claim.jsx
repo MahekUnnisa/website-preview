@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router';
 import Button from '../components/Button';
 import PartnerFlowLayout from '../components/PartnerFlowLayout';
 import { getApiBase } from '../lib/env';

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 const NAV_OFFSET = 64; // fixed navbar height (h-16), so anchors don't land underneath it
 const MAX_FRAMES = 60; // ~1s of retries, enough for a lazy route chunk to mount

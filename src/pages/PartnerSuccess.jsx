@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import PartnerFlowLayout from '../components/PartnerFlowLayout';
 import ExtensionInstallGuide from '../components/ExtensionInstallGuide';
 import { getApiBase, getChromeWebStoreUrl, getExtensionId } from '../lib/env';
