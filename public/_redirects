@@ -1,0 +1,4 @@
+# SPA fallback — client-side routing (react-router) owns all paths.
+# 200 (rewrite, not redirect) preserves the query string and hash fragment,
+# which /partner/success needs to read the OAuth token.
+/*  /index.html  200

@@ -2,12 +2,10 @@
   "name": "zeroai-website",
   "version": "0.1.0",
   "description": "ZeroAI - Your AI assistant that actually delivers. Manage calendar, tasks, and notes with ZeroAI.",
-  "main": "index.js",
   "scripts": {
-    "dev": "vite --port 5173",
+    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "serve": "serve -s dist -l 5173"
+    "preview": "vite preview"
   },
   "keywords": [
     "react",
@@ -20,8 +18,8 @@
   "license": "ISC",
   "type": "module",
   "engines": {
-    "node": "24.13.0",
-    "npm": "11.6.2"
+    "node": ">=24",
+    "npm": ">=11"
   },
   "dependencies": {
     "react": "19.2.4",
