@@ -20,6 +20,18 @@ const Terms = () => {
       ],
     },
     {
+      title: 'Connected Accounts, Permissions, and User Authorization',
+      content: [
+        'By connecting a Google account or any other third-party service to ZeroAI and granting permissions through the relevant consent or authorization flow, the user authorizes ZeroAI to access and perform actions within the permissions, scopes, and access rights approved by the user.',
+        'ZeroAI requests connected-account permissions before using those connected-account services.',
+        'ZeroAI acts on behalf of the user only for user-directed requests or confirmed actions inside ZeroAI.',
+        'Depending on the permissions granted by the user, ZeroAI may assist with actions such as searching, reading, summarizing, creating, updating, drafting, sending, scheduling, organizing, moving, trashing, deleting, or managing connected-account content.',
+        'The user is responsible for reviewing and confirming actions that create, update, send, move, trash, delete, share, or otherwise modify content in a connected account.',
+        'ZeroAI does not independently perform connected-account actions in the background without a user-directed request.',
+        'The user may revoke connected-account access at any time through the connected service’s account permission settings, including the Google Account permissions page for Google-connected services.',
+      ],
+    },
+    {
       title: 'User Accounts',
       content: [
         'You must create an account to access certain features of our services.',
@@ -120,7 +132,7 @@ const Terms = () => {
               <span className="gradient-text">Service</span>
             </h1>
             <p className="text-sm text-foreground-muted mb-6">
-              Last Updated: November 4, 2025
+              Last Updated: August 5, 2026
             </p>
             <Card className="bg-purple-15 border-border-colored">
               <p className="text-sm text-foreground-muted mb-3">
@@ -193,4 +205,3 @@ const Terms = () => {
 };
 
 export default Terms;
-
