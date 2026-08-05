@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import { getChromeWebStoreUrl } from '../lib/env';
@@ -94,11 +95,11 @@ const Home = () => {
                   Add to Chrome
                 </Button>
               </a>
-              <a href="#features">
+              <Link to="/#features">
                 <Button variant="outline" size="lg">
                   See what it does
                 </Button>
-              </a>
+              </Link>
             </div>
 
             {/* Hero Image/Screenshot */}

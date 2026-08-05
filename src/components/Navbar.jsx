@@ -9,7 +9,7 @@ const Navbar = () => {
   const location = useLocation();
 
   const navLinks = [
-    { path: '#features', label: 'Features' },
+    { path: '/#features', label: 'Features' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -35,13 +35,13 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.path}
-                href={link.path}
+                to={link.path}
                 className="text-sm font-medium text-foreground-muted hover:text-foreground-primary transition-colors"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
             <a
               href={chromeWebStoreUrl}
@@ -82,14 +82,14 @@ const Navbar = () => {
           <div className="md:hidden py-4 border-t border-border">
             <div className="flex flex-col space-y-4">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.path}
-                  href={link.path}
+                  to={link.path}
                   className="text-sm font-medium text-foreground-muted hover:text-foreground-primary transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
               <a
                 href={chromeWebStoreUrl}

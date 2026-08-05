@@ -9,7 +9,7 @@ const Footer = () => {
 
   const footerLinks = {
     product: [
-      { label: 'Features', path: '#features' },
+      { label: 'Features', path: '/#features' },
       { label: 'Slack App', path: '/slack' },
     ],
     company: [
