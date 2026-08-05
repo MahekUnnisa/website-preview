@@ -26,7 +26,7 @@ function App() {
       <RouteProgressProvider>
         <div className="min-h-screen flex flex-col dark">
           <Navbar />
-          <main className="flex-grow pt-16">
+          <main className="grow pt-16">
             <Suspense fallback={<RouteProgressFallback />}>
               <Routes>
                 <Route path="/" element={<Home />} />

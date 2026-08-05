@@ -19,7 +19,7 @@ function ProgressBar({ phase, progress }) {
 
   return (
     <div
-      className="fixed inset-x-0 top-0 z-[60] h-0.5 pointer-events-none"
+      className="fixed inset-x-0 top-0 z-60 h-0.5 pointer-events-none"
       role="progressbar"
       aria-label="Loading page"
       aria-valuemin={0}
@@ -33,7 +33,7 @@ function ProgressBar({ phase, progress }) {
         style={{ width: `${progress}%` }}
       >
         {/* Travelling highlight, so a slow chunk still reads as "working". */}
-        <div className="h-full w-16 bg-gradient-to-r from-transparent via-purple-100 to-transparent animate-progress-indeterminate motion-reduce:hidden" />
+        <div className="h-full w-16 bg-linear-to-r from-transparent via-purple-100 to-transparent animate-progress-indeterminate motion-reduce:hidden" />
       </div>
     </div>
   );

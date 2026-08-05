@@ -71,8 +71,8 @@ const Support = () => {
                   <ul className="space-y-4">
                     {section.content.map((item) => (
                       <li key={item} className="flex items-start space-x-3">
-                        <span className="flex-shrink-0 w-2 h-2 bg-purple-400 rounded-full mt-2"></span>
-                        <span className="text-sm text-foreground-muted flex-grow">{item}</span>
+                        <span className="shrink-0 w-2 h-2 bg-purple-400 rounded-full mt-2"></span>
+                        <span className="text-sm text-foreground-muted grow">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -82,7 +82,7 @@ const Support = () => {
 
             <div>
               <h2 className="text-xl font-bold text-foreground-primary mb-4">Contact</h2>
-              <Card className="bg-gradient-to-br from-purple-600/10 to-purple-400/10 border-purple-400/20">
+              <Card className="bg-linear-to-br from-purple-600/10 to-purple-400/10 border-purple-400/20">
                 <div className="space-y-3 text-foreground-primary">
                   <p className="text-sm text-foreground-muted">
                     Email is the fastest way to reach us. We aim to reply within 2–5 business days.

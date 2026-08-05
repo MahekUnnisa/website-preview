@@ -63,7 +63,7 @@ const Home = () => {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
         <div className="absolute left-1/2 top-24 h-72 w-72 -translate-x-1/2 rounded-full bg-purple-400/15 blur-3xl" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-background to-transparent" />
         <div className="container-custom w-full">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
@@ -133,7 +133,7 @@ const Home = () => {
             {features.map((feature, index) => (
               <div key={index} className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex">
                 <Card className="group relative overflow-hidden bg-background-secondary/80 w-full">
-                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-400/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                  <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-purple-400/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-[0.625rem] border border-border-colored bg-purple-15 text-purple-200 transition-colors group-hover:text-purple-100">
                     {feature.icon}
                   </div>

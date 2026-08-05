@@ -167,8 +167,8 @@ const Privacy = () => {
                         </li>
                       ) : (
                         <li key={itemIndex} className="flex items-start space-x-3">
-                          <span className="flex-shrink-0 w-2 h-2 bg-purple-400 rounded-full mt-2"></span>
-                          <span className="text-sm text-foreground-muted flex-grow">{item}</span>
+                          <span className="shrink-0 w-2 h-2 bg-purple-400 rounded-full mt-2"></span>
+                          <span className="text-sm text-foreground-muted grow">{item}</span>
                         </li>
                       )
                     ))}
@@ -182,7 +182,7 @@ const Privacy = () => {
               <h2 className="text-xl font-bold text-foreground-primary mb-4">
                 Contact Us
               </h2>
-              <Card className="bg-gradient-to-br from-purple-600/10 to-purple-400/10 border-purple-400/20">
+              <Card className="bg-linear-to-br from-purple-600/10 to-purple-400/10 border-purple-400/20">
                 <p className="text-sm text-foreground-muted mb-4">
                   If you have any questions or concerns about this Privacy Policy or our data practices, 
                   please contact us at:

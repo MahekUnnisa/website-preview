@@ -160,7 +160,7 @@ const SlackLanding = () => {
             </div>
 
             <div className="relative mt-10 animate-slide-up-fade-in">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-purple-600/20 rounded-2xl blur-3xl"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-purple-400/20 to-purple-600/20 rounded-2xl blur-3xl"></div>
               <div className="relative bg-background-tertiary border border-border rounded-2xl p-1 shadow-2xl">
                 <img
                   src="/slack.png"
@@ -220,8 +220,8 @@ const SlackLanding = () => {
                     <ul className="space-y-3">
                       {section.content.map((line) => (
                         <li key={line} className="flex items-start space-x-3">
-                          <span className="flex-shrink-0 w-2 h-2 bg-purple-400 rounded-full mt-2"></span>
-                          <span className="text-sm text-foreground-muted flex-grow">{line}</span>
+                          <span className="shrink-0 w-2 h-2 bg-purple-400 rounded-full mt-2"></span>
+                          <span className="text-sm text-foreground-muted grow">{line}</span>
                         </li>
                       ))}
                     </ul>
@@ -235,8 +235,8 @@ const SlackLanding = () => {
 
       <section className="relative py-10 md:py-12">
         <div className="container-custom">
-          <Card className="bg-gradient-to-br from-purple-600/10 to-purple-400/10 border-purple-400/20 relative overflow-hidden animate-slide-up-fade-in">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-400/5 to-purple-600/5 blur-3xl"></div>
+          <Card className="bg-linear-to-br from-purple-600/10 to-purple-400/10 border-purple-400/20 relative overflow-hidden animate-slide-up-fade-in">
+            <div className="absolute inset-0 bg-linear-to-r from-purple-400/5 to-purple-600/5 blur-3xl"></div>
             <div className="relative max-w-4xl mx-auto py-6 px-6">
               <div className="text-center mb-6">
                 <h2 className="text-xl md:text-2xl font-bold text-foreground-primary mb-2">Install & get started</h2>
@@ -249,8 +249,8 @@ const SlackLanding = () => {
                 <ul className="space-y-3 text-left">
                   {installSteps.map((step) => (
                     <li key={step} className="flex items-start space-x-3">
-                      <span className="flex-shrink-0 w-2 h-2 bg-purple-400 rounded-full mt-2"></span>
-                      <span className="text-sm text-foreground-muted flex-grow">{step}</span>
+                      <span className="shrink-0 w-2 h-2 bg-purple-400 rounded-full mt-2"></span>
+                      <span className="text-sm text-foreground-muted grow">{step}</span>
                     </li>
                   ))}
                 </ul>

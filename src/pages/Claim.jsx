@@ -92,7 +92,7 @@ export default function Claim() {
         </p>
       )}
       <div className="pt-2">
-        <Button onClick={startGoogle} disabled={Boolean(invalid)} className="min-w-[14rem]">
+        <Button onClick={startGoogle} disabled={Boolean(invalid)} className="min-w-56">
           Continue with Google
         </Button>
       </div>
