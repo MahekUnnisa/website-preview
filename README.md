@@ -1,223 +1,140 @@
-# DevBytes Website
+# ZeroAI Website
 
-Landing page for DevBytes - an AI-powered Chrome extension that helps developers manage their calendar, tasks, and notes. Built with React and Tailwind CSS, featuring a clean dark theme with purple accents.
+Marketing and partner-onboarding site for **ZeroAI** — a Chrome assistant for notes, tasks, meetings, summaries, and quick web actions.
 
-## 🚀 Features
+A static single-page app built with React and Tailwind CSS, bundled by Vite and hosted on **Cloudflare Pages**. There is no server, no API layer and no container — the build output in `dist/` is served directly as static files.
 
-- **React 19** - Latest version of React with modern hooks
-- **Tailwind CSS** - Utility-first CSS framework with custom theme
-- **React Router** - Client-side routing for smooth navigation
-- **Vite** - Lightning-fast build tool and dev server
-- **Docker** - Optimized multi-stage Docker build
-- **Responsive Design** - Mobile-first approach
-- **Custom Theme** - Purple-based dark theme with smooth animations
+## Tech stack
 
-## 📦 Pages
+- React 19.2.8 + React Router 8.3.0 (`BrowserRouter`, client-side routing)
+- Vite 8.2.0 (Rolldown bundler)
+- Tailwind CSS 4.3.3 via `@tailwindcss/vite` (CSS-first config, no PostCSS)
+- Node.js 24.13.0 (pinned via `.nvmrc` / `.node-version`)
 
-- **Home** - Hero section showcasing DevBot's features (Calendar, Tasks, Notes, TL;DR, Search)
-- **About** - DevBytes story, values, development timeline, and team
-- **Contact** - Contact form for feedback, bugs, and questions
-- **Privacy Policy** - Privacy policy for the extension
-- **Terms of Service** - Terms and conditions
+## Pages
 
-## 🛠️ Tech Stack
+| Route | Component |
+| --- | --- |
+| `/` | Home |
+| `/slack` | SlackLanding |
+| `/support` | Support |
+| `/claim` | Claim — partner access claim, starts Google OAuth |
+| `/partner/success` | PartnerSuccess — OAuth return, syncs token to the extension |
+| `/partner/success/demo` | PartnerSuccessDemo |
+| `/privacy` | Privacy |
+| `/terms` | Terms |
+| `/about` | About |
+| `*` | NotFound |
 
-- React 19.2.0
-- React Router DOM 7.9.5
-- Tailwind CSS 3.4.17
-- Vite 6.0.11
-- PostCSS & Autoprefixer
+The partner claim flow is specified in [`docs/referral-program/claim-activation.md`](docs/referral-program/claim-activation.md).
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 24.13.0 LTS – project enforces this via `.nvmrc` and the `engines` field in `package.json`
-- npm 11.6.2 – project enforces this via the `engines` field in `package.json`
-- Git
-- Docker (optional, for containerized development)
-- Better use nvm to manage Node.js versions.
-
-### Usng nvm
+## Local development
 
 ```bash
-nvm install
-nvm use
+nvm use                     # Node 24.13.0, per .nvmrc
+npm ci
+npm run dev                 # http://localhost:5173
+
+# optional — only to point at a local API instead of production:
+# cp .env.example .env.local
 ```
 
-### Using Docker
+### Scripts
 
-```bash
-docker build -t zeroai-website .
-docker run -p 3000:80 zeroai-website
-```
+- `npm run dev` — dev server on port 5173
+- `npm run build` — production build to `dist/`
+- `npm run preview` — serve the build on port 4173
 
-### Using Docker Compose
+Both ports are pinned with `strictPort` in `vite.config.js`, so a clash fails
+loudly rather than drifting to another port — the dev origin has to match the
+API's CORS allowlist and the Google OAuth redirect URI. Port 3000 is left free
+for the local API.
 
-```bash
-docker-compose up -d
-```
+> `npm run preview` does **not** apply `_headers` or `_redirects`. To test those (SPA deep links, security headers) exactly as Cloudflare serves them:
+> ```bash
+> npm run build && npx wrangler pages dev dist
+> ```
 
-### Development
+## Environment variables
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+All config is **build-time**: Vite inlines `VITE_*` into the bundle, so changing a value requires a rebuild. None are secrets — every value is readable in the shipped JavaScript.
 
-2. **Start development server:**
-   ```bash
-   npm run dev
-   ```
+**All three are optional.** Each falls back to its production value in `src/lib/env.js`, so a build with nothing configured works against live infrastructure. Set them only to point a build elsewhere.
 
-3. **Open your browser:**
-   Navigate to `http://localhost:3000`
+| Variable | Purpose | Default |
+| --- | --- | --- |
+| `VITE_API_BASE_URL` | Partner API base, used by `/claim` and `/partner/success`. Must include the version segment. | `https://api.zeroai.co.in/v2` |
+| `VITE_EXTENSION_ID` | Target of `chrome.runtime.sendMessage` for one-click sync | the published extension ID |
+| `VITE_CHROME_WEBSTORE_URL` | Install CTA target | the live store listing |
 
-### Production Build
+Locally these come from `.env.local`. In production they are set in the Cloudflare Pages project settings.
 
-1. **Build the application:**
-   ```bash
-   npm run build
-   ```
+## Deployment — Cloudflare Pages
 
-2. **Preview production build:**
-   ```bash
-   npm run preview
-   ```
+Pushing to the production branch triggers a build via the Cloudflare Pages Git integration. No CI config lives in this repo.
 
-## 🐳 Docker Deployment
+**Project settings:**
 
-### Build and Run with Docker
+| Setting | Value |
+| --- | --- |
+| Framework preset | Vite |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+| Root directory | `/` |
+| Production branch | `master` |
 
-```bash
-# Build the Docker image
-docker build -t zeroai-website .
+**Environment variables:** `NODE_VERSION=24.13.0` is required. The three `VITE_*` variables are optional — set them (for both Production *and* Preview) only to override the production defaults, for example to point a preview build at a staging API.
 
-# Run the container
-docker run -p 3000:80 zeroai-website
-```
+### Routing and headers
 
-### Using Docker Compose
+Two files in `public/` are copied verbatim into `dist/` and read by Cloudflare Pages:
 
-```bash
-# Start the application
-docker-compose up -d
+- **`public/_redirects`** — `/* /index.html 200`. Required so deep links like `/partner/success/demo` resolve instead of 404ing. The `200` rewrite preserves the query string and hash fragment that `/partner/success` reads the OAuth token from.
+- **`public/_headers`** — security headers (CSP, HSTS, `X-Frame-Options`, `nosniff`, `Referrer-Policy`) and cache policy. Content-hashed JS/CSS and fonts are immutable for a year; unhashed favicons are capped at a day.
 
-# Stop the application
-docker-compose down
-```
+Compression is handled by Cloudflare and needs no configuration.
 
-The application will be available at `http://localhost:3000` (or the port defined in your `docker-compose.override.yml`).
+### Origin allowlists
 
-### Bitbucket Pipeline
+The site's origin is allowlisted in three places outside this repo. All must include the production domain (and any `*.pages.dev` preview origin used for testing), or the partner claim flow breaks:
 
-- `bitbucket-pipelines.yml` runs on `atlassian/default-image:3`, ensures all required AWS variables are present, builds the Docker image, logs into the ECR registry with the AWS CLI, and pushes both the commit/tag-derived version and `latest` to the repository defined by `ECR_REPOSITORY`.
-- Provide these Bitbucket variables: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, and `ECR_REPOSITORY`. The pipeline derives the version tag from `BITBUCKET_TAG`, falls back to the commit SHA, and lets you override that value by defining `IMAGE_VERSION`; it exits if any required AWS value is missing.
+1. Partner API **CORS** allowlist
+2. **Google OAuth** authorised redirect URIs
+3. Chrome extension `externally_connectable.matches` (`chrome.runtime.sendMessage` silently no-ops from an unlisted origin)
 
-## 🎨 Customization
-
-### Theme Colors
-
-The custom theme colors are defined in `src/styles/themes.css` and extended in `tailwind.config.js`:
-
-- **Primary Purple**: `#6b4ce8`
-- **Purple Scale**: 50-800 variants
-- **Background Colors**: Dark theme gradients
-- **Semantic Colors**: Success, Error, Warning
-
-### Modifying Styles
-
-- Global styles: `src/styles/index.css`
-- Theme colors: `src/styles/themes.css`
-- Tailwind config: `tailwind.config.js`
-
-## 📁 Project Structure
+## Project structure
 
 ```
 zeroai-website/
+├── docs/referral-program/claim-activation.md
+├── public/
+│   ├── _headers            # Cloudflare Pages response headers
+│   ├── _redirects          # Cloudflare Pages SPA fallback
+│   ├── assets/icons/       # favicons, webmanifest
+│   └── fonts/Hauora/
 ├── src/
-│   ├── components/
-│   │   ├── Navbar.jsx
-│   │   ├── Footer.jsx
-│   │   ├── Button.jsx
-│   │   └── Card.jsx
+│   ├── components/         # Navbar, Footer, Button, Card, ...
+│   ├── lib/env.js          # VITE_* accessors
 │   ├── pages/
-│   │   ├── Home.jsx
-│   │   ├── About.jsx
-│   │   ├── Contact.jsx
-│   │   ├── Privacy.jsx
-│   │   └── Terms.jsx
-│   ├── styles/
-│   │   ├── index.css
-│   │   └── themes.css
+│   ├── styles/             # index.css, themes.css, fonts.css
 │   ├── App.jsx
 │   └── index.jsx
-├── Dockerfile
-├── docker-compose.yml
-├── vite.config.js
-├── tailwind.config.js
-├── postcss.config.js
-├── package.json
-└── index.html
+├── index.html
+└── vite.config.js
 ```
 
-## 🔧 Available Scripts
+## Theming
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build locally
+Tailwind v4 is configured in CSS, not JavaScript — there is no `tailwind.config.js`
+and no `postcss.config.js`.
 
-## 🌐 Browser Support
+- Design tokens (purple/orange scales, `Hauora` font family, radius, keyframes):
+  the `@theme` block in `src/styles/index.css`
+- Shared component classes (`btn-primary`, `card-base`, …): `@utility` blocks in
+  the same file
+- Global styles: `src/styles/index.css`
+- Theme colours: `src/styles/themes.css`
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+## Licence
 
-## 📝 Environment Variables
-
-Create a `.env` file in the root directory for any environment-specific configurations:
-
-```env
-VITE_API_URL=https://api.zeroai.co.in
-VITE_APP_NAME=ZeroAI
-```
-
-## 🚢 Production Deployment
-
-The Dockerfile uses a multi-stage build:
-
-1. **Stage 1**: Builds the React application with Node.js
-2. **Stage 2**: Serves the static files with Nginx
-
-This results in a minimal production image (~25MB) with optimized performance. The nginx configuration lives in `nginx/default.conf` so it can be reviewed or extended without touching the Dockerfile.
-
-## 🔒 Security Features
-
-- Security headers configured in Nginx
-- XSS protection
-- Content-Type nosniff
-- Frame options
-- Gzip compression enabled
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the ISC License.
-
-## 👥 Authors
-
-- **Mahek Unnisa** - *Creator & Developer*
-
-## 🙏 Acknowledgments
-
-- React team for the amazing framework
-- Tailwind CSS for the utility-first CSS framework
-- Vite for the lightning-fast build tool
+ISC. Created by **Mahek Unnisa**.

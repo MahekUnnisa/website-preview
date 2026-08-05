@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { getChromeWebStoreUrl } from '../lib/env';
 
 const chromeWebStoreUrl = getChromeWebStoreUrl();
@@ -9,7 +9,7 @@ const Footer = () => {
 
   const footerLinks = {
     product: [
-      { label: 'Features', path: '#features' },
+      { label: 'Features', path: '/#features' },
       { label: 'Slack App', path: '/slack' },
     ],
     company: [

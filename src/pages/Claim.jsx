@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router';
 import Button from '../components/Button';
 import PartnerFlowLayout from '../components/PartnerFlowLayout';
 import { getApiBase } from '../lib/env';
@@ -92,7 +92,7 @@ export default function Claim() {
         </p>
       )}
       <div className="pt-2">
-        <Button onClick={startGoogle} disabled={Boolean(invalid)} className="min-w-[14rem]">
+        <Button onClick={startGoogle} disabled={Boolean(invalid)} className="min-w-56">
           Continue with Google
         </Button>
       </div>

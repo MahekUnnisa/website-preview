@@ -1,39 +1,25 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
-/** Vite injects the app bundle into <head>; keep /runtime-env.js before it so window.__ENV__ exists when the app runs. */
-function runtimeEnvFirst() {
-  return {
-    name: 'runtime-env-first',
-    transformIndexHtml(html) {
-      const tag = '<script src="/runtime-env.js"></script>';
-      const without = html.replace(new RegExp(`\\s*${tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'g'), '');
-      if (without.includes('<script type="module"')) {
-        return without.replace(/<script type="module"/, `${tag}\n  <script type="module"`);
-      }
-      return without.replace('</head>', `  ${tag}\n</head>`);
-    },
-  };
-}
-
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), runtimeEnvFirst()],
+  plugins: [react(), tailwindcss()],
+  // strictPort: fail loudly instead of silently drifting to the next free port.
+  // The dev origin has to match the API's CORS allowlist and the OAuth redirect
+  // URI, so an unexpected port is a broken claim flow rather than a minor detail.
+  // 3000 is deliberately avoided — that is where the local API runs.
   server: {
-    port: 3000,
+    port: 5173,
+    strictPort: true,
     host: true,
+  },
+  preview: {
+    port: 4173,
+    strictPort: true,
   },
   build: {
     outDir: 'dist',
     sourcemap: false,
-    minify: 'terser',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-        },
-      },
-    },
   },
 });
-

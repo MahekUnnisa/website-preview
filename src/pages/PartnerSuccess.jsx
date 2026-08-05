@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import PartnerFlowLayout from '../components/PartnerFlowLayout';
 import ExtensionInstallGuide from '../components/ExtensionInstallGuide';
 import { getApiBase, getChromeWebStoreUrl, getExtensionId } from '../lib/env';
@@ -194,9 +194,7 @@ export default function PartnerSuccess() {
       if (!canTalkToExtensions()) {
         setPhase('done_web_only');
         setMessage(
-          getExtensionId()
-            ? 'Your ZeroAI account is active in this browser session. Install the Chrome extension below to sync it automatically.'
-            : 'Your ZeroAI account is active in this browser session. Install the Chrome extension below — one-click sync requires VITE_EXTENSION_ID in the site build.',
+          'Your ZeroAI account is active in this browser session. Install the Chrome extension below to sync it automatically.',
         );
         return;
       }

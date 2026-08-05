@@ -1,30 +1,23 @@
+// Production defaults. VITE_* values set at build time win; these keep a build
+// that was made without them (or with an empty value) pointing somewhere valid.
+const DEFAULT_API_BASE_URL = 'https://api.zeroai.co.in/v2';
+const DEFAULT_EXTENSION_ID = 'hplbpdkajdhlggncdpdmnkjldopmoomg';
 const DEFAULT_CHROME_WEBSTORE_URL =
   'https://chromewebstore.google.com/detail/zeroai-your-ai-work-assis/hplbpdkajdhlggncdpdmnkjldopmoomg';
 
-function getRuntimeEnv(key) {
-  if (typeof window === 'undefined') return undefined;
-  const bag = window.__ENV__;
-  if (!bag || typeof bag !== 'object') return undefined;
-  const v = bag[key];
-  if (v !== undefined && v !== null && String(v) !== '') return String(v);
-  return undefined;
-}
-
-/** Prefer runtime config (Docker/nginx entrypoint → `/runtime-env.js`), then Vite `import.meta.env` (dev / build). */
+/** Build-time config: Vite inlines `VITE_*` from `.env.local` (dev) or the Cloudflare Pages env (build). */
 export function getEnv(key, fallback = '') {
-  const runtime = getRuntimeEnv(key);
-  if (runtime !== undefined) return runtime;
   const built = import.meta.env[key];
   if (built !== undefined && built !== '') return String(built);
   return fallback;
 }
 
 export function getApiBase() {
-  return getEnv('VITE_API_BASE_URL').replace(/\/$/, '');
+  return (getEnv('VITE_API_BASE_URL', DEFAULT_API_BASE_URL).trim() || DEFAULT_API_BASE_URL).replace(/\/$/, '');
 }
 
 export function getExtensionId() {
-  return getEnv('VITE_EXTENSION_ID').trim();
+  return getEnv('VITE_EXTENSION_ID', DEFAULT_EXTENSION_ID).trim() || DEFAULT_EXTENSION_ID;
 }
 
 export function getChromeWebStoreUrl() {

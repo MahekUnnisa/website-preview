@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from '../components/Card';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const About = () => {
   return (
@@ -62,7 +62,7 @@ const About = () => {
 
             <div>
               <h2 className="text-xl font-bold text-foreground-primary mb-4">About ZeroAI</h2>
-              <Card className="bg-gradient-to-br from-purple-600/10 to-purple-400/10 border-purple-400/20">
+              <Card className="bg-linear-to-br from-purple-600/10 to-purple-400/10 border-purple-400/20">
                 <p className="text-sm text-foreground-muted mb-3">
                   <strong className="text-foreground-primary">ZeroAI</strong> is a product developed and operated by{' '}
                   <strong className="text-foreground-primary">Candela Labs Private Limited</strong>. All services,

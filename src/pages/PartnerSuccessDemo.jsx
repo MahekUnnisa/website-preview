@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 import PartnerFlowLayout from '../components/PartnerFlowLayout';
 import ExtensionInstallGuide from '../components/ExtensionInstallGuide';
 import { getChromeWebStoreUrl } from '../lib/env';
