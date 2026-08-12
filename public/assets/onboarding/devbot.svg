@@ -1,0 +1,7 @@
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="var(--accent-100)" d="M9.697 13.855h4.485v2.491H9.697z"/>
+    <path d="m10.943 17.094-1.246-.747h4.485v-2.492l1.246.748v2.491h-4.485z" fill="var(--accent-200)"/>
+    <path fill="var(--accent-400)" d="M1.818 3.182h12.893v7.163H1.818z"/>
+    <path d="m5.4 12.493-3.582-2.149h12.894V3.182l3.581 2.148v7.163H5.4z" fill="var(--accent-500)"/>
+    <path d="m11.28 8.403.538-.494-1.23-1.097 1.23-1.097-.537-.494-1.735 1.59 1.735 1.592zM5 5.221h.909v3.182H5z" fill="var(--accent-light)"/>
+</svg>
