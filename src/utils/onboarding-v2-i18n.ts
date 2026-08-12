@@ -243,7 +243,7 @@ export const getOnboardingV2KeysCopy = () => ({
 });
 
 export const getOnboardingV2InsightCopy = () => ({
-    openZero: onboardingV2Msg('onboarding_v2_insight_open_zero', 'Open Zero'),
+    openZero: onboardingV2Msg('onboarding_v2_insight_open_zero', 'Install Zero'),
     loadingLine1: onboardingV2Msg(
         'onboarding_v2_insight_loading_line1',
         "Thanks, I'm off to work now."
