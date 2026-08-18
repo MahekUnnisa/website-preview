@@ -287,7 +287,7 @@ export const IntroCenterIllustration: React.FC<IntroCenterIllustrationProps> = (
     return (
         <div
             ref={shellRef}
-            className={cn('relative mx-auto w-full max-w-[563px]', className)}
+            className={cn('pointer-events-none relative mx-auto h-full w-full max-w-none', className)}
             style={{ aspectRatio: `${ILLUSTRATION_WIDTH} / ${ILLUSTRATION_HEIGHT}` }}
             role="img"
             aria-label="Onboarding intro illustration"

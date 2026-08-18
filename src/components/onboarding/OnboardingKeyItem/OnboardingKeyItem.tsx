@@ -142,7 +142,7 @@ export const OnboardingKeyItem: React.FC<OnboardingKeyItemProps> = ({
                         ) : null}
                     </div>
                     <div className="flex flex-col gap-1">
-                        <p className="text-base font-bold leading-[1.45] text-foreground-primary font-aeonik">
+                        <p className="text-base font-bold leading-[1.45] text-foreground-primary font-instrumentSans">
                             {title}
                         </p>
                         <p className="text-sm leading-[1.45] text-foreground-muted font-instrumentSans">

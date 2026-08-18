@@ -46,9 +46,9 @@ export const OnboardingRoleSelectScreen: React.FC<OnboardingRoleSelectScreenProp
     }, [typingDone]);
 
     return (
-        <OnboardingScreenShell className={className} mainClassName="pt-[13px]">
-            <div className="flex w-full max-w-[608px] flex-col gap-8">
-                <h1 className="relative text-[28px] font-bold leading-[1.35] text-foreground-secondary font-aeonik">
+        <OnboardingScreenShell className={className}>
+            <div className="mx-auto flex w-full max-w-[720px] flex-col gap-6 pt-8 lg:my-auto lg:py-10 xl:max-w-[840px] 2xl:max-w-[900px]">
+                <h1 className="relative text-[24px] font-semibold leading-[1.35] text-foreground-secondary font-instrumentSans lg:text-[clamp(24px,2.6vw,36px)]">
                     <span className="invisible" aria-hidden>
                         {question}
                     </span>

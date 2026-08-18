@@ -36,7 +36,12 @@ export const OnboardingScheduleFlowLayout: React.FC<OnboardingScheduleFlowLayout
     const shouldAnimateCalendar = animateOnMount.current;
 
     return (
-        <div className={cn('flex w-full max-w-[684px] items-start gap-5', className)}>
+        <div
+            className={cn(
+                'mx-auto flex w-full max-w-[684px] flex-col items-center gap-6 lg:flex-row lg:items-start lg:gap-5',
+                className
+            )}
+        >
             <OnboardingCalendarDayPreview
                 date={scheduleDate}
                 events={calendarEvents}
@@ -45,7 +50,7 @@ export const OnboardingScheduleFlowLayout: React.FC<OnboardingScheduleFlowLayout
                 className={shouldAnimateCalendar ? 'onboarding-slide-from-bottom' : undefined}
             />
 
-            <div className="flex min-h-[506px] w-full max-w-[288px] flex-col">
+            <div className="flex w-full min-h-0 flex-col lg:min-h-[506px] lg:w-[288px] lg:shrink-0">
                 <OnboardingScheduleStatus visible={showStatus} headline={scheduleStatusHeadline} />
                 {children}
             </div>

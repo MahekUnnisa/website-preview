@@ -23,14 +23,19 @@ export const OnboardingPrimaryButton: React.FC<OnboardingPrimaryButtonProps> = (
     const fill = progress != null ? Math.min(1, Math.max(0, progress)) : undefined;
 
     return (
-        <div className={cn('inline-flex rounded-lg bg-border-widget p-[3px]', shellClassName)}>
-            <button
-                type={type}
+        <button
+            type={type}
+            className={cn(
+                'inline-flex min-h-12 cursor-pointer rounded-lg bg-border-widget p-[3px] transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-50',
+                shellClassName
+            )}
+            {...props}
+        >
+            <span
                 className={cn(
-                    'relative flex h-full items-center justify-center overflow-hidden rounded-[5px] bg-gradient-to-b from-accent-200 to-accent-500 text-white transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-50',
+                    'relative flex h-full w-full items-center justify-center overflow-hidden rounded-[5px] bg-gradient-to-b from-accent-200 to-accent-500 text-white',
                     className
                 )}
-                {...props}
             >
                 {fill != null ? (
                     <span
@@ -40,8 +45,8 @@ export const OnboardingPrimaryButton: React.FC<OnboardingPrimaryButtonProps> = (
                     />
                 ) : null}
                 <span className="relative z-[1] flex items-center gap-2">{children}</span>
-            </button>
-        </div>
+            </span>
+        </button>
     );
 };
 

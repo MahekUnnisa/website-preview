@@ -4,6 +4,7 @@ import type {
     OnboardingRoleId,
     OnboardingWorkToolCategory,
 } from '@/types/onboarding';
+import { publicUrl } from '@/lib/utils';
 
 export type OnboardingFlowStep =
     | 'welcome'
@@ -53,13 +54,24 @@ const LEGACY_ONBOARDING_STAGES = new Set(['signup', 'calendar', 'chat', 'loading
 export const DEFAULT_WRAP_UP_TIME = '6:30 PM';
 
 /** Default Slack key / picker icon when API omits one. */
-export const SLACK_FAVICON_URL = 'https://slack.com/favicon.ico';
+export const SLACK_ICON_URL = publicUrl('/assets/onboarding/slack-logo.svg');
+
+/** Keep the old name so stray imports still resolve to the local asset. */
+export const SLACK_FAVICON_URL = SLACK_ICON_URL;
+
+export function workspaceKeyIconUrl(icon?: string | null): string {
+    const value = typeof icon === 'string' ? icon.trim() : '';
+    if (!value || value.includes('slack.com/favicon')) {
+        return SLACK_ICON_URL;
+    }
+    return value;
+}
 
 export const mockWorkspaceProviders = [
     {
         id: 'slack' as const,
         label: 'Slack',
-        icon: SLACK_FAVICON_URL
+        icon: SLACK_ICON_URL
     },
     {
         id: 'msteams' as const,
@@ -247,19 +259,22 @@ export function normalizeFlowData(raw: unknown): OnboardingFlowData {
 
 type ResolveFlowStepOptions = {
     authenticated: boolean;
-    connections: Record<string, { connected?: boolean } | undefined>;
 };
 
 export function resolveOnboardingFlowStep(
     state: OnboardingV2State | undefined,
-    { authenticated, connections }: ResolveFlowStepOptions
+    { authenticated }: ResolveFlowStepOptions
 ): OnboardingFlowStep {
     if (!state || state.status === 'not_started') {
         return 'welcome';
     }
 
-    if (state.status === 'skipped' || state.status === 'completed') {
+    if (state.status === 'skipped') {
         return 'welcome';
+    }
+
+    if (state.status === 'completed') {
+        return state.stage === 'thank-you' ? 'thank-you' : 'welcome';
     }
 
     let step: OnboardingFlowStep = isOnboardingFlowStep(state.stage)
@@ -268,13 +283,12 @@ export function resolveOnboardingFlowStep(
           ? 'welcome'
           : 'welcome';
 
-    if (authenticated && step === 'keys-first') {
+    const keyAuth = normalizeFlowData(state.flowData).keyAuth;
+    if (authenticated && step === 'keys-first' && keyAuth?.google !== 'failed') {
         step = 'keys-second';
     }
-
-    const workspace = normalizeFlowData(state.flowData).workspace ?? 'slack';
-    if (authenticated && step === 'keys-second' && connections[workspace]?.connected) {
-        step = 'keys-complete';
+    if (authenticated && step === 'role-plan' && keyAuth?.google === 'success') {
+        step = 'keys-second';
     }
 
     return step;
@@ -298,6 +312,8 @@ export function getPreviousFlowStep(step: OnboardingFlowStep): OnboardingFlowSte
             return 'wrap-up-confirm';
         case 'calendar-insight':
             return 'keys-complete';
+        case 'thank-you':
+            return 'keys-second';
         default:
             return null;
     }
@@ -309,4 +325,50 @@ export function getNextFlowStep(step: OnboardingFlowStep): OnboardingFlowStep | 
         return null;
     }
     return ONBOARDING_FLOW_STEPS[index + 1];
+}
+
+/** First job is only for a new Slack connect this session — not Google, not already-connected Slack. */
+export function shouldFireExecuteFirstOnboardingJob(opts: {
+    slackAlreadyConnected: boolean;
+    slackConnectedNow: boolean;
+    oauthProvider: OnboardingKeyAuthProvider | null;
+}): boolean {
+    if (opts.slackAlreadyConnected || !opts.slackConnectedNow) {
+        return false;
+    }
+    return opts.oauthProvider !== 'google';
+}
+
+if (import.meta.env.DEV) {
+    console.assert(
+        shouldFireExecuteFirstOnboardingJob({
+            slackAlreadyConnected: true,
+            slackConnectedNow: true,
+            oauthProvider: 'slack'
+        }) === false,
+        'already-connected Slack should not execute first job'
+    );
+    console.assert(
+        shouldFireExecuteFirstOnboardingJob({
+            slackAlreadyConnected: false,
+            slackConnectedNow: true,
+            oauthProvider: 'google'
+        }) === false,
+        'Google OAuth should not execute first job'
+    );
+    console.assert(
+        shouldFireExecuteFirstOnboardingJob({
+            slackAlreadyConnected: false,
+            slackConnectedNow: true,
+            oauthProvider: 'slack'
+        }) === true,
+        'new Slack connect should execute first job'
+    );
+    console.assert(
+        resolveOnboardingFlowStep(
+            { status: 'in_progress', stage: 'keys-first', flowData: { keyAuth: { google: 'failed' } } },
+            { authenticated: true }
+        ) === 'keys-first',
+        'failed Google should not auto-advance off keys-first'
+    );
 }

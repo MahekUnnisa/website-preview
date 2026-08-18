@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router';
 import { getChromeWebStoreUrl } from '../lib/env';
+import { publicUrl } from '../lib/utils';
 
 const chromeWebStoreUrl = getChromeWebStoreUrl();
 
@@ -21,12 +22,12 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <img 
-              src="/assets/icons/icon.png"
+              src={publicUrl('/assets/icons/icon.png')}
               alt="DevBot Logo" 
               className="h-5 w-auto"
             />
             <img 
-              src="/assets/icons/logo.png"
+              src={publicUrl('/assets/icons/logo.png')}
               alt="ZeroAI Logo" 
               className="h-5 w-auto"
             />

@@ -1,3 +1,3 @@
-/** Figma onboarding typography — Instrument Sans body, Aeonik TRIAL display headings. */
+/** Figma onboarding typography — Instrument Sans for all text. */
 export const onboardingBodyFontClass = 'font-instrumentSans';
-export const onboardingDisplayFontClass = 'font-aeonik';
+export const onboardingDisplayFontClass = 'font-instrumentSans';

@@ -68,10 +68,8 @@ export const OnboardingRolePlanPanel: React.FC<OnboardingRolePlanPanelProps> = (
             schedule(() => setActiveStepIndex(i), stepsStart + i * STEP_INTERVAL_MS);
         }
 
-        schedule(
-            () => setShowFooter(true),
-            stepsStart + stepCount * STEP_INTERVAL_MS + STEP_ANIMATION_MS + 200
-        );
+        // Pin CTA with the card; don't wait for step choreography or the button sits off-screen.
+        schedule(() => setShowFooter(true), 950);
 
         return () => timers.forEach((id) => window.clearTimeout(id));
     }, [stepCount]);
@@ -86,50 +84,59 @@ export const OnboardingRolePlanPanel: React.FC<OnboardingRolePlanPanelProps> = (
     );
 
     return (
-        <div className={cn('flex w-full max-w-[608px] flex-col gap-6', onboardingBodyFontClass, className)}>
-            <OnboardingUserBubble
-                className={cn(
-                    showBubble ? 'onboarding-fade-in' : 'pointer-events-none opacity-0'
-                )}
-            >
-                {userChoice}
-            </OnboardingUserBubble>
-
-            <OnboardingStatusMessage
-                message={botMessage}
-                variant="prominent"
-                className={cn(showStatus ? 'onboarding-fade-in' : 'pointer-events-none opacity-0')}
-            />
-
-            <RolePlanEntranceProvider value={entranceState}>
-                <OnboardingPlanPreviewCard
+        <div
+            className={cn(
+                'mx-auto flex min-h-0 w-full max-w-[640px] flex-1 flex-col pt-5 max-lg:overflow-hidden lg:my-auto lg:flex-none lg:py-10',
+                onboardingBodyFontClass,
+                className
+            )}
+        >
+            <div className="flex min-h-0 flex-1 flex-col max-lg:overflow-y-auto">
+                <OnboardingUserBubble
                     className={cn(
-                        showCard ? 'onboarding-fade-in' : 'pointer-events-none opacity-0'
+                        showBubble ? 'onboarding-fade-in' : 'pointer-events-none opacity-0'
                     )}
-                    preview={preview}
-                    steps={stepChildren.map((child, index) => {
-                        const isShown = index <= activeStepIndex;
-                        const isEntering = index === activeStepIndex;
+                >
+                    {userChoice}
+                </OnboardingUserBubble>
 
-                        return (
-                            <div
-                                key={index}
-                                className={cn(
-                                    isEntering && 'onboarding-slide-down',
-                                    isShown && !isEntering && 'onboarding-step-visible',
-                                    !isShown && 'pointer-events-none opacity-0'
-                                )}
-                            >
-                                {child}
-                            </div>
-                        );
-                    })}
+                <OnboardingStatusMessage
+                    message={botMessage}
+                    variant="prominent"
+                    className={cn('mt-6', showStatus ? 'onboarding-fade-in' : 'pointer-events-none opacity-0')}
                 />
-            </RolePlanEntranceProvider>
+
+                <RolePlanEntranceProvider value={entranceState}>
+                    <OnboardingPlanPreviewCard
+                        className={cn(
+                            'mt-3',
+                            showCard ? 'onboarding-fade-in' : 'pointer-events-none opacity-0'
+                        )}
+                        preview={preview}
+                        steps={stepChildren.map((child, index) => {
+                            const isShown = index <= activeStepIndex;
+                            const isEntering = index === activeStepIndex;
+
+                            return (
+                                <div
+                                    key={index}
+                                    className={cn(
+                                        isEntering && 'onboarding-slide-down',
+                                        isShown && !isEntering && 'onboarding-step-visible',
+                                        !isShown && 'pointer-events-none opacity-0'
+                                    )}
+                                >
+                                    {child}
+                                </div>
+                            );
+                        })}
+                    />
+                </RolePlanEntranceProvider>
+            </div>
 
             <div
                 className={cn(
-                    'flex flex-col gap-3',
+                    'z-10 flex shrink-0 flex-col gap-3 bg-background pt-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:mt-6',
                     showFooter ? 'onboarding-fade-in' : 'pointer-events-none opacity-0'
                 )}
             >

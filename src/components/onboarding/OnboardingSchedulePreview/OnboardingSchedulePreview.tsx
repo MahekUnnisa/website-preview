@@ -127,7 +127,7 @@ export const OnboardingSchedulePreview: React.FC<OnboardingSchedulePreviewProps>
     return (
         <div
             className={cn(
-                'relative h-[320px] w-[280px] shrink-0 overflow-hidden rounded-xl bg-background-secondary',
+                'relative mx-auto h-[320px] w-full max-w-[280px] shrink-0 overflow-hidden rounded-xl bg-background-secondary lg:mx-0',
                 showPreviewBg ? 'onboarding-fade-in' : 'pointer-events-none opacity-0',
                 className
             )}

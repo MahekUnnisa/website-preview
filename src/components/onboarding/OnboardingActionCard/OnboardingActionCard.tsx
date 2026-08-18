@@ -31,7 +31,7 @@ export const OnboardingActionCard: React.FC<OnboardingActionCardProps> = ({
             )}
         >
             <div className="flex w-full items-start gap-4">
-                <div className="flex min-w-0 flex-1 items-center gap-3.5">
+                <div className="flex min-w-0 flex-1 items-start gap-3.5">
                     <div
                         className={cn(
                             'flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent-colored-bg-blur p-2',

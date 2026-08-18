@@ -1,6 +1,5 @@
 import { format, isToday, isTomorrow, parseISO } from 'date-fns';
 
-import { fetchCalendarAnalyzeJob } from '@/api/onboarding';
 import { ONBOARDING_V2_OWNER_USER_ID_KEY } from '@/data/static/onboarding';
 import { Storage } from '@/lib/storage';
 import type { OnboardingCalendarEventItem, OnboardingCalendarEventTone } from '@/types/onboarding';
@@ -11,10 +10,6 @@ const EVENT_TOP_OFFSET = 11;
 
 export const CALENDAR_INSIGHT_WAIT_MS = 60_000;
 export const CALENDAR_DEFERRED_POLL_MS = 3 * 60_000;
-/** Poll less often — analyze can run for minutes. */
-export const CALENDAR_ANALYZE_POLL_MS = 5000;
-
-const TERMINAL: CalendarAnalyzeJobStatus[] = ['completed', 'failed'];
 const TAB_OPENED_AT_SESSION_KEY = 'onboarding_calendar_nudge_tab_opened_at';
 export const PENDING_CALENDAR_NUDGE_STORAGE_KEY = 'onboarding_pending_calendar_nudge';
 const CALENDAR_ANALYZE_STATE_KEY = 'onboarding_calendar_analyze_state';
@@ -103,8 +98,6 @@ let stored: StoredCalendarAnalyze = {
 
 const listeners = new Set<(snapshot: StoredCalendarAnalyze) => void>();
 const nudgeReadyListeners = new Set<() => void>();
-let pollTimer: ReturnType<typeof setInterval> | null = null;
-let pollInFlight = false;
 let consumeInFlight = false;
 let hydratePromise: Promise<void> | null = null;
 let hydrated = false;
@@ -184,9 +177,6 @@ export async function hydrateCalendarAnalyzeFromStorage(): Promise<void> {
                         status: saved.status ?? 'idle'
                     };
                     notify();
-                    if (!TERMINAL.includes(stored.status as CalendarAnalyzeJobStatus)) {
-                        ensureCalendarAnalyzePolling();
-                    }
                 }
             } catch {
                 // continue with empty in-memory state
@@ -200,7 +190,6 @@ export async function hydrateCalendarAnalyzeFromStorage(): Promise<void> {
 }
 
 export async function clearCalendarAnalyzePersistence(): Promise<void> {
-    stopCalendarAnalyzePolling();
     stored = {
         jobId: null,
         status: 'idle',
@@ -222,23 +211,12 @@ export async function clearCalendarAnalyzePersistence(): Promise<void> {
     }
 }
 
-/** Drop reload snapshot after onboarding; keep deferred polling alive when insight was skipped. */
+/** Drop reload snapshot after onboarding. */
 export async function finalizeCalendarAnalyzeAfterOnboarding(): Promise<void> {
     try {
         await storageLocal().remove(CALENDAR_ANALYZE_STATE_KEY);
     } catch {
         // noop
-    }
-
-    const keepPolling =
-        stored.insightSkipped &&
-        stored.jobId &&
-        !TERMINAL.includes(stored.status as CalendarAnalyzeJobStatus) &&
-        (stored.pollDeadline == null || Date.now() < stored.pollDeadline);
-
-    if (keepPolling) {
-        ensureCalendarAnalyzePolling();
-        return;
     }
 
     await clearCalendarAnalyzePersistence();
@@ -260,7 +238,6 @@ export function getOnboardingCalendarAnalyzeSnapshot(): StoredCalendarAnalyze {
 }
 
 export function resetOnboardingCalendarAnalyze(): void {
-    stopCalendarAnalyzePolling();
     stored = {
         jobId: null,
         status: 'idle',
@@ -296,7 +273,6 @@ export function markCalendarInsightSkipped(): void {
         pollDeadline: startedAt + CALENDAR_INSIGHT_WAIT_MS + CALENDAR_DEFERRED_POLL_MS
     };
     notify();
-    ensureCalendarAnalyzePolling();
 }
 
 function parseEventDate(value?: string): Date | null {
@@ -494,72 +470,6 @@ export async function consumePendingCalendarNudge(
     } finally {
         consumeInFlight = false;
     }
-}
-
-export function stopCalendarAnalyzePolling(): void {
-    if (pollTimer) {
-        clearInterval(pollTimer);
-        pollTimer = null;
-    }
-}
-
-async function pollCalendarAnalyzeJobOnce(): Promise<void> {
-    if (pollInFlight || !stored.jobId) {
-        return;
-    }
-
-    if (stored.pollDeadline != null && Date.now() >= stored.pollDeadline) {
-        stopCalendarAnalyzePolling();
-        if (stored.status !== 'completed' && stored.status !== 'failed') {
-            stored = { ...stored, status: 'failed' };
-            notify();
-        }
-        return;
-    }
-
-    pollInFlight = true;
-    try {
-        const response = await fetchCalendarAnalyzeJob(stored.jobId);
-        if (!response.data || typeof response.data !== 'object') {
-            return;
-        }
-
-        applyCalendarAnalyzePollResponse(response.data as CalendarAnalyzePollResponse);
-        const nextStatus = (response.data as { status?: CalendarAnalyzeJobStatus }).status;
-        if (nextStatus && TERMINAL.includes(nextStatus)) {
-            stopCalendarAnalyzePolling();
-        }
-    } finally {
-        pollInFlight = false;
-    }
-}
-
-export function ensureCalendarAnalyzePolling(): void {
-    if (!stored.jobId || TERMINAL.includes(stored.status as CalendarAnalyzeJobStatus)) {
-        return;
-    }
-
-    if (stored.pollDeadline != null && Date.now() >= stored.pollDeadline) {
-        stopCalendarAnalyzePolling();
-        return;
-    }
-
-    if (pollTimer) {
-        return;
-    }
-
-    void pollCalendarAnalyzeJobOnce();
-    pollTimer = setInterval(() => {
-        void pollCalendarAnalyzeJobOnce();
-    }, CALENDAR_ANALYZE_POLL_MS);
-}
-
-export function beginCalendarAnalyzePolling(jobId: string): void {
-    stopCalendarAnalyzePolling();
-    void pollCalendarAnalyzeJobOnce();
-    pollTimer = setInterval(() => {
-        void pollCalendarAnalyzeJobOnce();
-    }, CALENDAR_ANALYZE_POLL_MS);
 }
 
 // ponytail: assert-based self-check — layout math fails if grid constants drift

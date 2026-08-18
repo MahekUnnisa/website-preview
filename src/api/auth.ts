@@ -1,5 +1,11 @@
 import { apiClient } from '@/lib/api/client';
 import { routes } from '@/lib/api';
+import {
+    connectionsFromConnectedAppsPayload,
+    slackHandoffFromAppsPayload,
+    slackTeamIdFromAppsPayload,
+    type SlackHandoff,
+} from '@/lib/slack-handoff';
 
 export type AuthMeUser = {
     id: string;
@@ -52,3 +58,21 @@ export async function fetchIntegrationConnections(): Promise<Record<string, { co
     const response = await apiClient.get(routes.integrations.list);
     return connectionsFromIntegrationsPayload(response.data);
 }
+
+export async function fetchConnectedApps(): Promise<unknown> {
+    const response = await apiClient.get(routes.auth.apps);
+    return response.data;
+}
+
+export async function fetchSlackHandoff(): Promise<SlackHandoff> {
+    const data = await fetchConnectedApps();
+    return slackHandoffFromAppsPayload(data);
+}
+
+/** After Slack OAuth — used to deep-link the workspace / DM. */
+export async function fetchSlackTeamId(): Promise<string | null> {
+    const data = await fetchConnectedApps();
+    return slackTeamIdFromAppsPayload(data);
+}
+
+export { connectionsFromConnectedAppsPayload };

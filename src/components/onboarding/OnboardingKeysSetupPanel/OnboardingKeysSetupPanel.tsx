@@ -52,9 +52,9 @@ export const OnboardingKeysSetupPanel: React.FC<OnboardingKeysSetupPanelProps> =
     }, [showContent]);
 
     return (
-        <div className={cn('flex w-full max-w-[608px] flex-col gap-[30px]', className)}>
+        <div className={cn('mx-auto flex min-h-0 w-full max-w-[720px] flex-1 flex-col gap-6 pt-8 lg:my-auto lg:flex-none lg:py-10 xl:max-w-[840px] 2xl:max-w-[900px]', className)}>
             <div className="flex flex-col gap-3">
-                <h1 className="relative text-[28px] font-bold leading-[1.35] text-foreground-secondary font-aeonik">
+                <h1 className="relative text-[24px] font-semibold leading-[1.35] text-foreground-secondary font-instrumentSans lg:text-[clamp(24px,2.6vw,36px)]">
                     <span className="invisible" aria-hidden>
                         {title}
                     </span>
@@ -89,6 +89,7 @@ export const OnboardingKeysSetupPanel: React.FC<OnboardingKeysSetupPanelProps> =
             {footer ? (
                 <div
                     className={cn(
+                        'sticky bottom-0 z-10 mt-auto shrink-0 bg-background pt-6 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:static lg:mt-6',
                         showFooter ? 'onboarding-fade-in' : 'pointer-events-none opacity-0'
                     )}
                 >

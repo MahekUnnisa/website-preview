@@ -1,14 +1,16 @@
-import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react';
-import { fetchAuthMe, fetchIntegrationConnections } from '@/api/auth';
+import React, { createContext, useCallback, useContext, useEffect, useReducer, useRef } from 'react';
+import axios from 'axios';
+import { fetchAuthMe } from '@/api/auth';
 import { apiClient } from '@/lib/api/client';
 import { routes } from '@/lib/api';
 import { getApiBase } from '@/lib/env.js';
-import { clearAuthSession, getAuthToken, setAuthSession } from '@/lib/auth-session';
+import { clearAuthSession, getAuthToken, getAuthUserId, setAuthSession } from '@/lib/auth-session';
 import { setPendingOnboardingKeyAuth, type OnboardingKeyAuthProvider } from '@/lib/onboarding-key-auth';
 import {
     createOnboardOAuthState,
-    isOnboardOAuthMessage,
-    openOAuthPopup,
+    openOAuthPopupBlank,
+    startOnboardOAuth,
+    subscribeOnboardOAuthResult,
 } from '@/lib/onboard-oauth';
 
 type AuthUser = {
@@ -54,7 +56,7 @@ const initialState: AuthState = {
 
 type AuthAction =
     | { type: 'AUTHENTICATING' }
-    | { type: 'LOGIN_SUCCESS'; payload: { user: AuthUser } }
+    | { type: 'LOGIN_SUCCESS'; payload: { user: AuthUser; connections?: AuthState['connections'] } }
     | { type: 'LOGOUT_SUCCESS' }
     | { type: 'AUTH_ERROR'; payload: { error: string } }
     | { type: 'SET_INTEGRATIONS'; payload: { connections: AuthState['connections'] } }
@@ -70,6 +72,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
                 status: 'success',
                 authenticated: true,
                 user: action.payload.user,
+                connections: action.payload.connections ?? state.connections,
                 error: null,
             };
         case 'LOGOUT_SUCCESS':
@@ -94,84 +97,81 @@ function googleLoginUrl(): string {
 
 export const WebAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
+    const hydrateInFlightRef = useRef(false);
+    const lastHydrateAtRef = useRef(0);
 
-    const hydrateFromToken = useCallback(async () => {
-        const token = await getAuthToken();
-        if (!token) {
-            dispatch({ type: 'READY_UNAUTHENTICATED' });
+    const hydrateFromToken = useCallback(async (force = false) => {
+        const now = Date.now();
+        if (hydrateInFlightRef.current) {
             return;
         }
-
+        if (!force && now - lastHydrateAtRef.current < 1200) {
+            return;
+        }
+        hydrateInFlightRef.current = true;
+        lastHydrateAtRef.current = now;
         try {
-            const me = await fetchAuthMe();
-            if (!me?.id) {
-                await clearAuthSession();
+            const token = await getAuthToken();
+            if (!token) {
                 dispatch({ type: 'READY_UNAUTHENTICATED' });
                 return;
             }
 
-            await setAuthSession({ token, userId: me.id });
+            let me: Awaited<ReturnType<typeof fetchAuthMe>> = null;
+            try {
+                me = await fetchAuthMe();
+            } catch (error) {
+                if (axios.isAxiosError(error) && error.response?.status === 401) {
+                    await clearAuthSession();
+                    dispatch({ type: 'READY_UNAUTHENTICATED' });
+                    return;
+                }
+            }
+
+            const storedUserId = await getAuthUserId();
+            const userId = me?.id ?? storedUserId;
+            if (me?.id) {
+                await setAuthSession({ token, userId: me.id });
+            }
+
             dispatch({
                 type: 'LOGIN_SUCCESS',
                 payload: {
                     user: {
-                        email: me.email ?? null,
-                        userId: me.id,
-                        name: me.name ?? null,
-                        picture: me.picture ?? null,
+                        email: me?.email ?? null,
+                        userId: userId ?? null,
+                        name: me?.name ?? null,
+                        picture: me?.picture ?? null,
                         token,
                     },
+                    connections: {},
                 },
             });
-
-            try {
-                const connections = await fetchIntegrationConnections();
-                dispatch({ type: 'SET_INTEGRATIONS', payload: { connections } });
-            } catch {
-                dispatch({ type: 'SET_INTEGRATIONS', payload: { connections: {} } });
-            }
-        } catch {
-            await clearAuthSession();
-            dispatch({ type: 'READY_UNAUTHENTICATED' });
+        } finally {
+            hydrateInFlightRef.current = false;
         }
     }, []);
 
     useEffect(() => {
-        void hydrateFromToken();
+        void hydrateFromToken(true);
     }, [hydrateFromToken]);
 
     useEffect(() => {
-        const onMessage = (event: MessageEvent) => {
-            if (event.origin !== window.location.origin) {
-                return;
-            }
-            if (!isOnboardOAuthMessage(event.data)) {
-                return;
-            }
-            void hydrateFromToken();
-        };
-
-        const onFocus = () => {
-            if (state.status === 'authenticating') {
-                void hydrateFromToken();
-            }
-        };
-
-        window.addEventListener('message', onMessage);
-        window.addEventListener('focus', onFocus);
-        document.addEventListener('visibilitychange', onFocus);
+        const unsubscribe = subscribeOnboardOAuthResult(() => {
+            void hydrateFromToken(true);
+        });
         return () => {
-            window.removeEventListener('message', onMessage);
-            window.removeEventListener('focus', onFocus);
-            document.removeEventListener('visibilitychange', onFocus);
+            unsubscribe();
         };
-    }, [hydrateFromToken, state.status]);
+    }, [hydrateFromToken]);
 
     const login = useCallback(() => {
         dispatch({ type: 'AUTHENTICATING' });
-        void setPendingOnboardingKeyAuth('google').then(() => {
-            openOAuthPopup(googleLoginUrl());
-        });
+        const popup = openOAuthPopupBlank();
+        void (async () => {
+            await setPendingOnboardingKeyAuth('google');
+            startOnboardOAuth(googleLoginUrl(), popup);
+        })();
     }, []);
 
     const connectIntegration = useCallback((type: string) => {
@@ -181,6 +181,7 @@ export const WebAuthProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
 
         dispatch({ type: 'AUTHENTICATING' });
+        const popup = openOAuthPopupBlank();
         void (async () => {
             await setPendingOnboardingKeyAuth(provider);
             try {
@@ -192,11 +193,13 @@ export const WebAuthProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 );
                 const url = response.data?.data?.url;
                 if (typeof url === 'string' && url.trim()) {
-                    openOAuthPopup(url);
+                    startOnboardOAuth(url, popup);
                     return;
                 }
+                popup?.close();
                 dispatch({ type: 'AUTH_ERROR', payload: { error: 'Could not start workspace sign-in.' } });
             } catch {
+                popup?.close();
                 dispatch({ type: 'AUTH_ERROR', payload: { error: 'Could not start workspace sign-in.' } });
             }
         })();

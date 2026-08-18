@@ -17,7 +17,9 @@ const PartnerSuccess = lazy(() => import('./pages/PartnerSuccess'));
 const PartnerSuccessDemo = lazy(() => import('./pages/PartnerSuccessDemo'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const OnboardOAuthCallback = lazy(() => import('./pages/OnboardOAuthCallback'));
+const OnboardOAuthError = lazy(() => import('./pages/OnboardOAuthError'));
 const Onboard = lazy(() => import('./pages/Onboard'));
+const SlackOpenTest = lazy(() => import('./pages/SlackOpenTest'));
 
 function SiteLayout() {
   return (
@@ -33,13 +35,15 @@ function SiteLayout() {
 
 function App() {
   return (
-    <Router>
+    <Router basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
       <WebAuthProvider>
         <ScrollManager />
         <RouteProgressProvider>
           <Suspense fallback={<RouteProgressFallback />}>
             <Routes>
               <Route path="/onboard/oauth/callback" element={<OnboardOAuthCallback />} />
+              <Route path="/onboard/oauth/error" element={<OnboardOAuthError />} />
+              <Route path="/onboard/slack-open-test" element={<SlackOpenTest />} />
               <Route path="/onboard" element={<Onboard />} />
               <Route element={<SiteLayout />}>
                 <Route path="/" element={<Home />} />

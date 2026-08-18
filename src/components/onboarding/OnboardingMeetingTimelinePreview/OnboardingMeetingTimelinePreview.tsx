@@ -47,7 +47,7 @@ const TimelineBlock: React.FC<{
     return (
         <div
             className={cn(
-                'w-[226px] rounded-lg border border-dashed px-3 py-2.5',
+                'w-full max-w-[226px] rounded-lg border border-dashed px-3 py-2.5',
                 blockVariantClass[block.variant],
                 entranceClassName
             )}

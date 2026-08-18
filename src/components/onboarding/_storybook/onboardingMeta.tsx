@@ -20,11 +20,26 @@ export const onboardingFullscreen = {
     backgrounds: { disable: true },
 };
 
+export const onboardingViewports = {
+    iphoneSE: { name: 'iPhone SE', styles: { width: '375px', height: '667px' }, type: 'mobile' as const },
+    iphone12: { name: 'iPhone 12', styles: { width: '390px', height: '844px' }, type: 'mobile' as const },
+    tablet768: { name: 'Tablet 768', styles: { width: '768px', height: '1024px' }, type: 'tablet' as const },
+};
+
+export const onboardingViewportParameters = {
+    ...onboardingFullscreen,
+    viewport: { options: onboardingViewports },
+};
+
+export const viewportGlobals = (value: keyof typeof onboardingViewports) => ({
+    viewport: { value, isRotated: false },
+});
+
 export const mockWorkspaceProviders = [
     {
         id: 'slack' as const,
         label: 'Slack',
-        icon: 'https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png',
+        icon: '/assets/onboarding/slack-logo.svg',
     },
     {
         id: 'msteams' as const,

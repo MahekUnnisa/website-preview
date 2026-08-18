@@ -7,12 +7,12 @@ import { OnboardingFooterActions } from '../OnboardingFooterActions';
 import { OnboardingStatusMessage } from '../OnboardingStatusMessage';
 import { OnboardingWorkspacePicker } from '../OnboardingWorkspacePicker';
 import { OnboardingScreenShell } from '../OnboardingScreenShell';
-import { mockWorkspaceProviders, onboardingFullscreen, withOnboardingTheme } from '../_storybook/onboardingMeta';
+import { mockWorkspaceProviders, onboardingViewportParameters, viewportGlobals, withOnboardingTheme } from '../_storybook/onboardingMeta';
 
 const meta = {
     title: 'Onboarding/OnboardingKeysSetupPanel',
     decorators: [withOnboardingTheme],
-    parameters: onboardingFullscreen,
+    parameters: onboardingViewportParameters,
     tags: ['autodocs'],
 } satisfies Meta;
 
@@ -106,4 +106,19 @@ export const BothConnected: Story = {
             </OnboardingKeysSetupPanel>
         </Shell>
     ),
+};
+
+export const FirstKeyIphoneSE: Story = {
+    ...FirstKey,
+    globals: viewportGlobals('iphoneSE'),
+};
+
+export const FirstKeyIphone12: Story = {
+    ...FirstKey,
+    globals: viewportGlobals('iphone12'),
+};
+
+export const FirstKeyTablet768: Story = {
+    ...FirstKey,
+    globals: viewportGlobals('tablet768'),
 };

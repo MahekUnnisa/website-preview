@@ -7,12 +7,12 @@ import { OnboardingTrustNote } from '../OnboardingTrustNote';
 import { OnboardingScreenShell } from '../OnboardingScreenShell';
 import { getOnboardingV2FocusPreviewEvents, getOnboardingV2RolePlanCopy } from '@/utils/onboarding-v2-i18n';
 import { getRoleChoiceLabels } from '@/lib/onboarding-flow';
-import { onboardingFullscreen, withOnboardingTheme } from '../_storybook/onboardingMeta';
+import { onboardingViewportParameters, viewportGlobals, withOnboardingTheme } from '../_storybook/onboardingMeta';
 
 const meta = {
     title: 'Onboarding/OnboardingRolePlanPanel',
     decorators: [withOnboardingTheme],
-    parameters: onboardingFullscreen,
+    parameters: onboardingViewportParameters,
     tags: ['autodocs'],
 } satisfies Meta;
 
@@ -45,4 +45,19 @@ export const FocusPlan: Story = {
             />
         </OnboardingScreenShell>
     ),
+};
+
+export const FocusPlanIphoneSE: Story = {
+    ...FocusPlan,
+    globals: viewportGlobals('iphoneSE'),
+};
+
+export const FocusPlanIphone12: Story = {
+    ...FocusPlan,
+    globals: viewportGlobals('iphone12'),
+};
+
+export const FocusPlanTablet768: Story = {
+    ...FocusPlan,
+    globals: viewportGlobals('tablet768'),
 };

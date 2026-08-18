@@ -216,7 +216,7 @@ export const TimelineGrid: FC<TimelineGridProps> = ({
             <div
                 ref={scrollRef}
                 className={cn(
-                    'relative overflow-y-auto border-t border-border-subtle',
+                    'scrollbar-theme relative overflow-y-auto border-t border-border-subtle',
                     fillHeight ? 'h-[calc(100%-40px)]' : 'max-h-[460px]'
                 )}
             >

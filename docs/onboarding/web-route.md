@@ -1,6 +1,8 @@
-# Onboarding Web Route (`/onboard`)
+# Onboarding Web Route (`/onboard`) — porting brief
 
-Source of truth for porting the Chrome extension's onboarding-v2 flow onto the website. Use this document as the reference for implementation in this chat.
+Original implementation brief used to port the Chrome extension’s onboarding-v2 flow onto the website.
+
+**As-built product and architecture:** [`web-onboarding.md`](./web-onboarding.md). Prefer that document. This file is historical; several targets drifted (All Set + Slack handoff instead of calendar-insight as the finale, no calendar-analyze poll, popup **or** same-tab OAuth, dedicated error route).
 
 **Extension source:** `../ext/src/components/client/onboarding-v2/`
 **Website target:** `/onboard` (full-screen, no Navbar/Footer)

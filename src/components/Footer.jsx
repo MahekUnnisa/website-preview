@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { getChromeWebStoreUrl } from '../lib/env';
+import { publicUrl } from '../lib/utils';
 
 const chromeWebStoreUrl = getChromeWebStoreUrl();
 
@@ -31,7 +32,7 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center mb-4">
               <img
-                src="/assets/icons/logo.png"
+                src={publicUrl('/assets/icons/logo.png')}
                 alt="ZeroAI Logo"
                 className="h-8 w-auto"
               />

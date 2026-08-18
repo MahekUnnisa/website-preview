@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn, publicUrl } from '@/lib/utils';
 
 const VECTOR_PATHS: Record<string, string> = {
     ArrowLeftIcon: '/assets/onboarding/arrow-left.svg',
@@ -22,6 +22,7 @@ const VECTOR_PATHS: Record<string, string> = {
     OnboardingRoleMeeting: '/assets/onboarding/role-meeting.svg',
     OnboardingRoleTarget: '/assets/onboarding/role-target.svg',
     OnboardingTaskAlt: '/assets/onboarding/task-alt.svg',
+    OnboardingWarningCircleLight: '/assets/onboarding/warning-circle-light.svg',
     OnboardingXCircleLight: '/assets/onboarding/x-circle-light.svg',
     SparklesIcon: '/assets/onboarding/sparkles.svg',
 };
@@ -29,6 +30,7 @@ const VECTOR_PATHS: Record<string, string> = {
 const RASTER_PATHS: Record<string, string> = {
     GoogleCalendarIcon: '/assets/icons/google-calendar-icon.png',
     Logo: '/assets/icons/logo.png',
+    OnboardingAllSetSlack: '/assets/onboarding/all-set-slack.png',
 };
 
 export type AssetName = string;
@@ -154,8 +156,11 @@ const InlineVector: React.FC<{
 };
 
 export const Image: React.FC<OnboardingImageProps> = ({ src, alt, type = 'raster', className, style, ...rest }) => {
-    if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('/')) {
+    if (src.startsWith('http://') || src.startsWith('https://')) {
         return <img src={src} alt={alt} className={className} style={style} {...rest} />;
+    }
+    if (src.startsWith('/')) {
+        return <img src={publicUrl(src)} alt={alt} className={className} style={style} {...rest} />;
     }
 
     const rasterPath = RASTER_PATHS[src];
@@ -163,7 +168,7 @@ export const Image: React.FC<OnboardingImageProps> = ({ src, alt, type = 'raster
         if (!rasterPath) {
             return null;
         }
-        return <img src={rasterPath} alt={alt} className={className} style={style} {...rest} />;
+        return <img src={publicUrl(rasterPath)} alt={alt} className={className} style={style} {...rest} />;
     }
 
     const vectorPath = VECTOR_PATHS[src];
@@ -171,7 +176,7 @@ export const Image: React.FC<OnboardingImageProps> = ({ src, alt, type = 'raster
         return null;
     }
 
-    return <InlineVector path={vectorPath} alt={alt} className={className} style={style} {...rest} />;
+    return <InlineVector path={publicUrl(vectorPath)} alt={alt} className={className} style={style} {...rest} />;
 };
 
 export default Image;
@@ -181,7 +186,7 @@ export function preloadOnboardingIcons(keys: AssetName[] = Object.keys(VECTOR_PA
     keys.forEach((key) => {
         const path = VECTOR_PATHS[key];
         if (path) {
-            void loadSvg(path);
+            void loadSvg(publicUrl(path));
         }
     });
 }

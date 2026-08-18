@@ -9,7 +9,7 @@ export default function Onboard() {
     }, []);
 
     return (
-        <div className="dark min-h-dvh bg-background">
+        <div className="dark min-h-dvh overflow-x-hidden bg-background">
             <OnboardingV2 />
         </div>
     );

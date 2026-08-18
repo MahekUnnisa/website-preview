@@ -26,4 +26,7 @@ export { OnboardingScheduleFlowLayout } from './OnboardingScheduleFlowLayout';
 export { OnboardingScheduleStatus } from './OnboardingScheduleStatus';
 export { OnboardingCalendarDayPreview } from './OnboardingCalendarDayPreview';
 export { OnboardingCalendarInsightPanel } from './OnboardingCalendarInsightPanel';
+export { OnboardingAllSetScreen } from './OnboardingAllSetScreen';
+export { OnboardingInstallScreen } from './OnboardingInstallScreen';
+export { OnboardOAuthTab } from './OnboardOAuthTab';
 export { OnboardingPrimaryButton } from './OnboardingPrimaryButton';

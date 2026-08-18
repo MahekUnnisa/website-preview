@@ -176,7 +176,7 @@ export const OnboardingCalendarInsightPanel: React.FC<OnboardingCalendarInsightP
     }
 
     return (
-        <div className={cn('flex w-full max-w-[684px] items-start gap-5', className)}>
+        <div className={cn('mx-auto flex w-full max-w-[684px] flex-col items-center gap-6 lg:flex-row lg:items-start lg:gap-5', className)}>
             <OnboardingCalendarDayPreview
                 date={date}
                 dateLabel={calendarDateLabel}
@@ -185,7 +185,9 @@ export const OnboardingCalendarInsightPanel: React.FC<OnboardingCalendarInsightP
                 animateEvents={animateEntrance}
             />
 
-            <div className={cn('flex min-h-[506px] w-full max-w-[288px] flex-col', onboardingBodyFontClass)}>{content}</div>
+            <div className={cn('flex w-full min-h-0 flex-col lg:min-h-[506px] lg:w-[288px] lg:shrink-0', onboardingBodyFontClass)}>
+                {content}
+            </div>
         </div>
     );
 };

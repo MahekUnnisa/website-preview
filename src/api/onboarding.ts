@@ -21,22 +21,6 @@ export type CalendarAnalyzeStartResponse = {
     status?: string;
 };
 
-export type CalendarAnalyzeJobStatus = 'queued' | 'processing' | 'completed' | 'failed';
-
-export type CalendarAnalyzePollResponse = {
-    success?: boolean;
-    jobId?: string;
-    status?: CalendarAnalyzeJobStatus;
-    result?: {
-        name?: string;
-        date?: string;
-        botMessage?: string;
-        data?: {
-            events?: unknown[];
-        };
-    };
-};
-
 type ApiResult<T> = {
     data: T | undefined;
     code: number | undefined;
@@ -71,33 +55,6 @@ export const saveOnboardingV3 = async (payload: OnboardingV3Payload): Promise<Ap
     }
 };
 
-export const requestCalendarAnalyze = async (): Promise<ApiResult<CalendarAnalyzeStartResponse>> => {
-    try {
-        const response = await apiClient.post<CalendarAnalyzeStartResponse>(
-            routes.onboarding.calendarAnalyze,
-            {},
-            { params: ONBOARDING_V3_PARAMS }
-        );
-        return { data: response.data, code: response.status };
-    } catch (error) {
-        console.error('[OnboardingV3] calendar analyze start failed', error);
-        return toResult<CalendarAnalyzeStartResponse>(error);
-    }
-};
-
-export const fetchCalendarAnalyzeJob = async (jobId: string): Promise<ApiResult<CalendarAnalyzePollResponse>> => {
-    try {
-        const response = await apiClient.get<CalendarAnalyzePollResponse>(
-            routes.onboarding.calendarAnalyzeJob(jobId),
-            { params: ONBOARDING_V3_PARAMS }
-        );
-        return { data: response.data, code: response.status };
-    } catch (error) {
-        console.error('[OnboardingV3] calendar analyze poll failed', error);
-        return toResult<CalendarAnalyzePollResponse>(error);
-    }
-};
-
 export const requestExecuteFirstOnboardingJob = async (): Promise<ApiResult<CalendarAnalyzeStartResponse>> => {
     try {
         const response = await apiClient.post<CalendarAnalyzeStartResponse>(
@@ -107,7 +64,21 @@ export const requestExecuteFirstOnboardingJob = async (): Promise<ApiResult<Cale
         );
         return { data: response.data, code: response.status };
     } catch (error) {
-        console.error('[OnboardingV3] execute first job failed', error);
         return toResult<CalendarAnalyzeStartResponse>(error);
     }
 };
+
+/** Slack connected → enqueue first job. Once per page load; never throws. */
+let executeFirstJobFired = false;
+
+export function fireExecuteFirstOnboardingJob(): void {
+    if (executeFirstJobFired) {
+        return;
+    }
+    executeFirstJobFired = true;
+    void apiClient
+        .post(routes.onboarding.executeFirstJob, {}, { params: ONBOARDING_V3_PARAMS })
+        .catch(() => {
+            /* ponytail: fire-and-forget — first Slack job must not block onboarding */
+        });
+}

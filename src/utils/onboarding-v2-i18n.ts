@@ -68,8 +68,9 @@ export const getOnboardingV2RolePlanCopy = () => ({
     botMessage: onboardingV2Msg('onboarding_v2_role_plan_bot', "Cool. Here's how I will run it:"),
     trustNote: onboardingV2Msg(
         'onboarding_v2_role_plan_trust',
-        "Just Slack and Google Calendar. That's all."
+        'Just Slack and Google Calendar. Both should be'
     ),
+    boldNote: onboardingV2Msg('onboarding_v2_role_plan_bold_note', 'connected with the same ID.'),
     goBack: onboardingV2Msg('onboarding_v2_role_plan_go_back', 'Go back'),
     connectTools: onboardingV2Msg('onboarding_v2_role_plan_connect_tools', 'Connect my tools'),
     focusSteps: [
@@ -271,5 +272,48 @@ export const getOnboardingV2InsightCopy = () => ({
     threadsPreviewTitle: onboardingV2Msg(
         'onboarding_v2_preview_threads_title',
         'From threads → onto your calendar'
+    )
+});
+
+export const getOnboardingV2AllSetCopy = (workspaceLabel = 'Slack') => ({
+    title: onboardingV2Msg('onboarding_v2_all_set_title', "You're all set."),
+    bodyLead: onboardingV2Msg(
+        'onboarding_v2_all_set_body_lead',
+        "I'll protect your time to build. I won't interrupt unless I need a decision or have something worth your time."
+    ),
+    bodyEmphasis: onboardingV2Msg(
+        'onboarding_v2_all_set_body_emphasis',
+        `Summon me anytime on ${workspaceLabel}.`,
+        workspaceLabel
+    ),
+    takingYou: onboardingV2Msg(
+        'onboarding_v2_all_set_taking_you',
+        `Taking you to ${workspaceLabel}...`,
+        workspaceLabel
+    ),
+    ifNotOpen: onboardingV2Msg(
+        'onboarding_v2_all_set_if_not_open',
+        `If ${workspaceLabel} didn't open, use the button below.`,
+        workspaceLabel
+    ),
+    openApp: onboardingV2Msg(
+        'onboarding_v2_all_set_open_app',
+        `Open ${workspaceLabel}`,
+        workspaceLabel
+    ),
+    openWeb: onboardingV2Msg('onboarding_v2_all_set_open_web', 'Open in browser')
+});
+
+
+export const getOnboardingV2InstallCopy = () => ({
+    title: onboardingV2Msg('onboarding_v2_install_title', 'Install Zero'),
+    body: onboardingV2Msg(
+        'onboarding_v2_install_body',
+        'Add the Chrome extension on desktop. Slack is already connected — this is just the browser sidekick.'
+    ),
+    cta: onboardingV2Msg('onboarding_v2_install_cta', 'Open Chrome Web Store'),
+    desktopNote: onboardingV2Msg(
+        'onboarding_v2_install_desktop_note',
+        'Note: Desktop Chrome only. Mobile browsers cannot install the extension.'
     )
 });

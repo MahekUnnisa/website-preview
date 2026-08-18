@@ -24,9 +24,12 @@ A static single-page app built with React and Tailwind CSS, bundled by Vite and 
 | `/privacy` | Privacy |
 | `/terms` | Terms |
 | `/about` | About |
+| `/onboard` | Onboard — Google + Slack/Teams keys, Slack handoff, Install Zero |
+| `/onboard/oauth/callback` | Onboard OAuth success (popup or same-tab) |
+| `/onboard/oauth/error` | Onboard OAuth failure |
 | `*` | NotFound |
 
-The partner claim flow is specified in [`docs/referral-program/claim-activation.md`](docs/referral-program/claim-activation.md).
+The partner claim flow is specified in [`docs/referral-program/claim-activation.md`](docs/referral-program/claim-activation.md). Web onboarding is specified in [`docs/onboarding/web-onboarding.md`](docs/onboarding/web-onboarding.md).
 
 ## Local development
 
@@ -44,6 +47,8 @@ npm run dev                 # http://localhost:5173
 - `npm run dev` — dev server on port 5173
 - `npm run build` — production build to `dist/`
 - `npm run preview` — serve the build on port 4173
+- `npm run storybook` — onboarding UI stories on port 6006
+- `npm run typecheck` — `tsc --noEmit`
 
 Both ports are pinned with `strictPort` in `vite.config.js`, so a clash fails
 loudly rather than drifting to another port — the dev origin has to match the
@@ -63,7 +68,7 @@ All config is **build-time**: Vite inlines `VITE_*` into the bundle, so changing
 
 | Variable | Purpose | Default |
 | --- | --- | --- |
-| `VITE_API_BASE_URL` | Partner API base, used by `/claim` and `/partner/success`. Must include the version segment. | `https://api.zeroai.co.in/v2` |
+| `VITE_API_BASE_URL` | API base for `/claim`, `/partner/success`, and `/onboard`. Must include the version segment. | `https://api.zeroai.co.in/v2` |
 | `VITE_EXTENSION_ID` | Target of `chrome.runtime.sendMessage` for one-click sync | the published extension ID |
 | `VITE_CHROME_WEBSTORE_URL` | Install CTA target | the live store listing |
 
@@ -106,6 +111,7 @@ The site's origin is allowlisted in three places outside this repo. All must inc
 
 ```
 zeroai-website/
+├── docs/onboarding/web-onboarding.md
 ├── docs/referral-program/claim-activation.md
 ├── public/
 │   ├── _headers            # Cloudflare Pages response headers

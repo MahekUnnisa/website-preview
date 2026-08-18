@@ -20,7 +20,7 @@ export const OnboardingPreviewFrame: React.FC<OnboardingPreviewFrameProps> = ({
     return (
         <div
             className={cn(
-                'relative h-[303px] w-[280px] shrink-0 overflow-hidden rounded-xl bg-background-secondary',
+                'relative mx-auto h-[303px] w-full max-w-[280px] shrink-0 overflow-hidden rounded-xl bg-background-secondary lg:mx-0',
                 showPreviewBg ? 'onboarding-fade-in' : 'pointer-events-none opacity-0',
                 className
             )}

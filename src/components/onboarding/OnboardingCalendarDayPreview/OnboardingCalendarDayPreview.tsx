@@ -125,7 +125,7 @@ const OverlayDayChrome: React.FC<{ date: Date }> = ({ date }) => {
                 </p>
             </div>
 
-            <div className="relative h-[462px] shrink-0 overflow-hidden">
+            <div className="relative min-h-0 flex-1 overflow-hidden">
                 {/* Scrolled day track — events sit in viewport coords like Figma */}
                 <div
                     className="absolute left-4 flex w-[303px] gap-2.5"
@@ -212,14 +212,24 @@ export const OnboardingCalendarDayPreview: React.FC<OnboardingCalendarDayPreview
 
     if (overlay) {
         return (
-            <div className={cn('relative h-[506px] w-[320px] shrink-0', className)}>
+            <div
+                className={cn(
+                    'relative mx-auto h-[min(506px,68dvh)] w-full max-w-[320px] shrink-0 sm:h-[506px]',
+                    className
+                )}
+            >
                 <OverlayDayChrome date={scheduleDate} />
             </div>
         );
     }
 
     return (
-        <div className={cn('relative h-[506px] w-[320px] shrink-0 overflow-hidden rounded-lg', className)}>
+        <div
+            className={cn(
+                'relative mx-auto h-[min(506px,68dvh)] w-full max-w-[320px] shrink-0 overflow-hidden rounded-lg sm:h-[506px]',
+                className
+            )}
+        >
             <div
                 className={cn(
                     'h-full transition-opacity duration-500 ease-out',
