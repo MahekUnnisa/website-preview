@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import { getChromeWebStoreUrl } from '../lib/env';
+import { publicUrl } from '../lib/utils';
 
 const chromeWebStoreUrl = getChromeWebStoreUrl();
 
@@ -107,7 +108,7 @@ const Home = () => {
               <div className="absolute inset-0 bg-purple-400/20 rounded-2xl blur-3xl"></div>
               <div className="relative bg-background-tertiary border border-border rounded-2xl p-1 shadow-2xl shadow-black/30">
                 <img 
-                  src="/screenshot.png" 
+                  src={publicUrl('/screenshot.png')} 
                   alt="ZeroAI Dashboard - Your AI Assistant" 
                   className="w-full h-auto rounded-xl"
                 />

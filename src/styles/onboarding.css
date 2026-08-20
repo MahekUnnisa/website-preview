@@ -1,0 +1,95 @@
+/* Onboarding v2 — animations (ported from extension utility.css) */
+
+@keyframes onboarding-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes onboarding-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes onboarding-slide-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-56px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes onboarding-slide-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(56px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes onboarding-slide-from-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(72px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.onboarding-fade-in {
+  animation: onboarding-fade-in 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: opacity;
+}
+
+.onboarding-slide-down {
+  opacity: 0;
+  animation: onboarding-slide-down 950ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.onboarding-step-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.onboarding-slide-from-left {
+  opacity: 0;
+  animation: onboarding-slide-from-left 800ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.onboarding-slide-from-right {
+  animation: onboarding-slide-from-right 800ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.onboarding-slide-from-bottom {
+  opacity: 0;
+  animation: onboarding-slide-from-bottom 950ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.font-aeonik {
+  font-family: 'Aeonik TRIAL', sans-serif;
+}
+
+.font-instrumentSans {
+  font-family: 'Instrument Sans', sans-serif;
+}

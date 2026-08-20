@@ -95,6 +95,40 @@
   --hero-primary: #85838a;
   --gradient-from: var(--icon-primary);
   --gradient-to: var(--hero-primary);
+
+  /* Accent scale (purple — onboarding default) */
+  --accent-50: #e7e4f0;
+  --accent-75: #d4d0f1;
+  --accent-100: #b8a6ff;
+  --accent-200: #9277ff;
+  --accent-300: #8061ff;
+  --accent-400: #6b4ce8;
+  --accent-500: #5629c1;
+  --accent-600: #311b67;
+  --accent-700: #1f163d;
+  --accent-800: #100a21;
+  --accent-colored-bg: #6b4ce826;
+  --accent-colored-bg-blur: #6b4ce810;
+  --accent-400-15: #6b4ce826;
+  --accent-400-30: #6b4ce84d;
+
+  /* Onboarding tokens */
+  --onboarding-badge-accent: #f88460;
+  --onboarding-after-accent: #ffd270;
+  --onboarding-featured-from: var(--accent-500);
+  --onboarding-featured-to: var(--accent-700);
+  --onboarding-featured-border: var(--accent-500);
+  --onboarding-featured-fg: #ffffff;
+  --onboarding-featured-muted: rgba(255, 255, 255, 0.7);
+  --onboarding-event-purple: #311b67;
+  --onboarding-event-gold: #74591e;
+  --onboarding-illust-event-purple: var(--accent-500);
+  --onboarding-illust-event-cyan: #1b516c;
+  --onboarding-illust-event-gold: #f39b16;
+  --onboarding-illust-chip-bg: rgba(255, 255, 255, 0.1);
+  --border-widget: rgba(255, 255, 255, 0.08);
+  --shadow-1: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+
   --foreground-secondary: rgba(238, 233, 220, 0.9);
   /* --text-dark-shorts-paragraph */
   --foreground-muted: rgba(255, 255, 255, 0.6);

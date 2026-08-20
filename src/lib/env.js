@@ -23,3 +23,7 @@ export function getExtensionId() {
 export function getChromeWebStoreUrl() {
   return getEnv('VITE_CHROME_WEBSTORE_URL', DEFAULT_CHROME_WEBSTORE_URL).trim() || DEFAULT_CHROME_WEBSTORE_URL;
 }
+
+export function getAppVersion() {
+  return getEnv('VITE_APP_VERSION', '0.1.0').trim() || '0.1.0';
+}

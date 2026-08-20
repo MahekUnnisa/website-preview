@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import Card from '../components/Card';
 import Button from '../components/Button';
+import { publicUrl } from '../lib/utils';
 
 const SlackLanding = () => {
   const highlights = [
@@ -163,7 +164,7 @@ const SlackLanding = () => {
               <div className="absolute inset-0 bg-linear-to-r from-purple-400/20 to-purple-600/20 rounded-2xl blur-3xl"></div>
               <div className="relative bg-background-tertiary border border-border rounded-2xl p-1 shadow-2xl">
                 <img
-                  src="/slack.png"
+                  src={publicUrl('/slack.png')}
                   alt="Connect Slack to ZeroAI"
                   className="w-full h-auto rounded-xl"
                 />

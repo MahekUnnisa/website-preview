@@ -1,6 +1,3 @@
-@import './fonts.css' layer(base);
-@import './themes.css' layer(base);
-
 @import 'tailwindcss';
 
 @custom-variant dark (&:is(.dark *));
@@ -64,6 +61,41 @@
   --color-border-strong: rgba(255, 255, 255, 0.2);
   --color-border-colored: rgba(107, 76, 232, 0.15);
   --color-border-selected: #6b4ce8;
+
+  --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-700: var(--accent-700);
+  --color-accent-colored-bg: var(--accent-colored-bg);
+  --color-accent-colored-bg-blur: var(--accent-colored-bg-blur);
+  --color-online-indicator: var(--online-indicator);
+  --color-icon-primary: var(--icon-primary);
+  --color-icon-secondary: var(--icon-secondary);
+  --color-gradient-from: var(--gradient-from);
+  --color-gradient-to: var(--gradient-to);
+  --color-border-widget: var(--border-widget);
+  --color-semantics-success-100: var(--semantics-success-100);
+  --color-semantics-error-100: var(--semantics-error-100);
+  --color-semantics-warning-100: var(--semantics-warning-100);
+  --color-onboarding-badge-accent: var(--onboarding-badge-accent);
+  --color-onboarding-after-accent: var(--onboarding-after-accent);
+  --color-onboarding-featured-from: var(--onboarding-featured-from);
+  --color-onboarding-featured-to: var(--onboarding-featured-to);
+  --color-onboarding-featured-border: var(--onboarding-featured-border);
+  --color-onboarding-featured-fg: var(--onboarding-featured-fg);
+  --color-onboarding-featured-muted: var(--onboarding-featured-muted);
+  --color-onboarding-illust-chip-bg: var(--onboarding-illust-chip-bg);
+  --color-onboarding-illust-event-purple: var(--onboarding-illust-event-purple);
+  --color-onboarding-illust-event-cyan: var(--onboarding-illust-event-cyan);
+  --color-onboarding-illust-event-gold: var(--onboarding-illust-event-gold);
+
+  --font-aeonik: 'Aeonik TRIAL', sans-serif;
+  --font-instrumentSans: 'Instrument Sans', sans-serif;
+
+  --shadow-1: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 
   --font-hauora: Hauora, sans-serif;
 
@@ -181,9 +213,8 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'Hauora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
-  
+
   html {
     @apply scroll-smooth;
   }
 }
-
