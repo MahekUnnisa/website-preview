@@ -186,6 +186,17 @@
   transition-delay: 60ms;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .animate-landing-fade-up,
+  .animate-landing-fade-in {
+    animation: none !important;
+  }
+
+  .blog-card img {
+    transition: none !important;
+  }
+}
+
 /*
   Tailwind v4 defaults the border color to `currentcolor`. In v3 this project
   set `colors.border.DEFAULT`, which also became `borderColor.DEFAULT` and so

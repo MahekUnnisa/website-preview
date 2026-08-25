@@ -16,17 +16,19 @@ export default function BlogPost() {
 
   return (
     <LandingShell active="blog">
-      <div className="border-b border-border px-4 pb-16 pt-10 md:px-6 md:pb-24 md:pt-14">
+      <div key={slug} className="border-b border-border px-4 pb-16 pt-10 md:px-6 md:pb-24 md:pt-14">
         <div className="mx-auto max-w-[1100px]">
-          <nav className="mb-8 flex flex-wrap items-center gap-2 font-instrumentSans text-sm text-foreground-muted">
-            <Link to="/blog" className="transition-colors hover:text-purple-200">
+          <nav
+            className="mb-8 flex flex-wrap items-center gap-2 font-instrumentSans text-sm text-foreground-muted animate-landing-fade-in"
+          >
+            <Link to="/blog" className="transition-colors duration-200 hover:text-purple-200">
               Blog
             </Link>
             <span aria-hidden>/</span>
             <span className="truncate text-foreground-secondary">{post.title}</span>
           </nav>
 
-          <header className="mb-10 max-w-[720px] md:mb-14">
+          <header className="mb-10 max-w-[720px] md:mb-14 animate-landing-fade-up" style={{ animationDelay: '60ms' }}>
             <h1 className="mb-6 font-azeret text-[32px] font-normal leading-[1.2] tracking-[-0.5px] text-foreground-primary md:text-[44px]">
               {post.title}
             </h1>
@@ -53,18 +55,25 @@ export default function BlogPost() {
           </header>
 
           <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
-            <main className="min-w-0 flex-1 lg:max-w-[720px]">
+            <main
+              className="min-w-0 flex-1 lg:max-w-[720px] animate-landing-fade-up"
+              style={{ animationDelay: '140ms' }}
+            >
               {post.featureImage && (
                 <img
                   alt=""
                   src={landingAsset(post.featureImage)}
-                  className="mb-10 aspect-[2/1] w-full object-cover"
+                  className="mb-10 aspect-[2/1] w-full object-cover animate-landing-fade-in"
+                  style={{ animationDelay: '180ms' }}
                 />
               )}
               <BlogBody blocks={post.body} />
             </main>
 
-            <aside className="w-full shrink-0 lg:w-[260px]">
+            <aside
+              className="w-full shrink-0 lg:w-[260px] animate-landing-fade-up"
+              style={{ animationDelay: '220ms' }}
+            >
               <div className="space-y-10 lg:sticky lg:top-24">
                 {toc.length > 0 && (
                   <div>
@@ -73,10 +82,14 @@ export default function BlogPost() {
                     </p>
                     <ol className="flex flex-col gap-2 border-l border-border pl-4">
                       {toc.map((item, i) => (
-                        <li key={item.id}>
+                        <li
+                          key={item.id}
+                          className="animate-landing-fade-up"
+                          style={{ animationDelay: `${260 + i * 50}ms` }}
+                        >
                           <a
                             href={`#${item.id}`}
-                            className="font-instrumentSans text-sm leading-[1.45] text-foreground-muted transition-colors hover:text-purple-200"
+                            className="font-instrumentSans text-sm leading-[1.45] text-foreground-muted transition-colors duration-200 hover:text-purple-200"
                           >
                             <span className="mr-2 text-foreground-subtle">{String(i + 1).padStart(2, '0')}</span>
                             {item.text}
