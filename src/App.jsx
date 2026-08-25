@@ -45,8 +45,8 @@ function App() {
               <Route path="/onboard/oauth/error" element={<OnboardOAuthError />} />
               <Route path="/onboard/slack-open-test" element={<SlackOpenTest />} />
               <Route path="/onboard" element={<Onboard />} />
+              <Route path="/" element={<Home />} />
               <Route element={<SiteLayout />}>
-                <Route path="/" element={<Home />} />
                 <Route path="/slack" element={<SlackLanding />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/claim" element={<Claim />} />
