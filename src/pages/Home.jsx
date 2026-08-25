@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
-import { publicUrl } from '../lib/utils';
-
-const asset = (name) => publicUrl(`/assets/landing/${name}`);
+import { LogoMark, StartCta, LandingFooter, landingAsset as asset } from '../components/landing/LandingShell';
 
 const faqs = [
   {
@@ -22,30 +20,6 @@ const faqs = [
     a: 'No. Zero is personal by default. Your focus blocks, recaps, and Slack tracking stay on your account unless you choose to share something.',
   },
 ];
-
-function LogoMark({ className = 'h-4 w-auto' }) {
-  return (
-    <img
-      alt="ZeroAI"
-      src={asset('logo-wordmark.svg')}
-      className={className}
-    />
-  );
-}
-
-function StartCta({ children, className = '', to = '/onboard' }) {
-  return (
-    <Link
-      to={to}
-      className={`relative inline-flex h-14 items-center justify-center overflow-hidden rounded-xl border-[3px] border-white/10 bg-purple-75 px-[30px] font-instrumentSans text-base font-semibold text-purple-800 transition-opacity hover:opacity-90 ${className}`}
-    >
-      <span className="pointer-events-none absolute left-1/2 top-[43px] h-8 w-[208px] -translate-x-1/2">
-        <img alt="" src={asset('btn-glow.svg')} className="size-full max-w-none" />
-      </span>
-      <span className="relative flex items-center gap-1.5 whitespace-nowrap">{children}</span>
-    </Link>
-  );
-}
 
 function FeatureProtect() {
   return (
@@ -164,16 +138,15 @@ function FeatureCommitments() {
 
 function FeatureMeetings() {
   return (
-    <div className="relative h-full min-h-[280px] overflow-hidden rounded-[20px] bg-background-secondary p-8 md:min-h-[324px]">
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-full">
-        <div className="absolute inset-y-0 right-0 w-[70%] rounded-bl-xl bg-[#473786] shadow-[inset_-60px_4px_80px_0_rgba(255,255,255,0.12)]" />
-        <div className="absolute inset-y-0 right-[88px] hidden w-[60%] rounded-bl-xl bg-[#473786] shadow-[inset_-60px_4px_80px_0_rgba(255,255,255,0.12)] md:block" />
-        <div className="absolute inset-y-0 right-[189px] hidden w-[50%] rounded-bl-xl bg-[#473786] shadow-[inset_-60px_4px_80px_0_rgba(255,255,255,0.12)] lg:block" />
-      </div>
-      <p className="pointer-events-none absolute left-8 top-[-29px] font-azeret text-[84px] font-medium leading-[1.2] tracking-[-0.5px] text-foreground-primary opacity-5">
+    <div className="relative h-[280px] overflow-clip rounded-[20px] bg-background-secondary md:h-[324px]">
+      {/* ponytail: Figma layers are wider than the card; overflow-clip makes the right-edge steps */}
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-[1090px] rounded-bl-xl bg-[#473786] shadow-[inset_-60px_4px_80px_0_rgba(255,255,255,0.12)]" />
+      <div className="pointer-events-none absolute right-[88px] top-0 h-full w-[979px] rounded-bl-xl bg-[#473786] shadow-[inset_-60px_4px_80px_0_rgba(255,255,255,0.12)]" />
+      <div className="pointer-events-none absolute right-[189px] top-0 h-full w-[811px] rounded-bl-xl bg-[#473786] shadow-[inset_-60px_4px_80px_0_rgba(255,255,255,0.12)]" />
+      <p className="pointer-events-none absolute left-8 top-[-29px] z-10 font-azeret text-[84px] font-medium leading-[1.2] tracking-[-0.5px] text-foreground-primary opacity-5">
         03
       </p>
-      <div className="relative z-10 max-w-[246px] pt-10">
+      <div className="absolute left-8 top-[84px] z-10 w-[246px]">
         <h3 className="mb-[13px] font-instrumentSans text-[28px] font-medium leading-[1.2] text-foreground-primary">
           Absorb meeting overhead
         </h3>
@@ -181,32 +154,36 @@ function FeatureMeetings() {
           Joining, note-taking, follow-ups — the work around the work.
         </p>
       </div>
-      <div className="pointer-events-none absolute right-4 top-10 hidden h-[243px] w-[256px] rounded-lg bg-[#1f1733] md:block">
-        <div className="absolute left-4 top-[35px] w-[226px] rounded-lg border border-dashed border-border-strong bg-[rgba(107,76,232,0.12)] px-3 py-2.5 shadow-[0_0_16px_rgba(146,119,255,0.15)]">
-          <div className="mb-1 flex items-center justify-between">
-            <span className="flex items-center gap-1">
-              <img alt="" src={asset('sparkles.svg')} className="size-3" />
-              <span className="font-hauora text-[10px] font-semibold leading-[1.35] text-purple-200">Context</span>
-            </span>
-            <span className="font-instrumentSans text-[10px] leading-[1.35] text-foreground-muted">10:40 AM</span>
+      <div className="pointer-events-none absolute right-[-28px] top-[40px] z-10 hidden h-[243px] w-[256px] rounded-lg bg-[#1f1733] md:block">
+        <div className="absolute left-4 top-[35px] w-[226px] rounded-lg border border-dashed border-border-strong bg-[rgba(107,76,232,0.12)] py-2.5 shadow-[0_0_16px_rgba(146,119,255,0.15)]">
+          <div className="px-3">
+            <div className="mb-1 flex items-center justify-between">
+              <span className="flex items-center gap-1">
+                <img alt="" src={asset('sparkles.svg')} className="size-3" />
+                <span className="font-hauora text-[10px] font-semibold leading-[1.35] text-purple-200">Context</span>
+              </span>
+              <span className="font-instrumentSans text-[10px] leading-[1.35] text-foreground-muted">10:40 AM</span>
+            </div>
+            <p className="font-instrumentSans text-[10px] leading-[1.35] text-foreground-muted">what changed since last time, in three lines</p>
           </div>
-          <p className="font-instrumentSans text-[10px] leading-[1.35] text-foreground-muted">what changed since last time, in three lines</p>
         </div>
-        <div className="absolute left-4 top-[99px] w-[226px] rounded-lg border border-border-muted bg-white/6 px-3 py-2.5 backdrop-blur-[2px]">
-          <div className="flex items-center justify-between">
+        <div className="absolute left-4 top-[99px] w-[226px] rounded-lg border border-border-muted bg-white/6 py-2.5 backdrop-blur-[2px]">
+          <div className="flex items-center justify-between px-3">
             <span className="font-hauora text-xs font-semibold leading-[17px] text-foreground-primary">Your meeting</span>
             <span className="font-hauora text-[10px] font-medium leading-[14px] text-foreground-muted">11 - 11:30 AM</span>
           </div>
         </div>
-        <div className="absolute left-4 top-[146px] w-[226px] rounded-lg border border-dashed border-border-strong bg-[rgba(107,76,232,0.12)] px-3 py-2.5 shadow-[0_0_16px_rgba(146,119,255,0.15)]">
-          <div className="mb-1 flex items-center justify-between">
-            <span className="flex items-center gap-1">
-              <img alt="" src={asset('sparkles-gold.svg')} className="size-3" />
-              <span className="font-hauora text-[10px] font-semibold leading-[1.35] text-[#ffd270]">After</span>
-            </span>
-            <span className="font-instrumentSans text-[10px] leading-[1.35] text-foreground-muted">11:35 AM</span>
+        <div className="absolute left-4 top-[146px] w-[226px] rounded-lg border border-dashed border-border-strong bg-[rgba(107,76,232,0.12)] py-2.5 shadow-[0_0_16px_rgba(146,119,255,0.15)]">
+          <div className="px-3">
+            <div className="mb-1 flex items-center justify-between">
+              <span className="flex items-center gap-1">
+                <img alt="" src={asset('sparkles-gold.svg')} className="size-3" />
+                <span className="font-hauora text-[10px] font-semibold leading-[1.35] text-[#ffd270]">After</span>
+              </span>
+              <span className="font-instrumentSans text-[10px] leading-[1.35] text-foreground-muted">11:35 AM</span>
+            </div>
+            <p className="font-instrumentSans text-[10px] leading-[1.35] text-foreground-muted">decisions captured, follow-ups scheduled, no chasing</p>
           </div>
-          <p className="font-instrumentSans text-[10px] leading-[1.35] text-foreground-muted">decisions captured, follow-ups scheduled, no chasing</p>
         </div>
       </div>
     </div>
@@ -215,11 +192,11 @@ function FeatureMeetings() {
 
 function FeatureRecap() {
   return (
-    <div className="relative h-full min-h-[280px] overflow-hidden rounded-[20px] bg-[rgba(107,76,232,0.12)] p-8 md:min-h-[324px]">
+    <div className="relative flex h-[280px] overflow-clip rounded-[20px] bg-[rgba(107,76,232,0.12)] md:h-[324px]">
       <p className="pointer-events-none absolute left-8 top-[-29px] font-azeret text-[84px] font-medium leading-[1.2] tracking-[-0.5px] text-foreground-primary opacity-5">
         04
       </p>
-      <div className="relative z-10 max-w-[246px] pt-10">
+      <div className="relative z-10 flex w-[246px] shrink-0 flex-col justify-center p-8">
         <h3 className="mb-[13px] font-instrumentSans text-[28px] font-medium leading-[1.2] text-foreground-primary">
           End the day on purpose
         </h3>
@@ -227,8 +204,10 @@ function FeatureRecap() {
           Two taps, no typing. Unfinished work files itself into tomorrow and the day closes.
         </p>
       </div>
-      <div className="pointer-events-none absolute -right-8 top-8 hidden h-[338px] w-[381px] overflow-hidden rounded-[10px] border border-border shadow-[0_0_24px_rgba(136,85,255,0.14)] md:block lg:right-0">
-        <img alt="" src={asset('daily-recap.webp')} className="absolute left-[-4%] top-0 h-[104%] w-[117%] max-w-none object-cover" />
+      <div className="pointer-events-none relative hidden min-w-0 flex-1 xl:block">
+        <div className="absolute right-[-72px] top-8 h-[338px] w-[381px] overflow-hidden rounded-[10px] border border-border shadow-[0_0_24px_rgba(136,85,255,0.14)]">
+          <img alt="" src={asset('daily-recap.webp')} className="absolute left-[-4.21%] top-0 h-[103.98%] w-[117.08%] max-w-none object-cover" />
+        </div>
       </div>
     </div>
   );
@@ -236,7 +215,6 @@ function FeatureRecap() {
 
 const Home = () => {
   const [openFaq, setOpenFaq] = useState(null);
-  const year = new Date().getFullYear();
 
   return (
     <div className="dark min-h-screen bg-background font-instrumentSans text-foreground-primary antialiased">
@@ -545,27 +523,31 @@ const Home = () => {
                 <div key={faq.q} className={i > 0 ? 'border-t border-border' : ''}>
                   <button
                     type="button"
-                    className="flex w-full items-center justify-between gap-4 py-6 text-left"
+                    className="group flex w-full items-center justify-between gap-4 py-6 text-left"
                     aria-expanded={open}
                     onClick={() => setOpenFaq(open ? null : i)}
                   >
                     <span className="flex min-w-0 items-center gap-5">
-                      <span className="shrink-0 font-azeret text-xs font-normal leading-[1.45] tracking-[-0.5px] text-purple-200">
+                      <span className="shrink-0 font-azeret text-xs font-normal leading-[1.45] tracking-[-0.5px] text-purple-200 transition-colors group-hover:text-purple-100">
                         {String(i + 1).padStart(2, '0')}.
                       </span>
-                      <span className="font-instrumentSans text-lg font-medium leading-[1.2] md:text-xl">{faq.q}</span>
+                      <span className="font-instrumentSans text-lg font-medium leading-[1.2] transition-colors group-hover:text-purple-100 md:text-xl">
+                        {faq.q}
+                      </span>
                     </span>
                     <img
                       alt=""
                       src={asset('plus.svg')}
-                      className={`size-5 shrink-0 transition-transform ${open ? 'rotate-45' : ''}`}
+                      className={`size-5 shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${open ? 'rotate-45' : ''}`}
                     />
                   </button>
-                  {open && (
-                    <p className="max-w-3xl pb-6 pl-[52px] font-instrumentSans text-base font-normal leading-[1.45] text-foreground-muted">
-                      {faq.a}
-                    </p>
-                  )}
+                  <div className="faq-answer" data-open={open} aria-hidden={!open}>
+                    <div>
+                      <p className="max-w-3xl pb-6 pl-[52px] font-instrumentSans text-base font-normal leading-[1.45] text-foreground-muted">
+                        {faq.a}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               );
             })}
@@ -596,26 +578,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border px-6 py-5 md:px-[92px]">
-        <div className="mx-auto flex max-w-[1256px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex w-[250px] flex-col gap-3">
-            <div className="flex items-center gap-[7px]">
-              <img alt="" src={asset('devbot.webp')} className="size-6 object-cover" />
-              <img alt="ZeroAI" src={asset('logo-wordmark-lg.svg')} className="h-5 w-[67px]" />
-              <img alt="" src={asset('beta-dot.svg')} className="size-2" />
-            </div>
-            <p className="font-instrumentSans text-xs font-normal leading-[1.45] text-foreground-muted">
-              © 2025–{year} ZeroAI. All rights reserved.
-            </p>
-          </div>
-          <nav className="flex gap-8 font-instrumentSans text-sm font-normal leading-[1.2] text-foreground-primary">
-            <Link to="/#features" className="hover:text-purple-200">Product</Link>
-            <Link to="/privacy" className="hover:text-purple-200">Security</Link>
-            <Link to="/support" className="hover:text-purple-200">Docs</Link>
-          </nav>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };

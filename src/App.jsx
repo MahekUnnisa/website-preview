@@ -20,6 +20,8 @@ const OnboardOAuthCallback = lazy(() => import('./pages/OnboardOAuthCallback'));
 const OnboardOAuthError = lazy(() => import('./pages/OnboardOAuthError'));
 const Onboard = lazy(() => import('./pages/Onboard'));
 const SlackOpenTest = lazy(() => import('./pages/SlackOpenTest'));
+const BlogList = lazy(() => import('./pages/BlogList'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
 
 function SiteLayout() {
   return (
@@ -46,6 +48,8 @@ function App() {
               <Route path="/onboard/slack-open-test" element={<SlackOpenTest />} />
               <Route path="/onboard" element={<Onboard />} />
               <Route path="/" element={<Home />} />
+              <Route path="/blog" element={<BlogList />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
               <Route element={<SiteLayout />}>
                 <Route path="/slack" element={<SlackLanding />} />
                 <Route path="/support" element={<Support />} />
