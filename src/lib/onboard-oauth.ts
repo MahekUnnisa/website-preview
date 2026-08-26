@@ -3,9 +3,11 @@ import type { OnboardingKeyAuthProvider } from '@/lib/onboarding-key-auth';
 export const ONBOARD_OAUTH_MESSAGE_TYPE = 'ZERO_ONBOARD_OAUTH';
 const ONBOARD_OAUTH_CHANNEL = 'zero-onboard-oauth';
 export const ONBOARD_RETURN_PATH = `${import.meta.env.BASE_URL}onboard`.replace(/\/{2,}/g, '/');
+export const GET_STARTED_RETURN_PATH = `${import.meta.env.BASE_URL}get-started`.replace(/\/{2,}/g, '/');
 const SAME_TAB_MAX_WIDTH = 768;
 const SAME_TAB_OAUTH_KEY = 'zero_onboard_oauth_same_tab';
 const POPUP_FLAG_KEY = 'zero_onboard_oauth_popup';
+const RETURN_PATH_KEY = 'zero_onboard_oauth_return';
 const POPUP_NAME = 'zero-onboard-oauth';
 const POPUP_FEATURES = 'width=500,height=600,scrollbars=yes,resizable=yes';
 
@@ -131,9 +133,29 @@ function isSameTabOAuth(): boolean {
     }
 }
 
-/** Same-tab OAuth returns to /onboard. Popup must never load /onboard. */
+/** Same-tab OAuth returns to /onboard or /get-started. Popup must never load those. */
 export function shouldReturnToOnboard(): boolean {
     return isSameTabOAuth() && !isOAuthPopupWindow();
+}
+
+/** Remember which marketing entry started OAuth so same-tab return lands correctly. */
+export function markOnboardReturnPath(entry: 'onboard' | 'get-started'): void {
+    try {
+        sessionStorage.setItem(RETURN_PATH_KEY, entry);
+    } catch {
+        /* sessionStorage unavailable */
+    }
+}
+
+export function resolveOnboardReturnPath(): string {
+    try {
+        if (sessionStorage.getItem(RETURN_PATH_KEY) === 'get-started') {
+            return GET_STARTED_RETURN_PATH;
+        }
+    } catch {
+        /* sessionStorage unavailable */
+    }
+    return ONBOARD_RETURN_PATH;
 }
 
 export function leaveOAuthCallback(): void {
@@ -146,7 +168,7 @@ export function leaveOAuthCallback(): void {
         return;
     }
     clearSameTabOAuth();
-    window.location.assign(ONBOARD_RETURN_PATH);
+    window.location.assign(resolveOnboardReturnPath());
 }
 
 export function openOAuthPopup(url: string): Window | null {

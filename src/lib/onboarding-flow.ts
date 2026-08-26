@@ -259,22 +259,26 @@ export function normalizeFlowData(raw: unknown): OnboardingFlowData {
 
 type ResolveFlowStepOptions = {
     authenticated: boolean;
+    /** `/get-started` skips welcome → role-plan and lands on keys. */
+    entry?: 'onboard' | 'get-started';
 };
+
+const GET_STARTED_SKIP_STEPS: OnboardingFlowStep[] = ['welcome', 'priority', 'role-plan'];
 
 export function resolveOnboardingFlowStep(
     state: OnboardingV2State | undefined,
-    { authenticated }: ResolveFlowStepOptions
+    { authenticated, entry = 'onboard' }: ResolveFlowStepOptions
 ): OnboardingFlowStep {
     if (!state || state.status === 'not_started') {
-        return 'welcome';
+        return entry === 'get-started' ? 'keys-first' : 'welcome';
     }
 
     if (state.status === 'skipped') {
-        return 'welcome';
+        return entry === 'get-started' ? 'keys-first' : 'welcome';
     }
 
     if (state.status === 'completed') {
-        return state.stage === 'thank-you' ? 'thank-you' : 'welcome';
+        return state.stage === 'thank-you' ? 'thank-you' : entry === 'get-started' ? 'keys-first' : 'welcome';
     }
 
     let step: OnboardingFlowStep = isOnboardingFlowStep(state.stage)
@@ -282,6 +286,10 @@ export function resolveOnboardingFlowStep(
         : isLegacyOnboardingStage(state.stage)
           ? 'welcome'
           : 'welcome';
+
+    if (entry === 'get-started' && GET_STARTED_SKIP_STEPS.includes(step)) {
+        step = 'keys-first';
+    }
 
     const keyAuth = normalizeFlowData(state.flowData).keyAuth;
     if (authenticated && step === 'keys-first' && keyAuth?.google !== 'failed') {
@@ -370,5 +378,16 @@ if (import.meta.env.DEV) {
             { authenticated: true }
         ) === 'keys-first',
         'failed Google should not auto-advance off keys-first'
+    );
+    console.assert(
+        resolveOnboardingFlowStep(undefined, { authenticated: false, entry: 'get-started' }) === 'keys-first',
+        'get-started entry should land on keys-first'
+    );
+    console.assert(
+        resolveOnboardingFlowStep(
+            { status: 'in_progress', stage: 'welcome' },
+            { authenticated: false, entry: 'get-started' }
+        ) === 'keys-first',
+        'get-started should skip welcome'
     );
 }

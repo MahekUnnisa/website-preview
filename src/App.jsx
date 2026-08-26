@@ -20,6 +20,7 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 const OnboardOAuthCallback = lazy(() => import('./pages/OnboardOAuthCallback'));
 const OnboardOAuthError = lazy(() => import('./pages/OnboardOAuthError'));
 const Onboard = lazy(() => import('./pages/Onboard'));
+const GetStarted = lazy(() => import('./pages/GetStarted'));
 const SlackOpenTest = lazy(() => import('./pages/SlackOpenTest'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 
@@ -47,6 +48,7 @@ function App() {
               <Route path="/onboard/oauth/error" element={<OnboardOAuthError />} />
               <Route path="/onboard/slack-open-test" element={<SlackOpenTest />} />
               <Route path="/onboard" element={<Onboard />} />
+              <Route path="/get-started" element={<GetStarted />} />
               <Route path="/" element={<Home />} />
               <Route path="/blog" element={<BlogList />} />
               <Route path="/blog/:slug" element={<BlogPost />} />

@@ -110,8 +110,8 @@ export const siteCopy = {
       ],
       quote:
         '“Focus blocks stopped getting eaten. Meeting notes landed without anyone chasing them. The team just… shipped more.”',
-      name: 'Anitha R.',
-      role: '· Staff Engineer at a frontier lab',
+      name: 'Rahul Bansal',
+      role: '· AI Head at a startup',
       stats: [
         { value: '3h 12m', label: 'average focus time returned per week' },
         { value: '92%', label: 'of meeting notes shared without an edit' },

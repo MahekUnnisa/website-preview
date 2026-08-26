@@ -1,7 +1,10 @@
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { Link } from 'react-router';
+import { cn, publicUrl } from '@/lib/utils';
 import { onboardingBodyFontClass } from '@/lib/onboarding-font';
 import { Image } from '@/components/onboarding/OnboardingImage';
+
+export type OnboardingShellVariant = 'default' | 'landing';
 
 export interface OnboardingScreenShellProps {
     children: React.ReactNode;
@@ -13,13 +16,48 @@ export interface OnboardingScreenShellProps {
     size?: 'default' | 'wide';
     /** Vertically center main content (large screens); scrolls from top when content overflows. */
     center?: boolean;
+    /** Kept for callers; both values use the marketing landing background. */
+    variant?: OnboardingShellVariant;
 }
 
-const dottedGridStyle: React.CSSProperties = {
-    backgroundImage: 'radial-gradient(circle, var(--border) 1px, transparent 1px)',
-    backgroundSize: '16px 16px',
-    backgroundPosition: 'center',
-};
+const landingAsset = (name: string) => publicUrl(`/assets/landing/${name}`);
+
+function LandingBackground() {
+    return (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+            <div className="absolute left-0 top-0 h-[400.5px] w-[479px]">
+                <div className="absolute inset-[0_0_-0.25%_-0.21%]">
+                    <img alt="" src={landingAsset('grid-corner.svg')} className="block size-full max-w-none" />
+                </div>
+            </div>
+            <div className="absolute bottom-0 right-0 hidden h-[400.5px] w-[479px] md:block">
+                <div className="-scale-y-100">
+                    <div className="relative h-[400.5px] w-[479px]">
+                        <div className="absolute inset-[0_0_-0.25%_-0.21%]">
+                            <img alt="" src={landingAsset('grid-corner-2.svg')} className="block size-full max-w-none" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="absolute left-1/2 top-[-91px] h-[182px] w-[788px] -translate-x-1/2">
+                <img
+                    alt=""
+                    src={landingAsset('glow-ellipse.svg')}
+                    className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2"
+                    width={1188}
+                    height={582}
+                />
+            </div>
+            <img
+                alt=""
+                src={landingAsset('hero-noise.svg')}
+                width={1400}
+                height={810}
+                className="absolute inset-0 size-full object-cover"
+            />
+        </div>
+    );
+}
 
 export const OnboardingScreenShell: React.FC<OnboardingScreenShellProps> = ({
     children,
@@ -29,6 +67,7 @@ export const OnboardingScreenShell: React.FC<OnboardingScreenShellProps> = ({
     className,
     size = 'default',
     center = false,
+    variant: _variant = 'default',
 }) => (
     <div
         className={cn(
@@ -36,18 +75,17 @@ export const OnboardingScreenShell: React.FC<OnboardingScreenShellProps> = ({
             onboardingBodyFontClass,
             className
         )}
-        style={dottedGridStyle}
     >
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[182px] bg-[radial-gradient(ellipse_at_top,var(--accent-400-15),transparent_70%)]" />
+        <LandingBackground />
 
         <header className="relative z-10 flex h-14 shrink-0 items-center justify-between px-5 pt-3 sm:h-16 sm:px-6 sm:pt-[17px] lg:px-10 xl:px-12">
-            <div className="flex items-center gap-[7px]">
+            <Link to="/" className="flex items-center gap-[7px]">
                 <Image src="Logo" alt="ZeroAI" width={53} height={16} style={{ width: 53, height: 16 }} />
                 <span
                     className="size-[6px] rounded-full bg-online-indicator shadow-[0_0_8px_2px_rgba(44,194,100,0.7)]"
                     aria-hidden
                 />
-            </div>
+            </Link>
             {headerTrailing}
         </header>
 
