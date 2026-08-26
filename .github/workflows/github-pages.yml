@@ -1,0 +1,78 @@
+# Deploy the Vite SPA to GitHub Pages.
+# Repo Settings → Pages → Source = GitHub Actions.
+#
+# Auto-deploys on push to feat/new-design.
+# Manual: Actions → Deploy to GitHub Pages → Run workflow (pick branch if needed).
+name: Deploy to GitHub Pages
+
+on:
+    workflow_dispatch:
+        inputs:
+            branch:
+                description: Branch to deploy
+                required: false
+                default: development
+                type: string
+            vite_api_base_url:
+                description: VITE_API_BASE_URL (blank = production default)
+                required: false
+                type: string
+            vite_extension_id:
+                description: VITE_EXTENSION_ID (blank = production default)
+                required: false
+                type: string
+            vite_chrome_webstore_url:
+                description: VITE_CHROME_WEBSTORE_URL (blank = production default)
+                required: false
+                type: string
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+concurrency:
+    group: pages
+    cancel-in-progress: true
+
+jobs:
+    deploy:
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.inputs.branch || github.ref }}
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "24"
+                  cache: npm
+
+            - run: npm ci
+
+            - name: Build
+              run: npm run build
+              env:
+                  # Project site is https://<user>.github.io/<repo>/
+                  BASE_PATH: /${{ github.event.repository.name }}/
+                  VITE_API_BASE_URL: ${{ github.event.inputs.vite_api_base_url || vars.VITE_API_BASE_URL }}
+                  VITE_EXTENSION_ID: ${{ github.event.inputs.vite_extension_id || vars.VITE_EXTENSION_ID }}
+                  VITE_CHROME_WEBSTORE_URL: ${{ github.event.inputs.vite_chrome_webstore_url || vars.VITE_CHROME_WEBSTORE_URL }}
+                  VITE_APP_VERSION: ${{ vars.VITE_APP_VERSION }}
+
+            - name: SPA fallback
+              run: |
+                  cp dist/index.html dist/404.html
+                  touch dist/.nojekyll
+
+            - uses: actions/configure-pages@v5
+
+            - uses: actions/upload-pages-artifact@v3
+              with:
+                  path: dist
+
+            - id: deployment
+              uses: actions/deploy-pages@v4

@@ -113,3 +113,36 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('/fonts/InstrumentSans/Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Azeret Mono — landing display / monospace UI (Figma) */
+@font-face {
+  font-family: 'Azeret Mono';
+  src: url('/fonts/AzeretMono/ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Azeret Mono';
+  src: url('/fonts/AzeretMono/Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Azeret Mono';
+  src: url('/fonts/AzeretMono/Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+

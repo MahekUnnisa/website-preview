@@ -7,7 +7,7 @@ import { markOnboardInstall, openWorkspaceHandoff, slackHandoffFromOnboardingPay
 import type { OnboardingWorkspaceProvider } from '@/lib/onboarding-flow';
 import { Image } from '../OnboardingImage';
 import { OnboardingFooterActions } from '../OnboardingFooterActions';
-import { OnboardingScreenShell } from '../OnboardingScreenShell';
+import { OnboardingScreenShell, type OnboardingShellVariant } from '../OnboardingScreenShell';
 import { OnboardingStatusMessage } from '../OnboardingStatusMessage';
 
 const AUTO_OPEN_APP_MS = 3000;
@@ -28,6 +28,7 @@ export interface OnboardingAllSetScreenProps {
     autoOpen?: boolean;
     onHandoffDone?: () => void;
     className?: string;
+    shellVariant?: OnboardingShellVariant;
 }
 
 export const OnboardingAllSetScreen: React.FC<OnboardingAllSetScreenProps> = ({
@@ -38,7 +39,8 @@ export const OnboardingAllSetScreen: React.FC<OnboardingAllSetScreenProps> = ({
     channelId = null,
     autoOpen = true,
     onHandoffDone,
-    className
+    className,
+    shellVariant = 'default',
 }) => {
     const label = workspaceLabel ?? (workspace === 'msteams' ? 'Teams' : 'Slack');
     const copy = getOnboardingV2AllSetCopy(label);
@@ -106,6 +108,7 @@ export const OnboardingAllSetScreen: React.FC<OnboardingAllSetScreenProps> = ({
     return (
         <OnboardingScreenShell
             className={className}
+            variant={shellVariant}
             mainClassName="flex min-h-0 flex-1 flex-col px-5 pb-5 sm:px-8 sm:pb-12 lg:px-10"
         >
             <div

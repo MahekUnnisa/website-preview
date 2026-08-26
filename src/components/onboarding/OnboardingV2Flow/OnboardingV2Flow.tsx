@@ -46,9 +46,11 @@ import { OnboardingStatusMessage } from '../OnboardingStatusMessage';
 
 interface OnboardingV2FlowProps {
     setShowOnboardingV2?: (show: boolean) => void;
+    /** Marketing shortcut entry — keys first + landing shell + Google progress. */
+    entry?: 'onboard' | 'get-started';
 }
 
-const SECOND_KEY_AUTO_MS = 3000;
+const KEY_AUTO_MS = 3000;
 const isKeysStep = (step: OnboardingFlowStep): boolean => step === 'keys-first' || step === 'keys-second';
 
 function onboardingWorkspaceConnectedFromRecord(record: unknown, workspace: 'slack' | 'msteams'): boolean {
@@ -82,7 +84,7 @@ const PlanStepText = ({ lead, rest }: { lead: string; rest: string }) => (
     </>
 );
 
-const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = () => {
+const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = ({ entry = 'onboard' }) => {
     const { trackEvent } = useAnalytics();
     const { authenticated, login, connectIntegration, userId } = useAuth();
     const [flowState, setFlowState, isHydrated, syncAfterLogin] = useOnboardingFlowState(userId ?? null);
@@ -91,11 +93,14 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = () => {
     );
     const remoteConfig = useMemo(() => buildDefaultRemoteConfig(), []);
     const [keysEntranceComplete, setKeysEntranceComplete] = useState(false);
+    const [firstKeyProgress, setFirstKeyProgress] = useState(0);
     const [secondKeyProgress, setSecondKeyProgress] = useState(0);
     const syncedAuthRef = useRef<string | null>(null);
     const completedAllSetRef = useRef(false);
+    const firstKeyRafRef = useRef<number | null>(null);
     const secondKeyRafRef = useRef<number | null>(null);
     const workspaceOAuthStartedRef = useRef(false);
+    const googleOAuthStartedRef = useRef(false);
     const slackAlreadyConnectedRef = useRef(false);
     const capturedSlackHydrateRef = useRef(false);
     const [workspaceConnectedFromApi, setWorkspaceConnectedFromApi] = useState(false);
@@ -107,10 +112,12 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = () => {
     });
     const [showInstall, setShowInstall] = useState(() => onboardInstallMarked());
 
+    const isGetStarted = entry === 'get-started';
+
     const flowData = useMemo(() => normalizeFlowData(flowState?.flowData), [flowState?.flowData]);
     const workspace = flowData.workspace ?? 'slack';
 
-    const step = resolveOnboardingFlowStep(flowState, { authenticated });
+    const step = resolveOnboardingFlowStep(flowState, { authenticated, entry });
     const workspaceConnected = workspaceConnectedFromApi;
     const googleFailed = flowData.keyAuth?.google === 'failed';
     const workspaceFailed = flowData.keyAuth?.[workspace] === 'failed';
@@ -243,6 +250,25 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = () => {
         },
         [flowData, flowState?.onboardingStartTime, selectedTools, setFlowState]
     );
+
+    // /get-started: seed keys-first so shared storage matches the shortcut entry.
+    useEffect(() => {
+        if (!isGetStarted || !isHydrated) {
+            return;
+        }
+        if (!flowState || flowState.status === 'not_started' || flowState.status === 'skipped') {
+            void persistStep('keys-first');
+            return;
+        }
+        if (
+            flowState.status === 'in_progress' &&
+            (flowState.stage === 'welcome' ||
+                flowState.stage === 'priority' ||
+                flowState.stage === 'role-plan')
+        ) {
+            void persistStep('keys-first');
+        }
+    }, [flowState, isGetStarted, isHydrated, persistStep]);
 
     const updateWorkspace = useCallback(
         (nextWorkspace: 'slack' | 'msteams') => {
@@ -424,10 +450,66 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = () => {
         return () => window.clearTimeout(timer);
     }, [keysEntranceComplete, step]);
 
+    const startFirstKeyAuth = useCallback(() => {
+        googleOAuthStartedRef.current = true;
+        login();
+    }, [login]);
+
     const startSecondKeyAuth = useCallback(() => {
         workspaceOAuthStartedRef.current = true;
         connectIntegration(workspace);
     }, [connectIntegration, workspace]);
+
+    // /get-started only: 3s progress then auto-start Google OAuth (mirrors Slack key).
+    useEffect(() => {
+        const shouldFill =
+            isGetStarted &&
+            step === 'keys-first' &&
+            !authenticated &&
+            !googleFailed &&
+            keysEntranceComplete;
+
+        if (!shouldFill) {
+            if (firstKeyRafRef.current != null) {
+                cancelAnimationFrame(firstKeyRafRef.current);
+                firstKeyRafRef.current = null;
+            }
+            if (step !== 'keys-first' || authenticated || googleFailed) {
+                setFirstKeyProgress(0);
+            }
+            return undefined;
+        }
+
+        const startedAt = performance.now();
+
+        const tick = (now: number) => {
+            const progress = Math.min(1, (now - startedAt) / KEY_AUTO_MS);
+            setFirstKeyProgress(progress);
+            if (progress >= 1) {
+                if (!googleOAuthStartedRef.current) {
+                    startFirstKeyAuth();
+                }
+                return;
+            }
+            firstKeyRafRef.current = requestAnimationFrame(tick);
+        };
+
+        firstKeyRafRef.current = requestAnimationFrame(tick);
+
+        return () => {
+            if (firstKeyRafRef.current != null) {
+                cancelAnimationFrame(firstKeyRafRef.current);
+                firstKeyRafRef.current = null;
+            }
+        };
+    }, [
+        authenticated,
+        googleFailed,
+        isGetStarted,
+        keysEntranceComplete,
+        startFirstKeyAuth,
+        step
+    ]);
 
     // Slack path: 3s progress then auto-start Slack OAuth.
     useEffect(() => {
@@ -453,7 +535,7 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = () => {
         const startedAt = performance.now();
 
         const tick = (now: number) => {
-            const progress = Math.min(1, (now - startedAt) / SECOND_KEY_AUTO_MS);
+            const progress = Math.min(1, (now - startedAt) / KEY_AUTO_MS);
             setSecondKeyProgress(progress);
             if (progress >= 1) {
                 if (!workspaceOAuthStartedRef.current) {
@@ -518,7 +600,7 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = () => {
         );
     }
 
-    if (step === 'keys-first' && !authenticated && !googleFailed && preferSameTabOAuth()) {
+    if (step === 'keys-first' && !authenticated && !googleFailed && preferSameTabOAuth() && !isGetStarted) {
         return <div className="min-h-screen bg-background" />;
     }
 
@@ -536,6 +618,10 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = () => {
                 : keysCopy.turnFirst;
 
         const bothConnected = calendarConnected && slackShownConnected && !keysErrored;
+        const firstKeyProgressActive =
+            isGetStarted && !showRetryCta && !calendarConnected;
+        const secondKeyProgressActive =
+            !showRetryCta && calendarConnected && workspace === 'slack';
 
         return (
             <OnboardingScreenShell>
@@ -557,15 +643,21 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = () => {
                                 {
                                     label: ctaLabel,
                                     icon: showRetryCta ? 'OnboardingArrowClockwiseLight' : 'OnboardingKeyLight',
-                                    progress:
-                                        !showRetryCta &&
-                                        calendarConnected &&
-                                        workspace === 'slack'
-                                            ? secondKeyProgress
-                                            : undefined,
+                                    progress: firstKeyProgressActive
+                                        ? firstKeyProgress
+                                        : secondKeyProgressActive
+                                          ? secondKeyProgress
+                                          : undefined,
                                     onClick: () => {
                                         if (googleFailed || !calendarConnected) {
-                                            login();
+                                            if (firstKeyRafRef.current != null) {
+                                                cancelAnimationFrame(firstKeyRafRef.current);
+                                                firstKeyRafRef.current = null;
+                                            }
+                                            if (isGetStarted && !googleFailed) {
+                                                setFirstKeyProgress(1);
+                                            }
+                                            startFirstKeyAuth();
                                             return;
                                         }
                                         if (secondKeyRafRef.current != null) {
