@@ -139,7 +139,7 @@ export default function BlogList() {
           <h2 className="font-azeret text-[28px] font-normal leading-[1.2] tracking-[-0.5px] md:text-[36px]">
             {copy.listCta.title}
           </h2>
-          <StartCta>{siteCopy.common.getStarted}</StartCta>
+          <StartCta to="/get-started">{siteCopy.common.getStarted}</StartCta>
         </div>
       </section>
     </LandingShell>
