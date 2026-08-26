@@ -37,3 +37,10 @@ temp/
 
 *storybook.log
 storybook-static
+
+# Local design comparison dumps
+/design.png
+/now.png
+
+# Editorial copy export (local only)
+docs/landing-page-copy.csv
