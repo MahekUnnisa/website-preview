@@ -1,0 +1,291 @@
+/* Blog — list cards + markdown prose. Edit here instead of hunting Tailwind in JSX. */
+
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  transition:
+    border-color 300ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.blog-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-border-strong, rgba(255, 255, 255, 0.2));
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.blog-card__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+}
+
+.blog-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.blog-card:hover .blog-card__media img {
+  transform: scale(1.03);
+}
+
+.blog-card__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(107, 76, 232, 0.12);
+}
+
+.blog-card__placeholder-letter {
+  font-family: var(--font-azeret, ui-monospace, monospace);
+  font-size: 3rem;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  color: var(--color-foreground-primary, #f5f5f5);
+  opacity: 0.1;
+  transition: opacity 300ms;
+}
+
+.blog-card:hover .blog-card__placeholder-letter {
+  opacity: 0.2;
+}
+
+.blog-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .blog-card__body {
+    padding: 2rem;
+  }
+}
+
+.blog-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-azeret, ui-monospace, monospace);
+  font-size: 0.75rem;
+  letter-spacing: -0.5px;
+  color: var(--color-foreground-muted, #9a9a9a);
+}
+
+.blog-card__title {
+  font-family: var(--font-azeret, ui-monospace, monospace);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.5px;
+  color: var(--color-foreground-primary, #f5f5f5);
+  transition: color 300ms;
+}
+
+@media (min-width: 768px) {
+  .blog-card__title {
+    font-size: 1.5rem;
+  }
+}
+
+.blog-card:hover .blog-card__title {
+  color: var(--color-purple-200, #c4b5fd);
+}
+
+.blog-card__excerpt {
+  flex: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  font-family: var(--font-instrumentSans, system-ui, sans-serif);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--color-foreground-muted, #9a9a9a);
+}
+
+.blog-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--font-instrumentSans, system-ui, sans-serif);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-purple-200, #c4b5fd);
+}
+
+.blog-card__cta img {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 300ms;
+}
+
+.blog-card:hover .blog-card__cta img {
+  transform: translateX(4px);
+}
+
+/* Markdown body */
+.blog-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: var(--font-instrumentSans, system-ui, sans-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--color-foreground-secondary, #c8c8c8);
+}
+
+.blog-prose > *:first-child {
+  margin-top: 0;
+}
+
+.blog-prose > *:last-child {
+  margin-bottom: 0;
+}
+
+.blog-prose p {
+  margin: 0;
+}
+
+.blog-prose h2 {
+  scroll-margin-top: 7rem;
+  margin: 0.5rem 0 0;
+  font-family: var(--font-azeret, ui-monospace, monospace);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.5px;
+  color: var(--color-foreground-primary, #f5f5f5);
+}
+
+@media (min-width: 768px) {
+  .blog-prose h2 {
+    font-size: 1.5rem;
+  }
+}
+
+.blog-prose h3 {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-azeret, ui-monospace, monospace);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.5px;
+  color: var(--color-foreground-primary, #f5f5f5);
+}
+
+.blog-prose ul,
+.blog-prose ol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0 0 0 0.25rem;
+  list-style: none;
+}
+
+.blog-prose li {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.blog-prose ul > li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 0.375rem;
+  height: 0.375rem;
+  margin-top: 0.625rem;
+  border-radius: 9999px;
+  background: var(--color-purple-200, #c4b5fd);
+}
+
+.blog-prose ol {
+  counter-reset: blog-ol;
+}
+
+.blog-prose ol > li {
+  counter-increment: blog-ol;
+}
+
+.blog-prose ol > li::before {
+  content: counter(blog-ol, decimal-leading-zero);
+  flex-shrink: 0;
+  margin-top: 0.1em;
+  font-family: var(--font-azeret, ui-monospace, monospace);
+  font-size: 0.75rem;
+  letter-spacing: -0.5px;
+  color: var(--color-foreground-muted, #9a9a9a);
+}
+
+.blog-prose a {
+  font-weight: 500;
+  color: var(--color-purple-200, #c4b5fd);
+  text-decoration: none;
+  transition: color 200ms;
+}
+
+.blog-prose a:hover {
+  color: var(--color-purple-100, #ddd6fe);
+}
+
+.blog-prose strong {
+  font-weight: 600;
+  color: var(--color-foreground-primary, #f5f5f5);
+}
+
+.blog-prose em {
+  font-style: italic;
+}
+
+.blog-prose blockquote {
+  margin: 0;
+  padding: 0.75rem 0 0.75rem 1rem;
+  border-left: 2px solid var(--color-border-strong, rgba(255, 255, 255, 0.2));
+  color: var(--color-foreground-muted, #9a9a9a);
+}
+
+.blog-prose code {
+  padding: 0.1em 0.35em;
+  border-radius: 0.25rem;
+  background: rgba(255, 255, 255, 0.06);
+  font-family: var(--font-azeret, ui-monospace, monospace);
+  font-size: 0.9em;
+}
+
+.blog-prose pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.blog-prose pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.blog-prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.blog-prose hr {
+  margin: 0.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+}

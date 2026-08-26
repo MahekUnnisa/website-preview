@@ -1,4 +1,5 @@
 @import './styles/fonts.css' layer(base);
 @import './styles/themes.css' layer(base);
 @import './styles/onboarding.css' layer(base);
+@import './styles/blog.css' layer(base);
 @import './styles/app.css';

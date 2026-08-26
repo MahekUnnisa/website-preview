@@ -6,6 +6,7 @@ import ScrollManager from './components/ScrollManager';
 import { RouteProgressProvider, RouteProgressFallback } from './components/RouteProgress';
 import { WebAuthProvider } from './context/WebAuthProvider';
 import Home from './pages/Home';
+import BlogList from './pages/BlogList';
 
 const SlackLanding = lazy(() => import('./pages/SlackLanding'));
 const Privacy = lazy(() => import('./pages/Privacy'));
@@ -20,6 +21,7 @@ const OnboardOAuthCallback = lazy(() => import('./pages/OnboardOAuthCallback'));
 const OnboardOAuthError = lazy(() => import('./pages/OnboardOAuthError'));
 const Onboard = lazy(() => import('./pages/Onboard'));
 const SlackOpenTest = lazy(() => import('./pages/SlackOpenTest'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
 
 function SiteLayout() {
   return (
@@ -46,6 +48,8 @@ function App() {
               <Route path="/onboard/slack-open-test" element={<SlackOpenTest />} />
               <Route path="/onboard" element={<Onboard />} />
               <Route path="/" element={<Home />} />
+              <Route path="/blog" element={<BlogList />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
               <Route element={<SiteLayout />}>
                 <Route path="/slack" element={<SlackLanding />} />
                 <Route path="/support" element={<Support />} />
