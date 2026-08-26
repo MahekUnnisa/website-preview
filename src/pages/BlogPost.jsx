@@ -107,7 +107,9 @@ export default function BlogPost() {
                   <p className="mb-4 font-instrumentSans text-sm leading-[1.45] text-foreground-muted">
                     {siteCopy.blog.post.sidebarCta}
                   </p>
-                  <StartCta className="h-11 px-5 text-sm">{siteCopy.blog.post.startFree}</StartCta>
+                  <StartCta to="/get-started" className="w-full">
+                    {siteCopy.blog.post.startFree}
+                  </StartCta>
                 </div>
               </div>
             </aside>
