@@ -2,6 +2,8 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { onboardingBodyFontClass } from '@/lib/onboarding-font';
 import { getChromeWebStoreUrl } from '@/lib/env.js';
+import { ANALYTICS_EVENTS } from '@/data/static/analytics-events';
+import { trackEvent } from '@/lib/analytics';
 import { getOnboardingV2InstallCopy } from '@/utils/onboarding-v2-i18n';
 import { OnboardingFooterActions } from '../OnboardingFooterActions';
 import { OnboardingScreenShell, type OnboardingShellVariant } from '../OnboardingScreenShell';
@@ -40,6 +42,9 @@ export const OnboardingInstallScreen: React.FC<OnboardingInstallScreenProps> = (
                         {
                             label: copy.cta,
                             onClick: () => {
+                                trackEvent(ANALYTICS_EVENTS.ONBOARDING.EXTENSION_INSTALL_CLICKED, {
+                                    source: 'onboarding_install',
+                                });
                                 window.open(getChromeWebStoreUrl(), '_blank', 'noopener,noreferrer');
                             }
                         }

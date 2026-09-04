@@ -3,6 +3,8 @@ import { cn } from '@/lib/utils';
 import { onboardingBodyFontClass } from '@/lib/onboarding-font';
 import { getOnboardingV2AllSetCopy } from '@/utils/onboarding-v2-i18n';
 import { fetchOnboardingV3 } from '@/api/onboarding';
+import { ANALYTICS_EVENTS } from '@/data/static/analytics-events';
+import { trackEventOnce } from '@/lib/analytics';
 import { markOnboardInstall, openWorkspaceHandoff, slackHandoffFromOnboardingPayload, tryOpenWorkspaceApp, workspaceAppUrl, workspaceWebUrl } from '@/lib/slack-handoff';
 import type { OnboardingWorkspaceProvider } from '@/lib/onboarding-flow';
 import { Image } from '../OnboardingImage';
@@ -15,6 +17,13 @@ const AUTO_OPEN_APP_MS = 3000;
 function sleep(ms: number): Promise<void> {
     return new Promise((resolve) => {
         window.setTimeout(resolve, ms);
+    });
+}
+
+function trackSlackOpen(workspace: OnboardingWorkspaceProvider): void {
+    trackEventOnce('slack_open_clicked', ANALYTICS_EVENTS.ONBOARDING.SLACK_OPEN_CLICKED, {
+        workspace,
+        provider: workspace,
     });
 }
 
@@ -54,10 +63,11 @@ export const OnboardingAllSetScreen: React.FC<OnboardingAllSetScreenProps> = ({
 
     const openSlackAndInstall = useCallback(() => {
         const { app, web } = urlsRef.current;
+        trackSlackOpen(workspace);
         markOnboardInstall();
         openWorkspaceHandoff(app, web);
         onDoneRef.current?.();
-    }, []);
+    }, [workspace]);
 
     useEffect(() => {
         if (!autoOpen) {
@@ -94,6 +104,7 @@ export const OnboardingAllSetScreen: React.FC<OnboardingAllSetScreenProps> = ({
                 return;
             }
 
+            trackSlackOpen(workspace);
             tryOpenWorkspaceApp(urlsRef.current.app);
             markOnboardInstall();
             onDoneRef.current?.();

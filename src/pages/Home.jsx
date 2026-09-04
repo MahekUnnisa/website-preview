@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { LogoMark, StartCta, LandingFooter, landingAsset as asset } from '../components/landing/LandingShell';
 import { siteCopy } from '../data/siteCopy';
+import { ANALYTICS_EVENTS } from '../data/static/analytics-events';
+import { trackEvent } from '../lib/analytics';
 import { getChromeWebStoreUrl } from '../lib/env';
 
 const copy = siteCopy.home;
@@ -258,6 +260,9 @@ const Home = () => {
             <Link
               to="/get-started"
               className="inline-flex h-10 shrink-0 items-center rounded-[20px] border border-foreground-primary px-3 font-instrumentSans text-xs font-medium leading-[1.2] tracking-[0.4px] text-foreground-primary transition-colors hover:bg-white/5 sm:px-5 sm:text-sm"
+              onClick={() => {
+                trackEvent(ANALYTICS_EVENTS.CTA.GET_STARTED_CLICK, { entry: 'home_nav', to: '/get-started' });
+              }}
             >
               {common.getItNow}
             </Link>
@@ -288,6 +293,11 @@ const Home = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex h-14 w-full max-w-[314px] items-center justify-center gap-2 rounded-xl border border-purple-75 px-[30px] font-instrumentSans text-base font-semibold text-purple-50 transition-opacity hover:opacity-90 md:w-auto md:max-w-none"
+                  onClick={() => {
+                    trackEvent(ANALYTICS_EVENTS.ONBOARDING.EXTENSION_INSTALL_CLICKED, {
+                      source: 'home_hero',
+                    });
+                  }}
                 >
                   <img alt="" src={asset('chrome-logo.webp')} width={18} height={18} className="size-[18px] shrink-0 object-cover" />
                   {common.installChrome}
