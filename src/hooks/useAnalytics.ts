@@ -1,11 +1,12 @@
+import { trackEvent } from '@/lib/analytics';
+import type { AnalyticsEventParams } from '@/lib/analytics';
+
 export function useAnalytics(): {
-    trackEvent: (eventName: string, eventParams?: Record<string, string | number | boolean | undefined>) => void;
+    trackEvent: (eventName: string, eventParams?: AnalyticsEventParams) => void;
     isEnabled: boolean;
 } {
     return {
-        trackEvent: () => {
-            /* Analytics stub — add later */
-        },
-        isEnabled: false,
+        trackEvent,
+        isEnabled: typeof window !== 'undefined',
     };
 }

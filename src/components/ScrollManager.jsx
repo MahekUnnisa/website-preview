@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
+import { trackVirtualPageView } from '@/lib/analytics';
 
 const NAV_OFFSET = 64; // fixed navbar height (h-16), so anchors don't land underneath it
 const MAX_FRAMES = 60; // ~1s of retries, enough for a lazy route chunk to mount
@@ -15,6 +16,15 @@ const MAX_FRAMES = 60; // ~1s of retries, enough for a lazy route chunk to mount
  */
 function ScrollManager() {
   const { pathname, hash, key } = useLocation();
+  const lastVirtualPath = useRef('');
+
+  useEffect(() => {
+    const pagePath = `${pathname}${hash || ''}`;
+    if (pagePath !== lastVirtualPath.current) {
+      lastVirtualPath.current = pagePath;
+      trackVirtualPageView(pagePath);
+    }
+  }, [pathname, hash]);
 
   useEffect(() => {
     const target = hash.slice(1);

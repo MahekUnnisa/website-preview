@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import { publicUrl } from '../../lib/utils';
 import { siteCopy } from '../../data/siteCopy';
+import { ANALYTICS_EVENTS } from '../../data/static/analytics-events';
+import { trackEvent } from '../../lib/analytics';
 
 export const landingAsset = (name) => publicUrl(`/assets/landing/${name}`);
 
@@ -14,6 +16,9 @@ export function StartCta({ children, className = '', to = '/get-started' }) {
     <Link
       to={to}
       className={`relative inline-flex h-14 items-stretch rounded-xl bg-white/10 p-[3px] font-instrumentSans text-base font-semibold text-purple-800 transition-opacity hover:opacity-90 ${className}`}
+      onClick={() => {
+        trackEvent(ANALYTICS_EVENTS.CTA.GET_STARTED_CLICK, { entry: 'cta', to });
+      }}
       onMouseEnter={() => {
         // ponytail: warm the target route on intent; ceiling = one prefetch per href
         if (document.querySelector(`link[data-prefetch-cta="${to}"]`)) return;
@@ -49,6 +54,9 @@ export function LandingHeader() {
         <Link
           to="/get-started"
           className="inline-flex h-10 shrink-0 items-center rounded-[20px] border border-foreground-primary px-3 font-instrumentSans text-xs font-medium leading-[1.2] tracking-[0.4px] text-foreground-primary transition-colors hover:bg-white/5 sm:px-5 sm:text-sm"
+          onClick={() => {
+            trackEvent(ANALYTICS_EVENTS.CTA.GET_STARTED_CLICK, { entry: 'nav', to: '/get-started' });
+          }}
         >
           {siteCopy.common.getItNow}
         </Link>

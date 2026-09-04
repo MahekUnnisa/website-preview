@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAuth } from '@/context/WebAuthProvider';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { ANALYTICS_EVENTS } from '@/data/static/analytics-events';
+import { trackEventOnce } from '@/lib/analytics';
 import { useOnboardingFlowState } from '@/hooks/useOnboardingFlowState';
 import { fetchOnboardingV3, fireExecuteFirstOnboardingJob } from '@/api/onboarding';
 import {
@@ -179,29 +180,42 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = ({ entry = 'onboard' }
     useEffect(() => {
         const unsubscribe = subscribeOnboardOAuthResult((message) => {
             if (message.status === 'failed') {
-                if (message.provider) {
-                    void setFlowState((previous) => {
-                        const prevData = normalizeFlowData(previous?.flowData);
-                        return {
-                            flowData: {
-                                ...prevData,
-                                keyAuth: { ...prevData.keyAuth, [message.provider]: 'failed' }
-                            }
-                        };
-                    });
+                const failedProvider = message.provider;
+                if (!failedProvider) {
+                    return;
                 }
+                trackEvent(
+                    failedProvider === 'google'
+                        ? ANALYTICS_EVENTS.ONBOARDING.SIGNUP_FAILED
+                        : ANALYTICS_EVENTS.ONBOARDING.SLACK_CONNECT_FAILED,
+                    { entry, provider: failedProvider, workspace }
+                );
+                void setFlowState((previous) => {
+                    const prevData = normalizeFlowData(previous?.flowData);
+                    const keyAuth = { ...prevData.keyAuth };
+                    keyAuth[failedProvider] = 'failed';
+                    return {
+                        flowData: {
+                            ...prevData,
+                            keyAuth
+                        }
+                    };
+                });
                 return;
             }
             if (message.status !== 'success' || !authenticated || !isKeysStep(step)) {
                 return;
             }
-            if (message.provider) {
+            const successProvider = message.provider;
+            if (successProvider) {
                 void setFlowState((previous) => {
                     const prevData = normalizeFlowData(previous?.flowData);
+                    const keyAuth = { ...prevData.keyAuth };
+                    keyAuth[successProvider] = 'success';
                     return {
                         flowData: {
                             ...prevData,
-                            keyAuth: { ...prevData.keyAuth, [message.provider]: 'success' }
+                            keyAuth
                         }
                     };
                 });
@@ -222,7 +236,30 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = ({ entry = 'onboard' }
             });
         });
         return unsubscribe;
-    }, [authenticated, setFlowState, step, workspace]);
+    }, [authenticated, entry, setFlowState, step, trackEvent, workspace]);
+
+    // Signup success once per session when Google auth lands.
+    useEffect(() => {
+        if (!authenticated || googleFailed) {
+            return;
+        }
+        trackEventOnce('signup_success', ANALYTICS_EVENTS.ONBOARDING.SIGNUP_SUCCESS, {
+            entry,
+            provider: 'google',
+        });
+    }, [authenticated, entry, googleFailed]);
+
+    // Slack/Teams connect success once per session.
+    useEffect(() => {
+        if (!workspaceConnected || workspaceFailed) {
+            return;
+        }
+        trackEventOnce('slack_connect_success', ANALYTICS_EVENTS.ONBOARDING.SLACK_CONNECT_SUCCESS, {
+            entry,
+            workspace,
+            provider: workspace,
+        });
+    }, [entry, workspace, workspaceConnected, workspaceFailed]);
 
     const persistStep = useCallback(
         async (
@@ -317,7 +354,10 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = ({ entry = 'onboard' }
     }, [persistStep, step]);
 
     const handleComplete = useCallback(async () => {
-        trackEvent(ANALYTICS_EVENTS.ONBOARDING.COMPLETED);
+        trackEventOnce('onboarding_completed', ANALYTICS_EVENTS.ONBOARDING.COMPLETED, {
+            entry,
+            workspace,
+        });
         const mergedFlowData = {
             ...flowData,
             selectedTools: Object.entries(selectedTools)
@@ -333,11 +373,12 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = ({ entry = 'onboard' }
             onboardingStartTime: flowState?.onboardingStartTime ?? new Date().toISOString()
         });
     }, [
+        entry,
         flowData,
         flowState?.onboardingStartTime,
         selectedTools,
         setFlowState,
-        trackEvent
+        workspace
     ]);
 
     useEffect(() => {
@@ -363,7 +404,13 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = ({ entry = 'onboard' }
             icon: 'OnboardingKeyLight' as const,
             onClick: () => {
                 // Persist first so same-tab Google return lands on keys, not role-plan.
-                void persistStep('keys-first', { selectedRole: role }).then(() => login());
+                void persistStep('keys-first', { selectedRole: role }).then(() => {
+                    trackEvent(ANALYTICS_EVENTS.ONBOARDING.SIGNUP_STARTED, {
+                        entry,
+                        provider: 'google',
+                    });
+                    login();
+                });
             }
         }
     ];
@@ -452,13 +499,22 @@ const OnboardingV2Flow: React.FC<OnboardingV2FlowProps> = ({ entry = 'onboard' }
 
     const startFirstKeyAuth = useCallback(() => {
         googleOAuthStartedRef.current = true;
+        trackEvent(ANALYTICS_EVENTS.ONBOARDING.SIGNUP_STARTED, {
+            entry,
+            provider: 'google',
+        });
         login();
-    }, [login]);
+    }, [entry, login, trackEvent]);
 
     const startSecondKeyAuth = useCallback(() => {
         workspaceOAuthStartedRef.current = true;
+        trackEvent(ANALYTICS_EVENTS.ONBOARDING.SLACK_CONNECT_STARTED, {
+            entry,
+            workspace,
+            provider: workspace,
+        });
         connectIntegration(workspace);
-    }, [connectIntegration, workspace]);
+    }, [connectIntegration, entry, trackEvent, workspace]);
 
     // /get-started only: 3s progress then auto-start Google OAuth (mirrors Slack key).
     useEffect(() => {
