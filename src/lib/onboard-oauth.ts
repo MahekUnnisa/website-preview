@@ -4,7 +4,6 @@ export const ONBOARD_OAUTH_MESSAGE_TYPE = 'ZERO_ONBOARD_OAUTH';
 const ONBOARD_OAUTH_CHANNEL = 'zero-onboard-oauth';
 export const ONBOARD_RETURN_PATH = `${import.meta.env.BASE_URL}onboard`.replace(/\/{2,}/g, '/');
 export const GET_STARTED_RETURN_PATH = `${import.meta.env.BASE_URL}get-started`.replace(/\/{2,}/g, '/');
-const SAME_TAB_MAX_WIDTH = 768;
 const SAME_TAB_OAUTH_KEY = 'zero_onboard_oauth_same_tab';
 const POPUP_FLAG_KEY = 'zero_onboard_oauth_popup';
 const RETURN_PATH_KEY = 'zero_onboard_oauth_return';
@@ -26,7 +25,8 @@ export function createOnboardOAuthState(): string {
 }
 
 export function preferSameTabOAuthFrom(opts: { coarsePointer: boolean; innerWidth: number }): boolean {
-    return opts.coarsePointer || opts.innerWidth < SAME_TAB_MAX_WIDTH;
+    void opts;
+    return true;
 }
 
 export function preferSameTabOAuth(): boolean {
@@ -284,7 +284,7 @@ export function subscribeOnboardOAuthResult(onResult: (message: OnboardOAuthMess
 if (import.meta.env.DEV) {
     console.assert(preferSameTabOAuthFrom({ coarsePointer: true, innerWidth: 1280 }) === true, 'coarse pointer should same-tab');
     console.assert(preferSameTabOAuthFrom({ coarsePointer: false, innerWidth: 390 }) === true, 'narrow viewport should same-tab');
-    console.assert(preferSameTabOAuthFrom({ coarsePointer: false, innerWidth: 1280 }) === false, 'desktop should keep popup');
+    console.assert(preferSameTabOAuthFrom({ coarsePointer: false, innerWidth: 1280 }) === true, 'desktop should same-tab');
     console.assert(oauthCallbackActionLabel(true) === 'Close Window', 'popup callback should close');
     console.assert(oauthCallbackActionLabel(false) === 'Continue', 'same-tab callback should continue');
     console.assert(oauthCallbackCountdownLabel(true, 3) === 'Closing in 3…', 'popup countdown copy');
