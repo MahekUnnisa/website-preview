@@ -20,14 +20,16 @@ function sleep(ms: number): Promise<void> {
     });
 }
 
-function trackSlackOpen(workspace: OnboardingWorkspaceProvider): void {
-    trackEventOnce('slack_open_clicked', ANALYTICS_EVENTS.ONBOARDING.SLACK_OPEN_CLICKED, {
+function trackSlackOpen(entryRoute: 'get-started' | 'onboard', workspace: OnboardingWorkspaceProvider): void {
+    trackEventOnce(`slack_open_clicked_${entryRoute}`, ANALYTICS_EVENTS.ONBOARDING.SLACK_OPEN_CLICKED, {
+        entry_route: entryRoute,
         workspace,
         provider: workspace,
     });
 }
 
 export interface OnboardingAllSetScreenProps {
+    entryRoute?: 'get-started' | 'onboard';
     workspace?: OnboardingWorkspaceProvider;
     workspaceLabel?: string;
     teamId?: string | null;
@@ -41,6 +43,7 @@ export interface OnboardingAllSetScreenProps {
 }
 
 export const OnboardingAllSetScreen: React.FC<OnboardingAllSetScreenProps> = ({
+    entryRoute = 'onboard',
     workspace = 'slack',
     workspaceLabel,
     teamId = null,
@@ -61,13 +64,20 @@ export const OnboardingAllSetScreen: React.FC<OnboardingAllSetScreenProps> = ({
     });
     const [showPrompt, setShowPrompt] = useState(!autoOpen);
 
+    useEffect(() => {
+        trackEventOnce(`all_set_viewed_${entryRoute}`, ANALYTICS_EVENTS.ONBOARDING.ALL_SET_VIEWED, {
+            entry_route: entryRoute,
+            workspace,
+        });
+    }, [entryRoute, workspace]);
+
     const openSlackAndInstall = useCallback(() => {
         const { app, web } = urlsRef.current;
-        trackSlackOpen(workspace);
+        trackSlackOpen(entryRoute, workspace);
         markOnboardInstall();
         openWorkspaceHandoff(app, web);
         onDoneRef.current?.();
-    }, [workspace]);
+    }, [entryRoute, workspace]);
 
     useEffect(() => {
         if (!autoOpen) {
@@ -104,7 +114,7 @@ export const OnboardingAllSetScreen: React.FC<OnboardingAllSetScreenProps> = ({
                 return;
             }
 
-            trackSlackOpen(workspace);
+            trackSlackOpen(entryRoute, workspace);
             tryOpenWorkspaceApp(urlsRef.current.app);
             markOnboardInstall();
             onDoneRef.current?.();
@@ -114,7 +124,7 @@ export const OnboardingAllSetScreen: React.FC<OnboardingAllSetScreenProps> = ({
         return () => {
             cancelled = true;
         };
-    }, [autoOpen, botUserId, channelId, teamId, workspace]);
+    }, [autoOpen, botUserId, channelId, entryRoute, teamId, workspace]);
 
     return (
         <OnboardingScreenShell

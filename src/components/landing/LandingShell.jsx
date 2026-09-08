@@ -11,13 +11,13 @@ export function LogoMark({ className = 'h-4 w-auto' }) {
   return <img alt={siteCopy.common.brandAlt} src={landingAsset('logo-wordmark.svg')} className={className} />;
 }
 
-export function StartCta({ children, className = '', to = '/get-started' }) {
+export function StartCta({ children, className = '', to = '/get-started', source = 'generic_cta' }) {
   return (
     <Link
       to={to}
       className={`relative inline-flex h-14 items-stretch rounded-xl bg-white/10 p-[3px] font-instrumentSans text-base font-semibold text-purple-800 transition-opacity hover:opacity-90 ${className}`}
       onClick={() => {
-        trackEvent(ANALYTICS_EVENTS.CTA.GET_STARTED_CLICK, { entry: 'cta', to });
+        trackEvent(ANALYTICS_EVENTS.CTA.GET_STARTED_CLICK, { source, destination: to });
       }}
       onMouseEnter={() => {
         // ponytail: warm the target route on intent; ceiling = one prefetch per href
@@ -55,7 +55,10 @@ export function LandingHeader() {
           to="/get-started"
           className="inline-flex h-10 shrink-0 items-center rounded-[20px] border border-foreground-primary px-3 font-instrumentSans text-xs font-medium leading-[1.2] tracking-[0.4px] text-foreground-primary transition-colors hover:bg-white/5 sm:px-5 sm:text-sm"
           onClick={() => {
-            trackEvent(ANALYTICS_EVENTS.CTA.GET_STARTED_CLICK, { entry: 'nav', to: '/get-started' });
+            trackEvent(ANALYTICS_EVENTS.CTA.GET_STARTED_CLICK, {
+              source: 'landing_header_nav_cta',
+              destination: '/get-started',
+            });
           }}
         >
           {siteCopy.common.getItNow}

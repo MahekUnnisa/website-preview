@@ -11,7 +11,7 @@ export default function GetStarted() {
         preloadOnboardingIcons();
         markOnboardReturnPath('get-started');
         trackEventOnce('onboarding_started_get-started', ANALYTICS_EVENTS.ONBOARDING.STARTED, {
-            entry: 'get-started',
+            entry_route: 'get-started',
         });
     }, []);
 
