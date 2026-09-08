@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { LogoMark, StartCta, LandingFooter, landingAsset as asset } from '../components/landing/LandingShell';
 import { siteCopy } from '../data/siteCopy';
 import { ANALYTICS_EVENTS } from '../data/static/analytics-events';
-import { trackEvent } from '../lib/analytics';
+import { trackEvent, trackEventOnce } from '../lib/analytics';
 import { getChromeWebStoreUrl } from '../lib/env';
 
 const copy = siteCopy.home;
@@ -202,6 +202,10 @@ function FeatureRecap() {
 const Home = () => {
   const [openFaq, setOpenFaq] = useState(null);
 
+  useEffect(() => {
+    trackEventOnce('home_viewed', ANALYTICS_EVENTS.PAGE.HOME_VIEWED);
+  }, []);
+
   return (
     <div className="dark min-h-screen bg-background font-instrumentSans text-foreground-primary antialiased">
       {/* Hero — Figma 1400×1128 frame */}
@@ -261,7 +265,10 @@ const Home = () => {
               to="/get-started"
               className="inline-flex h-10 shrink-0 items-center rounded-[20px] border border-foreground-primary px-3 font-instrumentSans text-xs font-medium leading-[1.2] tracking-[0.4px] text-foreground-primary transition-colors hover:bg-white/5 sm:px-5 sm:text-sm"
               onClick={() => {
-                trackEvent(ANALYTICS_EVENTS.CTA.GET_STARTED_CLICK, { entry: 'home_nav', to: '/get-started' });
+                trackEvent(ANALYTICS_EVENTS.CTA.GET_STARTED_CLICK, {
+                  source: 'home_header_cta',
+                  destination: '/get-started',
+                });
               }}
             >
               {common.getItNow}
@@ -285,7 +292,11 @@ const Home = () => {
 
             <div className="flex w-full max-w-[720px] flex-col items-center gap-8 animate-landing-fade-up" style={{ animationDelay: '120ms' }}>
               <div className="flex w-full flex-col items-center gap-5 md:flex-row md:flex-wrap md:justify-center">
-                <StartCta to="/get-started" className="w-full max-w-[314px] md:w-auto md:max-w-none">
+                <StartCta
+                  to="/get-started"
+                  source="home_hero_primary_cta"
+                  className="w-full max-w-[314px] md:w-auto md:max-w-none"
+                >
                   {common.getStarted}
                 </StartCta>
                 <a
@@ -295,7 +306,7 @@ const Home = () => {
                   className="inline-flex h-14 w-full max-w-[314px] items-center justify-center gap-2 rounded-xl border border-purple-75 px-[30px] font-instrumentSans text-base font-semibold text-purple-50 transition-opacity hover:opacity-90 md:w-auto md:max-w-none"
                   onClick={() => {
                     trackEvent(ANALYTICS_EVENTS.ONBOARDING.EXTENSION_INSTALL_CLICKED, {
-                      source: 'home_hero',
+                      source: 'home_hero_install_cta',
                     });
                   }}
                 >
@@ -468,7 +479,11 @@ const Home = () => {
             })}
           </div>
 
-          <StartCta to="/get-started" className="w-full max-w-[314px] md:w-auto md:max-w-none">
+          <StartCta
+            to="/get-started"
+            source="home_setup_cta"
+            className="w-full max-w-[314px] md:w-auto md:max-w-none"
+          >
             {copy.setup.cta}
             <img alt="" src={asset('arrow-right.svg')} className="size-5" />
           </StartCta>
@@ -646,7 +661,9 @@ const Home = () => {
             </p>
           </div>
           <div className="flex w-full max-w-[314px] flex-col items-center gap-4">
-            <StartCta to="/get-started" className="w-full">{common.getStarted}</StartCta>
+            <StartCta to="/get-started" source="home_bottom_cta" className="w-full">
+              {common.getStarted}
+            </StartCta>
             <p className="w-full text-center font-azeret text-xs font-normal leading-[1.45] tracking-[-0.5px] text-foreground-muted">
               {copy.finalCta.freeNote}
             </p>

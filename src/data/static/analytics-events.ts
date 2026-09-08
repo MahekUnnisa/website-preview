@@ -1,4 +1,8 @@
 export const ANALYTICS_EVENTS = {
+    PAGE: {
+        HOME_VIEWED: 'home_viewed',
+        VIRTUAL_PAGE_VIEW: 'virtual_page_view',
+    },
     CTA: {
         GET_STARTED_CLICK: 'cta_get_started_click',
     },
@@ -10,13 +14,13 @@ export const ANALYTICS_EVENTS = {
         SLACK_CONNECT_STARTED: 'slack_connect_started',
         SLACK_CONNECT_SUCCESS: 'slack_connect_success',
         SLACK_CONNECT_FAILED: 'slack_connect_failed',
+        SLACK_STEP_VIEWED: 'slack_step_viewed',
+        ALL_SET_VIEWED: 'all_set_viewed',
         SLACK_OPEN_CLICKED: 'slack_open_clicked',
+        EXTENSION_INSTALL_PROMPT_VIEWED: 'extension_install_prompt_viewed',
         EXTENSION_INSTALL_CLICKED: 'extension_install_clicked',
         COMPLETED: 'onboarding_completed',
         SKIPPED: 'onboarding_skipped',
-    },
-    PAGE: {
-        VIRTUAL_PAGE_VIEW: 'virtual_page_view',
     },
 } as const;
 

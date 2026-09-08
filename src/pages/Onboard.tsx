@@ -11,7 +11,7 @@ export default function Onboard() {
         preloadOnboardingIcons();
         markOnboardReturnPath('onboard');
         trackEventOnce('onboarding_started_onboard', ANALYTICS_EVENTS.ONBOARDING.STARTED, {
-            entry: 'onboard',
+            entry_route: 'onboard',
         });
     }, []);
 
